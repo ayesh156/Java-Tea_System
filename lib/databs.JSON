@@ -1,12 +1,7 @@
 {
-    "o_url": "srv736.hstgr.io",
-    "o_port": "3306",
-    "o_reconnect": "?autoReconnect=true",
-    "o_databaseName": "u993191433_akurugoda_ca",
-    "o_username": "u993191433_akurugoda_ca",
-    "o_password": "Roshantha_23",
-
-    "databaseName": "akurugoda_cashier",
+    
+    "host": "localhost:3306",
+    "databaseName": "tea_system",
     "username": "root",
     "password": "SEngineer,531"
 }

@@ -6,21 +6,39 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.ResultSet;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.function.Supplier;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import model.Mysql;
+import model.transport.TransportService;
+import model.transport.TransportTableModel;
 
 /**
  *
@@ -30,14 +48,153 @@ public class Home extends javax.swing.JFrame {
 
     private java.util.HashMap<String, JButton> buttonMap = new HashMap<>();
 
+    TransportTableModel transportTableModel;
+
+    Integer page = 1;
+    Integer rowCountPerPage = 5;
+    Integer totalPage = 1;
+    Integer totalData = 0;
+
+    private static TransportService transportService;
+
     /**
      * Creates new form Home
      */
     public Home() {
+
+        transportService = new TransportService();
+
         initComponents();
         // Inside initComponents() method, find and replace the jPanel6 initialization
         // Replace jPanel6 with your custom panel
         loadSidebarButtonMap();
+
+        // Get screen dimensions
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screenSize.height;
+
+        // Check if screen height is less than 720
+        if (screenHeight < 1000) {
+            jPanel17.setLayout(null);
+            jPanel17.setBounds(50, 50, 200, 100);  // Set bounds for jPanel17
+            jPanel20.setBounds(0, 60, 1011, 240);  // Set width (300) and new height
+            int newHeight = screenHeight - 450;
+            jPanel22.setBounds(0, 290, 1011, newHeight);  // Set width (300) and new height
+        }
+
+        // Customize the table header
+        customizeTableHeader(jTable);
+
+        jComboBoxPage.addItem("5");
+        jComboBoxPage.addItem("15");
+        jComboBoxPage.addItem("30");
+        jComboBoxPage.addItem("50");
+        jComboBoxPage.addItem("100");
+        jComboBoxPage.addItemListener(new ItemListener() {
+
+            public void itemStateChanged(ItemEvent e) {
+                initPagination();
+            }
+        });
+        initPagination();
+
+        jTable.setSelectionBackground(new Color(57, 117, 104));
+        jTable.setSelectionForeground(new Color(255, 255, 255));
+
+        jComboBoxPage.setUI(new BasicComboBoxUI() {
+            @Override
+            protected JButton createArrowButton() {
+                // Create a button for the arrow
+                JButton arrowButton = new JButton() {
+                    @Override
+                    public void paint(Graphics g) {
+                        super.paint(g);
+                        Graphics2D g2d = (Graphics2D) g;
+
+                        // Create a gradient from green to dark green
+                        GradientPaint gradient = new GradientPaint(0, 0, Color.GREEN, getWidth(), getHeight(), new Color(57, 117, 104));
+                        g2d.setPaint(gradient);
+
+                        // Adjusted space between the two arrows
+                        int arrowSpacing = 2; // Space between the two arrows
+
+                        // Draw upper arrow (pointing up)
+                        int[] xPointsUp = {getWidth() / 2 - 5, getWidth() / 2 + 5, getWidth() / 2};
+                        int[] yPointsUp = {getHeight() / 2 - arrowSpacing, getHeight() / 2 - arrowSpacing, getHeight() / 2 - 10};
+                        g2d.fillPolygon(xPointsUp, yPointsUp, 3);
+
+                        // Draw lower arrow (pointing down)
+                        int[] xPointsDown = {getWidth() / 2 - 5, getWidth() / 2 + 5, getWidth() / 2};
+                        int[] yPointsDown = {getHeight() / 2 + arrowSpacing, getHeight() / 2 + arrowSpacing, getHeight() / 2 + 10};
+                        g2d.fillPolygon(xPointsDown, yPointsDown, 3);
+                    }
+                };
+                arrowButton.setBorder(null);
+                arrowButton.setBackground(Color.WHITE); // Set background color for the button
+                return arrowButton;
+            }
+        });
+
+    }
+
+    private void customizeTableHeader(JTable table) {
+
+        JTableHeader header = table.getTableHeader();
+
+        // Set font family, style, and size
+        Font headerFont = new Font("FMMalithi", Font.PLAIN, 26);  // Change "Arial" and size as needed
+        header.setFont(headerFont);
+
+        // Set the header height
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 48));  // Adjust the height as needed
+
+        // Center align the header names
+        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Apply the custom header renderer to all columns
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
+        }
+
+    }
+
+    private void initPagination() {
+
+        totalData = transportService.count();
+        rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
+        Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
+        totalPage = totalPageD.intValue();
+
+        if (page.equals(1)) {
+            jButtonFirst.setEnabled(false);
+            jButtonPrevious.setEnabled(false);
+        } else {
+            jButtonFirst.setEnabled(true);
+            jButtonPrevious.setEnabled(true);
+        }
+
+        if (page.equals(totalPage)) {
+            jButtonLast.setEnabled(false);
+            jButtonNext.setEnabled(false);
+        } else {
+            jButtonLast.setEnabled(true);
+            jButtonNext.setEnabled(true);
+        }
+
+        if (page > totalPage) {
+            page = 1;
+        }
+
+        transportTableModel = new TransportTableModel();
+        transportTableModel.setList(transportService.findAll(page, rowCountPerPage));
+        jTable.setModel(transportTableModel);
+
+        jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
+        jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
+        autoResizeColumn(jTable);
+        jButtonNum.setText(page.toString());
+
     }
 
     private void loadSidebarButtonMap() {
@@ -76,21 +233,19 @@ public class Home extends javax.swing.JFrame {
         if (button <= 3) {
             setPanelColors(jPanel6, jPanel7, new Color(236, 243, 242), new Color(57, 117, 104));
             setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
-             setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
-             setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
+            setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
+            setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
         } else if (button >= 4 && button <= 7) {
             setPanelColors(jPanel11, jPanel12, new Color(236, 243, 242), new Color(57, 117, 104));
             setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
             setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
             setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
-        }
-         else if (button >= 8 && button <= 9) {
+        } else if (button >= 8 && button <= 9) {
             setPanelColors(jPanel13, jPanel14, new Color(236, 243, 242), new Color(57, 117, 104));
             setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
             setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
             setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
-        }
-         else if (button == 10) {
+        } else if (button == 10) {
             setPanelColors(jPanel15, jPanel16, new Color(236, 243, 242), new Color(57, 117, 104));
             setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
             setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
@@ -116,6 +271,7 @@ public class Home extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel()
@@ -177,6 +333,28 @@ public class Home extends javax.swing.JFrame {
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
+        jPanel37 = new javax.swing.JPanel();
+        jPanel38 = new javax.swing.JPanel();
+        jPanel35 = new javax.swing.JPanel();
+        jEntriesLabel = new javax.swing.JLabel();
+        jComboBoxPage = new javax.swing.JComboBox();
+        jShowLabel = new javax.swing.JLabel();
+        jPanel36 = new javax.swing.JPanel();
+        jLabelTotalData2 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jPanel40 = new javax.swing.JPanel();
+        jPanel27 = new javax.swing.JPanel();
+        jButtonFirst = new javax.swing.JButton();
+        jButtonPrevious = new javax.swing.JButton();
+        jButtonNum = new javax.swing.JButton();
+        jButtonNext = new javax.swing.JButton();
+        jButtonLast = new javax.swing.JButton();
+        jPanel34 = new javax.swing.JPanel();
+        jLabelStatusHalaman = new javax.swing.JLabel();
+        jLabelTotalData = new javax.swing.JLabel();
+        tableScrollButton1 = new table.TableScrollButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable = new javax.swing.JTable();
         jPanel18 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
@@ -187,9 +365,9 @@ public class Home extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        setMinimumSize(new java.awt.Dimension(1260, 1024));
-        setPreferredSize(new java.awt.Dimension(1280, 1024));
-        setSize(new java.awt.Dimension(1280, 1024));
+        setMinimumSize(new java.awt.Dimension(1280, 985));
+        setPreferredSize(new java.awt.Dimension(1280, 985));
+        setSize(new java.awt.Dimension(1280, 985));
 
         jPanel1.setMinimumSize(new java.awt.Dimension(269, 986));
         jPanel1.setPreferredSize(new java.awt.Dimension(269, 986));
@@ -211,6 +389,10 @@ public class Home extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.PAGE_START);
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setForeground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setMinimumSize(new java.awt.Dimension(100, 887));
@@ -631,7 +813,9 @@ public class Home extends javax.swing.JFrame {
 
         jPanel4.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 762, -1, -1));
 
-        jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
+        jScrollPane2.setViewportView(jPanel4);
+
+        jPanel1.add(jScrollPane2, java.awt.BorderLayout.LINE_END);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
 
@@ -654,13 +838,12 @@ public class Home extends javax.swing.JFrame {
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
         jPanel20.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(1, 23, 1, 23, new java.awt.Color(245, 245, 245)), javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25)));
-        jPanel20.setMaximumSize(new java.awt.Dimension(32767, 230));
-        jPanel20.setMinimumSize(new java.awt.Dimension(991, 230));
-        jPanel20.setPreferredSize(new java.awt.Dimension(991, 230));
+        jPanel20.setMaximumSize(new java.awt.Dimension(32767, 240));
+        jPanel20.setMinimumSize(new java.awt.Dimension(991, 240));
+        jPanel20.setPreferredSize(new java.awt.Dimension(991, 240));
         jPanel20.setLayout(new java.awt.BorderLayout());
 
         jPanel24.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel24.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 1, 1, 1));
         jPanel24.setMaximumSize(new java.awt.Dimension(2147483647, 92));
         jPanel24.setMinimumSize(new java.awt.Dimension(900, 92));
         jPanel24.setPreferredSize(new java.awt.Dimension(900, 92));
@@ -686,7 +869,6 @@ public class Home extends javax.swing.JFrame {
         jTextField1.setBackground(new java.awt.Color(245, 245, 245));
         jTextField1.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(15, 15, 18));
-        jTextField1.setCaretPosition(0);
         jTextField1.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField1.setMinimumSize(new java.awt.Dimension(296, 52));
         jTextField1.setPreferredSize(new java.awt.Dimension(296, 52));
@@ -710,11 +892,11 @@ public class Home extends javax.swing.JFrame {
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 539, Short.MAX_VALUE)
+            .addGap(0, 561, Short.MAX_VALUE)
         );
         jPanel26Layout.setVerticalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
 
         jPanel25.add(jPanel26, java.awt.BorderLayout.CENTER);
@@ -732,7 +914,7 @@ public class Home extends javax.swing.JFrame {
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 209, Short.MAX_VALUE)
+            .addGap(0, 231, Short.MAX_VALUE)
         );
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -747,7 +929,7 @@ public class Home extends javax.swing.JFrame {
         jPanel32.setPreferredSize(new java.awt.Dimension(330, 52));
         jPanel32.setLayout(new java.awt.BorderLayout(20, 0));
 
-        jButton15.setBackground(new java.awt.Color(68, 150, 207));
+        jButton15.setBackground(new java.awt.Color(57, 117, 104));
         jButton15.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
         jButton15.setForeground(new java.awt.Color(255, 255, 255));
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png"))); // NOI18N
@@ -758,7 +940,12 @@ public class Home extends javax.swing.JFrame {
         jButton15.setMinimumSize(new java.awt.Dimension(135, 52));
         jButton15.setOpaque(true);
         jButton15.setPreferredSize(new java.awt.Dimension(135, 52));
-        jPanel32.add(jButton15, java.awt.BorderLayout.CENTER);
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+        jPanel32.add(jButton15, java.awt.BorderLayout.LINE_START);
 
         jButton16.setBackground(new java.awt.Color(213, 60, 60));
         jButton16.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
@@ -779,7 +966,7 @@ public class Home extends javax.swing.JFrame {
 
         jPanel24.add(jPanel25, java.awt.BorderLayout.CENTER);
 
-        jPanel20.add(jPanel24, java.awt.BorderLayout.CENTER);
+        jPanel20.add(jPanel24, java.awt.BorderLayout.PAGE_END);
 
         jPanel29.setBackground(new java.awt.Color(255, 255, 255));
         jPanel29.setMaximumSize(new java.awt.Dimension(2147483647, 92));
@@ -858,19 +1045,196 @@ public class Home extends javax.swing.JFrame {
 
         jPanel22.setBackground(new java.awt.Color(255, 255, 255));
         jPanel22.setBorder(javax.swing.BorderFactory.createMatteBorder(23, 23, 23, 23, new java.awt.Color(245, 245, 245)));
-        jPanel22.setMinimumSize(new java.awt.Dimension(1011, 572));
-        jPanel22.setPreferredSize(new java.awt.Dimension(1011, 572));
+        jPanel22.setMinimumSize(new java.awt.Dimension(1011, 547));
+        jPanel22.setPreferredSize(new java.awt.Dimension(1011, 547));
+        jPanel22.setLayout(new javax.swing.BoxLayout(jPanel22, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
-        jPanel22.setLayout(jPanel22Layout);
-        jPanel22Layout.setHorizontalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel22Layout.setVerticalGroup(
-            jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 526, Short.MAX_VALUE)
-        );
+        jPanel37.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel37.setMinimumSize(new java.awt.Dimension(950, 526));
+        jPanel37.setLayout(new java.awt.BorderLayout());
+
+        jPanel38.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel38.setMaximumSize(new java.awt.Dimension(32767, 60));
+        jPanel38.setMinimumSize(new java.awt.Dimension(950, 60));
+        jPanel38.setPreferredSize(new java.awt.Dimension(950, 60));
+        jPanel38.setLayout(new java.awt.BorderLayout());
+
+        jPanel35.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel35.setMinimumSize(new java.awt.Dimension(325, 40));
+        jPanel35.setPreferredSize(new java.awt.Dimension(325, 54));
+        jPanel35.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jEntriesLabel.setFont(new java.awt.Font("FMMalithi", 0, 25)); // NOI18N
+        jEntriesLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jEntriesLabel.setText("jd¾;d j,ska");
+        jPanel35.add(jEntriesLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
+
+        jComboBoxPage.setBackground(new java.awt.Color(255, 255, 255));
+        jComboBoxPage.setFont(new java.awt.Font("Inter", 0, 20)); // NOI18N
+        jComboBoxPage.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
+        jPanel35.add(jComboBoxPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
+
+        jShowLabel.setFont(new java.awt.Font("FMMalithi", 0, 25)); // NOI18N
+        jShowLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jShowLabel.setText("fmkaj'");
+        jPanel35.add(jShowLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jPanel38.add(jPanel35, java.awt.BorderLayout.LINE_START);
+
+        jPanel36.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel36.setMinimumSize(new java.awt.Dimension(365, 52));
+        jPanel36.setPreferredSize(new java.awt.Dimension(365, 60));
+        jPanel36.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelTotalData2.setFont(new java.awt.Font("FMMalithi", 0, 25)); // NOI18N
+        jLabelTotalData2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabelTotalData2.setText("fidhkak (");
+        jLabelTotalData2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 1, 1, 1));
+        jPanel36.add(jLabelTotalData2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 7, -1, -1));
+
+        jTextField2.setFont(new java.awt.Font("Iskoola Pota", 0, 20)); // NOI18N
+        jTextField2.setText("Search Here...");
+        jTextField2.setMinimumSize(new java.awt.Dimension(229, 40));
+        jTextField2.setPreferredSize(new java.awt.Dimension(229, 40));
+        jPanel36.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 12, -1, -1));
+
+        jPanel38.add(jPanel36, java.awt.BorderLayout.LINE_END);
+
+        jPanel37.add(jPanel38, java.awt.BorderLayout.PAGE_START);
+        jPanel38.getAccessibleContext().setAccessibleName("");
+
+        jPanel40.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel40.setMaximumSize(new java.awt.Dimension(32767, 60));
+        jPanel40.setMinimumSize(new java.awt.Dimension(950, 60));
+        jPanel40.setPreferredSize(new java.awt.Dimension(950, 60));
+        jPanel40.setLayout(new java.awt.BorderLayout());
+
+        jPanel27.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel27.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 1, 7, 1));
+        jPanel27.setMaximumSize(new java.awt.Dimension(218, 46));
+        jPanel27.setMinimumSize(new java.awt.Dimension(218, 46));
+        jPanel27.setPreferredSize(new java.awt.Dimension(218, 46));
+        jPanel27.setLayout(new java.awt.GridLayout(1, 0));
+
+        jButtonFirst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/first_arrow.png"))); // NOI18N
+        jButtonFirst.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButtonFirst.setMaximumSize(new java.awt.Dimension(46, 46));
+        jButtonFirst.setMinimumSize(new java.awt.Dimension(46, 46));
+        jButtonFirst.setPreferredSize(new java.awt.Dimension(46, 46));
+        jButtonFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonFirstActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButtonFirst);
+
+        jButtonPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/prev_arrow.png"))); // NOI18N
+        jButtonPrevious.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButtonPrevious.setMaximumSize(new java.awt.Dimension(46, 46));
+        jButtonPrevious.setMinimumSize(new java.awt.Dimension(46, 46));
+        jButtonPrevious.setPreferredSize(new java.awt.Dimension(46, 46));
+        jButtonPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPreviousActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButtonPrevious);
+
+        jButtonNum.setBackground(new java.awt.Color(57, 117, 104));
+        jButtonNum.setFont(new java.awt.Font("Inter", 0, 22)); // NOI18N
+        jButtonNum.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonNum.setText("1");
+        jButtonNum.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButtonNum.setMaximumSize(new java.awt.Dimension(46, 46));
+        jButtonNum.setMinimumSize(new java.awt.Dimension(46, 46));
+        jButtonNum.setPreferredSize(new java.awt.Dimension(46, 46));
+        jButtonNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNumActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButtonNum);
+
+        jButtonNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/next_arrow.png"))); // NOI18N
+        jButtonNext.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButtonNext.setMaximumSize(new java.awt.Dimension(46, 46));
+        jButtonNext.setMinimumSize(new java.awt.Dimension(46, 46));
+        jButtonNext.setPreferredSize(new java.awt.Dimension(46, 46));
+        jButtonNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNextActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButtonNext);
+
+        jButtonLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/last_arrow.png"))); // NOI18N
+        jButtonLast.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButtonLast.setMaximumSize(new java.awt.Dimension(46, 46));
+        jButtonLast.setMinimumSize(new java.awt.Dimension(46, 46));
+        jButtonLast.setPreferredSize(new java.awt.Dimension(46, 46));
+        jButtonLast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLastActionPerformed(evt);
+            }
+        });
+        jPanel27.add(jButtonLast);
+
+        jPanel40.add(jPanel27, java.awt.BorderLayout.LINE_END);
+
+        jPanel34.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel34.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 1, 7, 1));
+        jPanel34.setMinimumSize(new java.awt.Dimension(600, 46));
+        jPanel34.setPreferredSize(new java.awt.Dimension(600, 46));
+        jPanel34.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabelStatusHalaman.setFont(new java.awt.Font("FMMalithi", 0, 25)); // NOI18N
+        jLabelStatusHalaman.setText("msgq 1 isg 25 olajd");
+        jPanel34.add(jLabelStatusHalaman, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 19, 270, -1));
+
+        jLabelTotalData.setFont(new java.awt.Font("FMMalithi", 0, 25)); // NOI18N
+        jLabelTotalData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelTotalData.setText("uq¿ jd¾;d .Kk");
+        jPanel34.add(jLabelTotalData, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, 250, -1));
+
+        jPanel40.add(jPanel34, java.awt.BorderLayout.LINE_START);
+
+        jPanel37.add(jPanel40, java.awt.BorderLayout.PAGE_END);
+
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(950, 417));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(950, 417));
+
+        jTable.setFont(new java.awt.Font("Iskoola Pota", 0, 22)); // NOI18N
+        jTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Category"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable.setRowHeight(52);
+        jTable.setRowMargin(5);
+        jTable.setShowGrid(true);
+        jTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable);
+
+        tableScrollButton1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel37.add(tableScrollButton1, java.awt.BorderLayout.CENTER);
+
+        jPanel22.add(jPanel37);
 
         jPanel17.add(jPanel22, java.awt.BorderLayout.PAGE_END);
 
@@ -1055,6 +1419,112 @@ public class Home extends javax.swing.JFrame {
         focusSideBarButton(7);
     }//GEN-LAST:event_jButton7FocusGained
 
+    private void jButtonFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFirstActionPerformed
+        page = 1;
+        initPagination();
+    }//GEN-LAST:event_jButtonFirstActionPerformed
+
+    private void jButtonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPreviousActionPerformed
+        if (page > 1) {
+            page--;
+            initPagination();
+        }
+    }//GEN-LAST:event_jButtonPreviousActionPerformed
+
+    private void jButtonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNextActionPerformed
+        if (page < totalPage) {
+            page++;
+            initPagination();;
+        }
+    }//GEN-LAST:event_jButtonNextActionPerformed
+
+    private void jButtonLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLastActionPerformed
+        page = totalPage;
+        initPagination();
+    }//GEN-LAST:event_jButtonLastActionPerformed
+
+    private void jButtonNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNumActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonNumActionPerformed
+
+    private void jTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMouseClicked
+        // TODO add your handling code here:
+        int row = jTable.getSelectedRow();
+
+        jTextField4.setText(String.valueOf(jTable.getValueAt(row, 0)));
+        jTextField5.setText(String.valueOf(jTable.getValueAt(row, 1)));
+        jTextField1.setText(String.valueOf(jTable.getValueAt(row, 2)));
+
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
+        jButton15.setText("fjkia");
+        jButton15.setBackground(new Color(30, 30, 30));
+    }//GEN-LAST:event_jTableMouseClicked
+
+    private void clear() {
+
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField1.setText("");
+
+    }
+
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+
+        if ("iqrlskak".equals(jButton15.getText())) {
+            try {
+
+                Mysql.execute("INSERT INTO `transport` VALUES ('" + jTextField4.getText() + "','" + jTextField5.getText() + "','" + jTextField1.getText() + "')");
+
+            } catch (Exception e) {
+                //                Login.logger.log(Level.WARNING, "CompanyRegistration_update", e);
+                e.printStackTrace();
+
+            }
+        } else {
+
+            int row = jTable.getSelectedRow();
+
+            System.out.println("Update");
+            jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));
+            jButton15.setText("iqrlskak");
+            jButton15.setBackground(new Color(57, 117, 104));
+            clear();
+            if (row != -1) {
+
+                // Unselect the row
+                jTable.clearSelection();
+            }
+        }
+
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void autoResizeColumn(JTable jTable1) {
+
+        JTableHeader header = jTable1.getTableHeader();
+        int rowCount = jTable1.getRowCount();
+
+        final Enumeration columns = jTable1.getColumnModel().getColumns();
+        while (columns.hasMoreElements()) {
+            TableColumn column = (TableColumn) columns.nextElement();
+            int col = header.getColumnModel().getColumnIndex(column.getIdentifier());
+            int width = (int) jTable1.getTableHeader().getDefaultRenderer()
+                    .getTableCellRendererComponent(jTable1, column.getIdentifier(), false, false, -1, col).getPreferredSize().getWidth();
+
+            for (int row = 0; row < rowCount; row++) {
+                int preferedWidth = (int) jTable1.getCellRenderer(row, col).getTableCellRendererComponent(jTable1,
+                        jTable1.getValueAt(row, col), false, false, row, col).getPreferredSize().getWidth();
+                width = Math.max(width, preferedWidth);
+            }
+            // Account for cell spacing
+            width += jTable1.getIntercellSpacing().width;
+
+            // Set the column width
+            column.setPreferredWidth(width);
+
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1066,6 +1536,7 @@ public class Home extends javax.swing.JFrame {
         UIManager.put("Button.arc", radius);
         UIManager.put("Component.arc", radius);
         UIManager.put("TextComponent.arc", radius);
+        UIManager.put("ComboBox.selectionBackground", new ColorUIResource(new Color(57, 117, 104)));
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1092,6 +1563,13 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonFirst;
+    private javax.swing.JButton jButtonLast;
+    private javax.swing.JButton jButtonNext;
+    private javax.swing.JButton jButtonNum;
+    private javax.swing.JButton jButtonPrevious;
+    private javax.swing.JComboBox jComboBoxPage;
+    private javax.swing.JLabel jEntriesLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1110,6 +1588,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelStatusHalaman;
+    private javax.swing.JLabel jLabelTotalData;
+    private javax.swing.JLabel jLabelTotalData2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1129,6 +1610,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
@@ -1136,14 +1618,26 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel33;
+    private javax.swing.JPanel jPanel34;
+    private javax.swing.JPanel jPanel35;
+    private javax.swing.JPanel jPanel36;
+    private javax.swing.JPanel jPanel37;
+    private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel jShowLabel;
+    private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private table.TableScrollButton tableScrollButton1;
     // End of variables declaration//GEN-END:variables
 }
