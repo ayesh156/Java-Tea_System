@@ -8,7 +8,6 @@
 
 package model.transport;
 
-import model.product.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,15 +16,15 @@ import java.util.Date;
  * @author Cover Star
  */
 public class Transport {
-    private int id;
+    private String id;
     private String road_name;
     private String transport_rate;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

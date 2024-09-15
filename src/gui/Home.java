@@ -6,6 +6,7 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,9 +19,14 @@ import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.function.Supplier;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,16 +38,19 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+
 import model.Mysql;
+import model.leaf.LeafService;
+import model.transport.Transport;
 import model.transport.TransportService;
 import model.transport.TransportTableModel;
 
 /**
- *
  * @author ECOTEC
  */
 public class Home extends javax.swing.JFrame {
@@ -56,6 +65,8 @@ public class Home extends javax.swing.JFrame {
     Integer totalData = 0;
 
     private static TransportService transportService;
+
+    public static Logger logger = Logger.getLogger("tea_sys");
 
     /**
      * Creates new form Home
@@ -93,10 +104,10 @@ public class Home extends javax.swing.JFrame {
         jComboBoxPage.addItemListener(new ItemListener() {
 
             public void itemStateChanged(ItemEvent e) {
-                initPagination();
+                loadTable();
             }
         });
-        initPagination();
+        loadTable();
 
         jTable.setSelectionBackground(new Color(57, 117, 104));
         jTable.setSelectionForeground(new Color(255, 255, 255));
@@ -135,6 +146,18 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        jTextField2.setText("ටයිප් කරන්න...");
+        jTextField2.setForeground(Color.GRAY);
+
+        //logger
+        try {
+            FileHandler handler = new FileHandler("teaSystem.log", true);
+            handler.setFormatter(new SimpleFormatter());
+            logger.addHandler(handler);
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "logger", e);
+        }
+
     }
 
     private void customizeTableHeader(JTable table) {
@@ -159,7 +182,7 @@ public class Home extends javax.swing.JFrame {
 
     }
 
-    private void initPagination() {
+    private void loadTable() {
 
         totalData = transportService.count();
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
@@ -193,6 +216,47 @@ public class Home extends javax.swing.JFrame {
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
         autoResizeColumn(jTable);
+
+        jTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+
+        jButtonNum.setText(page.toString());
+
+    }
+
+    private void searchTable(String searchText) {
+
+        totalData = transportService.findCount(searchText);
+        rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
+        Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
+        totalPage = totalPageD.intValue();
+
+        if (page.equals(1)) {
+            jButtonFirst.setEnabled(false);
+            jButtonPrevious.setEnabled(false);
+        } else {
+            jButtonFirst.setEnabled(true);
+            jButtonPrevious.setEnabled(true);
+        }
+
+        if (page.equals(totalPage)) {
+            jButtonLast.setEnabled(false);
+            jButtonNext.setEnabled(false);
+        } else {
+            jButtonLast.setEnabled(true);
+            jButtonNext.setEnabled(true);
+        }
+
+        if (page > totalPage) {
+            page = 1;
+        }
+
+        transportTableModel = new TransportTableModel();
+        transportTableModel.setList(transportService.find(searchText, page, rowCountPerPage));
+        jTable.setModel(transportTableModel);
+
+        jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
+        jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
+        autoResizeColumn(jTable);
         jButtonNum.setText(page.toString());
 
     }
@@ -210,7 +274,7 @@ public class Home extends javax.swing.JFrame {
         buttonMap.put("btn10", jButton10);
     }
 
-    private void focusSideBarButton(int button) {
+    public void focusSideBarButton(int button) {
         for (int i = 1; i < 11; i++) {
             String key = "btn" + i;
 
@@ -323,6 +387,7 @@ public class Home extends javax.swing.JFrame {
         jPanel32 = new javax.swing.JPanel();
         jButton15 = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
+        jButton18 = new javax.swing.JButton();
         jPanel29 = new javax.swing.JPanel();
         jPanel30 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
@@ -914,7 +979,7 @@ public class Home extends javax.swing.JFrame {
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 231, Short.MAX_VALUE)
+            .addGap(0, 161, Short.MAX_VALUE)
         );
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -924,10 +989,10 @@ public class Home extends javax.swing.JFrame {
         jPanel28.add(jPanel33, java.awt.BorderLayout.CENTER);
 
         jPanel32.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel32.setMaximumSize(new java.awt.Dimension(330, 52));
-        jPanel32.setMinimumSize(new java.awt.Dimension(330, 52));
-        jPanel32.setPreferredSize(new java.awt.Dimension(330, 52));
-        jPanel32.setLayout(new java.awt.BorderLayout(20, 0));
+        jPanel32.setMaximumSize(new java.awt.Dimension(400, 52));
+        jPanel32.setMinimumSize(new java.awt.Dimension(400, 52));
+        jPanel32.setPreferredSize(new java.awt.Dimension(400, 52));
+        jPanel32.setLayout(new java.awt.BorderLayout(15, 0));
 
         jButton15.setBackground(new java.awt.Color(57, 117, 104));
         jButton15.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
@@ -945,7 +1010,7 @@ public class Home extends javax.swing.JFrame {
                 jButton15ActionPerformed(evt);
             }
         });
-        jPanel32.add(jButton15, java.awt.BorderLayout.LINE_START);
+        jPanel32.add(jButton15, java.awt.BorderLayout.CENTER);
 
         jButton16.setBackground(new java.awt.Color(213, 60, 60));
         jButton16.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
@@ -958,7 +1023,29 @@ public class Home extends javax.swing.JFrame {
         jButton16.setMinimumSize(new java.awt.Dimension(175, 52));
         jButton16.setOpaque(true);
         jButton16.setPreferredSize(new java.awt.Dimension(175, 52));
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
         jPanel32.add(jButton16, java.awt.BorderLayout.LINE_END);
+
+        jButton18.setBackground(new java.awt.Color(68, 150, 207));
+        jButton18.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
+        jButton18.setForeground(new java.awt.Color(255, 255, 255));
+        jButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/loading.png"))); // NOI18N
+        jButton18.setIconTextGap(8);
+        jButton18.setMargin(new java.awt.Insets(2, 9, 2, 9));
+        jButton18.setMaximumSize(new java.awt.Dimension(55, 52));
+        jButton18.setMinimumSize(new java.awt.Dimension(55, 52));
+        jButton18.setOpaque(true);
+        jButton18.setPreferredSize(new java.awt.Dimension(55, 52));
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
+        jPanel32.add(jButton18, java.awt.BorderLayout.LINE_START);
 
         jPanel28.add(jPanel32, java.awt.BorderLayout.LINE_END);
 
@@ -1031,6 +1118,7 @@ public class Home extends javax.swing.JFrame {
 
         jPanel21.setBackground(new java.awt.Color(245, 245, 245));
         jPanel21.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 22, 1, 22));
+        jPanel21.setToolTipText("");
         jPanel21.setMaximumSize(new java.awt.Dimension(32767, 64));
         jPanel21.setMinimumSize(new java.awt.Dimension(991, 64));
         jPanel21.setPreferredSize(new java.awt.Dimension(991, 64));
@@ -1093,9 +1181,27 @@ public class Home extends javax.swing.JFrame {
         jPanel36.add(jLabelTotalData2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 7, -1, -1));
 
         jTextField2.setFont(new java.awt.Font("Iskoola Pota", 0, 20)); // NOI18N
-        jTextField2.setText("Search Here...");
+        jTextField2.setToolTipText("Search Here...");
         jTextField2.setMinimumSize(new java.awt.Dimension(229, 40));
         jTextField2.setPreferredSize(new java.awt.Dimension(229, 40));
+        jTextField2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField2FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField2FocusLost(evt);
+            }
+        });
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
         jPanel36.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 12, -1, -1));
 
         jPanel38.add(jPanel36, java.awt.BorderLayout.LINE_END);
@@ -1228,6 +1334,11 @@ public class Home extends javax.swing.JFrame {
                 jTableMouseClicked(evt);
             }
         });
+        jTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTableKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable);
 
         tableScrollButton1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -1248,7 +1359,7 @@ public class Home extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("FMMalithi", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(73, 80, 87));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("m%jdyk wkqmd;h ");
+        jLabel10.setText("m%jdyk wkqmd;h");
         jLabel10.setMaximumSize(new java.awt.Dimension(32767, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(1011, 50));
         jLabel10.setOpaque(true);
@@ -1421,26 +1532,27 @@ public class Home extends javax.swing.JFrame {
 
     private void jButtonFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFirstActionPerformed
         page = 1;
-        initPagination();
+        loadTable();
     }//GEN-LAST:event_jButtonFirstActionPerformed
 
     private void jButtonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPreviousActionPerformed
         if (page > 1) {
             page--;
-            initPagination();
+            loadTable();
         }
     }//GEN-LAST:event_jButtonPreviousActionPerformed
 
     private void jButtonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNextActionPerformed
         if (page < totalPage) {
             page++;
-            initPagination();;
+            loadTable();
+            ;
         }
     }//GEN-LAST:event_jButtonNextActionPerformed
 
     private void jButtonLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLastActionPerformed
         page = totalPage;
-        initPagination();
+        loadTable();
     }//GEN-LAST:event_jButtonLastActionPerformed
 
     private void jButtonNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNumActionPerformed
@@ -1451,14 +1563,24 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         int row = jTable.getSelectedRow();
 
-        jTextField4.setText(String.valueOf(jTable.getValueAt(row, 0)));
-        jTextField5.setText(String.valueOf(jTable.getValueAt(row, 1)));
-        jTextField1.setText(String.valueOf(jTable.getValueAt(row, 2)));
+        // Check if the row index is valid
+        if (row >= 0 && row < jTable.getRowCount()) {
+            // Safely retrieve the values from the selected row
+            jTextField4.setText(String.valueOf(jTable.getValueAt(row, 0)));
+            jTextField5.setText(String.valueOf(jTable.getValueAt(row, 1)));
+            jTextField1.setText(String.valueOf(jTable.getValueAt(row, 2)));
 
-        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
-        jButton15.setText("fjkia");
-        jButton15.setBackground(new Color(30, 30, 30));
+            jTextField4.setEnabled(false);
+            setUpdateButton();
+        }
     }//GEN-LAST:event_jTableMouseClicked
+
+    private void setUpdateButton(){
+        // Update button properties
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
+        jButton15.setText("fjkia'"); // Assuming you meant "Update" instead of "fjkia"
+        jButton15.setBackground(new Color(30, 30, 30));
+    }
 
     private void clear() {
 
@@ -1471,33 +1593,192 @@ public class Home extends javax.swing.JFrame {
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
 
-        if ("iqrlskak".equals(jButton15.getText())) {
-            try {
+        String id = jTextField4.getText().trim();
+        String name = jTextField5.getText().trim();
+        String rate = jTextField1.getText().trim();
 
-                Mysql.execute("INSERT INTO `transport` VALUES ('" + jTextField4.getText() + "','" + jTextField5.getText() + "','" + jTextField1.getText() + "')");
-
-            } catch (Exception e) {
-                //                Login.logger.log(Level.WARNING, "CompanyRegistration_update", e);
-                e.printStackTrace();
-
-            }
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ud¾. wxlh we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ud¾.fha ku we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (rate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "m%jdyk wkqmd;h we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
+            try {
+                // Validate if rate is a valid number (either integer or float)
+                Float.parseFloat(rate); // Attempt to parse rate as a float
 
-            int row = jTable.getSelectedRow();
+                // First check if the ID already exists
 
-            System.out.println("Update");
-            jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));
-            jButton15.setText("iqrlskak");
-            jButton15.setBackground(new Color(57, 117, 104));
-            clear();
-            if (row != -1) {
+                if ("iqrlskak".equals(jButton15.getText())) {
+                    try {
 
-                // Unselect the row
-                jTable.clearSelection();
+                        TransportService transportService = new TransportService();
+                        int ftransport = transportService.findById(id);
+
+                        if (ftransport > 0) {
+                            // ID exists, show error message
+                            JOptionPane.showMessageDialog(this, "fuu wxlh oekgu;a mj;S' lreKdlr fjk;a wxlhla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+
+                            // Create a Transport object and set the values
+                            Transport transport = new Transport();
+                            transport.setId(id);
+                            transport.setRoad_name(name);
+                            transport.setTransport_rate(rate);
+
+                            // Call the save method in transportService
+                            transportService.save(transport);
+                            String searchText = jTextField2.getText();
+                            if(searchText.equals("ටයිප් කරන්න...")){
+                                loadTable();
+                            } else{
+                                searchTable(searchText);
+                            }
+                            clear();
+
+                        }
+
+                    } catch (Exception e) {
+                        logger.log(Level.WARNING, "Home", e);
+                        e.printStackTrace();
+
+                    }
+                } else {
+
+                    int row = jTable.getSelectedRow();
+
+                    if (row != -1) {  // Ensure a row is selected
+
+                        try {
+
+                            Transport transport = new Transport();
+                            transport.setId(id);
+                            transport.setRoad_name(name);
+                            transport.setTransport_rate(rate);
+
+                            // Call the update method in transportService
+                            TransportService transportService = new TransportService();
+                            transportService.update(transport);
+
+                        } catch (Exception e) {
+                            logger.log(Level.WARNING, "Home", e);
+                            e.printStackTrace();
+
+                        }
+
+                        clear();
+                        jTextField4.setEnabled(true);
+
+                        // Unselect the row if any was selected
+                        String searchText = jTextField2.getText();
+                        if(searchText.equals("ටයිප් කරන්න...")){
+                            loadTable();
+                        } else{
+                            searchTable(searchText);
+                        }
+                        setSaveButton();
+
+                    }
+                }
+
+            } catch (NumberFormatException e) {
+                // If the rate is not a valid number, show an error message
+                JOptionPane.showMessageDialog(this, "lreKdlr m%jdyk wkqmd;h wxlhla f,i we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
 
     }//GEN-LAST:event_jButton15ActionPerformed
+
+    private void setSaveButton(){
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));
+        jButton15.setText("iqrlskak");
+        jButton15.setBackground(new Color(57, 117, 104));
+    }
+
+    private void jTableKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTableKeyReleased
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTableKeyReleased
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        // TODO add your handling code here:
+        searchTable(jTextField2.getText().trim());
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained
+        // TODO add your handling code here:
+        if (jTextField2.getText().equals("ටයිප් කරන්න...")) {
+            jTextField2.setText("");
+            jTextField2.setForeground(Color.BLACK);  // Change color to black when focused
+        }
+    }//GEN-LAST:event_jTextField2FocusGained
+
+    private void jTextField2FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusLost
+        // TODO add your handling code here:
+        if (jTextField2.getText().isEmpty()) {
+            jTextField2.setForeground(Color.GRAY);  // Change color to gray when empty
+            jTextField2.setText("ටයිප් කරන්න...");
+        }
+    }//GEN-LAST:event_jTextField2FocusLost
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+        String id = jTextField4.getText().trim();
+
+        if (id.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "lreKdlr ud¾.hla f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            int row = jTable.getSelectedRow();
+
+            setUpdateButton();
+
+            try {
+
+                // Call the delete method in transportService
+                TransportService transportService = new TransportService();
+                transportService.delete(id);
+
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Home", e);
+                e.printStackTrace();
+
+            }
+
+            clear();
+            if (row != -1) {
+                // Unselect the row
+                jTable.clearSelection();
+            }
+            setSaveButton();
+            String searchText = jTextField2.getText();
+            if(searchText.equals("ටයිප් කරන්න...")){
+                loadTable();
+            } else{
+                searchTable(searchText);
+            }
+        }
+
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        // TODO add your handling code here:
+        int row = jTable.getSelectedRow();
+        clear();
+        if (row != -1) {
+            // Unselect the row
+            jTable.clearSelection();
+        }
+        loadTable();
+        jTextField2.setText("ටයිප් කරන්න...");
+        setSaveButton();
+        jTextField4.setEnabled(true);
+    }//GEN-LAST:event_jButton18ActionPerformed
 
     private void autoResizeColumn(JTable jTable1) {
 
@@ -1537,6 +1818,8 @@ public class Home extends javax.swing.JFrame {
         UIManager.put("Component.arc", radius);
         UIManager.put("TextComponent.arc", radius);
         UIManager.put("ComboBox.selectionBackground", new ColorUIResource(new Color(57, 117, 104)));
+        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font(
+                "FMMalithi", Font.PLAIN, 18)));
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1555,6 +1838,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
+    private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
