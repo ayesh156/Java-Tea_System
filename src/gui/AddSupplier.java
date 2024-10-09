@@ -5,7 +5,21 @@
 
 package gui;
 
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
+import model.suppliers.SuppliersModel;
+import model.suppliers.SuppliersService;
+
+import static gui.Home.logger;
+import javax.swing.*;
+
+import model.suppliers.Popups;
+import model.transport.Transport;
+import model.transport.TransportService;
 
 /**
  *
@@ -14,13 +28,79 @@ import javax.swing.JPanel;
 public class AddSupplier extends javax.swing.JDialog {
 
     /** Creates new form customer */
-    public AddSupplier(String supplierNo, String supplierName, String supplierAddress, String roadName) {
+
+    private HashMap<String, Transport> transportMap = new HashMap<>(); //to keep all products
+    private HashMap<String, String> transportNameMap = new HashMap<>(); //to keep product names with IDss
+
+    private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep all products
+    private HashMap<String, String> suppliersDocMap = new HashMap<>(); //to keep product names with IDss
+    private static AddSupplier instance; // Static instance to ensure only one instance is created
+    private String supplierNo; // Use instance variable instead of static
+
+    // Constructor
+    private AddSupplier(String sNo) {
         initComponents();
 
+        supplierNo = sNo;
+
+        if (!supplierNo.isEmpty()) {
+            setUpdateButton();
+            loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
+        } else {
+            newSupplier(); // Clear fields if `supplierNo` is empty
+        }
+    }
+
+    private void setUpdateButton(){
+        // Update button properties
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
+        jButton15.setText("fjkia'"); // Assuming you meant "Update" instead of "fjkia"
+        jButton15.setBackground(new Color(30, 30, 30));
+    }
+
+    // Method to get the single instance of AddSupplier
+    public static AddSupplier getInstance(String supplierNo) {
+        if (instance == null) {
+            instance = new AddSupplier(supplierNo);
+        } else {
+            if (supplierNo.isEmpty()) {
+                instance.newSupplier(); // Clear fields if `supplierNo` is empty
+            } else {
+                instance.loadSupplierData(supplierNo); // Load data if supplier number is provided
+            }
+            instance.toFront(); // Bring the existing instance to the front if it exists
+            instance.requestFocus();
+        }
+        return instance;
+    }
+
+    // Method to clear all fields
+    private void newSupplier() {
+        // Example of how you might clear fields:
+        jTextField4.setText("");
+        jTextField4.setEditable(true);
+        jTextField6.setText("");
+        jTextArea1.setText("");
+        jTextField5.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+        jLabel15.setText("kj iemhqïlrejka");
+        // Add code to clear any other input fields
+    }
+
+    private void loadSupplierData(String supplierNo){
         jTextField4.setText(supplierNo);
-        jTextField6.setText(supplierName);
-        jTextArea1.setText(supplierAddress);
-        jTextField5.setText(roadName);
+        jTextField4.setEditable(false);
+        SuppliersService ss = new SuppliersService();
+
+        SuppliersModel s = ss.findByDataById(supplierNo);
+        jTextField6.setText(s.getName());
+        jTextArea1.setText(s.getAddress());
+        jTextField5.setText(s.getRoad_name());
+        jTextField7.setText(s.getTransport_rate());
+        jTextField8.setText(s.getDoc_rate());
+
+        jLabel15.setText("iemhqïlrejka fjkia lsÍu");
     }
 
     /** This method is called from within the constructor to
@@ -32,6 +112,8 @@ public class AddSupplier extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopupMenu2 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -50,8 +132,12 @@ public class AddSupplier extends javax.swing.JDialog {
         jLabel22 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jTextField8 = new javax.swing.JTextField();
         jPanel28 = new javax.swing.JPanel();
         jPanel32 = new javax.swing.JPanel();
         jButton15 = new javax.swing.JButton();
@@ -203,6 +289,19 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField5.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField5.setMinimumSize(new java.awt.Dimension(882, 55));
         jTextField5.setPreferredSize(new java.awt.Dimension(882, 55));
+        jTextField5.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField5FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField5FocusLost(evt);
+            }
+        });
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField5KeyReleased(evt);
+            }
+        });
         jPanel6.add(jTextField5, java.awt.BorderLayout.PAGE_END);
 
         jPanel2.add(jPanel6);
@@ -213,6 +312,11 @@ public class AddSupplier extends javax.swing.JDialog {
         jPanel7.setPreferredSize(new java.awt.Dimension(975, 100));
         jPanel7.setLayout(new java.awt.BorderLayout());
 
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setMinimumSize(new java.awt.Dimension(430, 95));
+        jPanel8.setPreferredSize(new java.awt.Dimension(430, 98));
+        jPanel8.setLayout(new java.awt.BorderLayout());
+
         jLabel23.setBackground(new java.awt.Color(255, 255, 255));
         jLabel23.setFont(new java.awt.Font("FMMalithi", 0, 31)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(15, 15, 18));
@@ -222,15 +326,54 @@ public class AddSupplier extends javax.swing.JDialog {
         jLabel23.setMinimumSize(new java.awt.Dimension(296, 40));
         jLabel23.setPreferredSize(new java.awt.Dimension(296, 40));
         jLabel23.setVerifyInputWhenFocusTarget(false);
-        jPanel7.add(jLabel23, java.awt.BorderLayout.PAGE_START);
+        jPanel8.add(jLabel23, java.awt.BorderLayout.PAGE_START);
 
+        jTextField7.setEditable(false);
         jTextField7.setBackground(new java.awt.Color(245, 245, 245));
         jTextField7.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
         jTextField7.setForeground(new java.awt.Color(15, 15, 18));
         jTextField7.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField7.setMinimumSize(new java.awt.Dimension(882, 55));
         jTextField7.setPreferredSize(new java.awt.Dimension(882, 55));
-        jPanel7.add(jTextField7, java.awt.BorderLayout.PAGE_END);
+        jPanel8.add(jTextField7, java.awt.BorderLayout.PAGE_END);
+
+        jPanel7.add(jPanel8, java.awt.BorderLayout.LINE_START);
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setMinimumSize(new java.awt.Dimension(430, 95));
+        jPanel9.setPreferredSize(new java.awt.Dimension(430, 98));
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jLabel24.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel24.setFont(new java.awt.Font("FMMalithi", 0, 31)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel24.setText(",sms øjH .dia;=");
+        jLabel24.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 10, 1, new java.awt.Color(255, 255, 255)));
+        jLabel24.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        jLabel24.setMinimumSize(new java.awt.Dimension(296, 40));
+        jLabel24.setPreferredSize(new java.awt.Dimension(296, 40));
+        jLabel24.setVerifyInputWhenFocusTarget(false);
+        jPanel9.add(jLabel24, java.awt.BorderLayout.PAGE_START);
+
+        jTextField8.setBackground(new java.awt.Color(245, 245, 245));
+        jTextField8.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
+        jTextField8.setForeground(new java.awt.Color(15, 15, 18));
+        jTextField8.setMaximumSize(new java.awt.Dimension(2147483647, 52));
+        jTextField8.setMinimumSize(new java.awt.Dimension(882, 55));
+        jTextField8.setPreferredSize(new java.awt.Dimension(882, 55));
+        jTextField8.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField8FocusGained(evt);
+            }
+        });
+        jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField8KeyReleased(evt);
+            }
+        });
+        jPanel9.add(jTextField8, java.awt.BorderLayout.PAGE_END);
+
+        jPanel7.add(jPanel9, java.awt.BorderLayout.LINE_END);
 
         jPanel2.add(jPanel7);
 
@@ -264,7 +407,7 @@ public class AddSupplier extends javax.swing.JDialog {
         });
         jPanel32.add(jButton15, java.awt.BorderLayout.CENTER);
 
-        jButton16.setBackground(new java.awt.Color(30, 39, 46));
+        jButton16.setBackground(new java.awt.Color(243, 156, 18));
         jButton16.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
         jButton16.setForeground(new java.awt.Color(255, 255, 255));
         jButton16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/close.png"))); // NOI18N
@@ -327,115 +470,107 @@ public class AddSupplier extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void clear() {
+
+        jTextField4.setText("");
+        jTextField6.setText("");
+        jTextArea1.setText("");
+        jTextField5.setText("");
+        jTextField7.setText("");
+        jTextField8.setText("");
+
+    }
+
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
 
-        /*String yearString = String.valueOf(jComboBox2.getSelectedItem());
-        String month = String.valueOf(jComboBox1.getSelectedItem());
-        String rate = jTextField1.getText().trim();
+        String sNo = jTextField4.getText().trim();
+        String supplierName = jTextField6.getText().trim();
+        String supplierAddress = jTextArea1.getText().trim();
+        String rodeName = jTextField5.getText().trim();
+        String transportRate = jTextField7.getText().trim();
+        String docRate = jTextField8.getText().trim();
 
-        if (yearString.equals("අවුරුද්ද") || yearString.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "wjqreoao f;darkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (month.equals("මාසය") || month.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "udih f;darkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (rate.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "o¿ ñ< we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
+        if (sNo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "iemhqïlref.a wxlh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (supplierName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "iemhqïlref.a ku we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (supplierAddress.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "iemhqïlref.a ,smskh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (rodeName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ud¾.fha ku we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (transportRate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "lreKdlr oekgu;a mj;sk ud¾. kï muKla we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        }else if (docRate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, ",sms øjH .dia;= we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                // Validate if rate is a valid number (either integer or float)
-                Float.parseFloat(rate); // Attempt to parse rate as a float
+                // Validate if docRate is a valid number (either integer or float)
+                Float.parseFloat(docRate); // Attempt to parse rate as a float
 
-                // Convert yearString to Year object
-                Year year = Year.parse(yearString);
 
                 // First check if the ID already exists
 
                 if ("iqrlskak".equals(jButton15.getText())) {
+
                     try {
+                        SuppliersService supplierService = new SuppliersService();
+                        int fsupplier = supplierService.findById(sNo);
 
-                        LeafService leafService = new LeafService();
-                        int fleaf = leafService.findByData(yearString, month, rate);
-
-                        if (fleaf > 0) {
+                        if (fsupplier > 0) {
                             // ID exists, show error message
                             JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lreKdlr fjk;a o;a;h we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
                         } else {
 
                             // Create a Transport object and set the values
-                            Leaf leaf = new Leaf();
-                            leaf.setYear(year);
-                            leaf.setMonth(month);
-                            leaf.setLeaf_rate(rate);
+                            SuppliersModel supplier = new SuppliersModel();
+                            supplier.setId(sNo);
+                            supplier.setName(supplierName);
+                            supplier.setAddress(supplierAddress);
+                            supplier.setRoad_name(rodeName);
+                            supplier.setTransport_rate(transportRate);
+                            supplier.setDoc_rate(docRate);
 
                             // Call the save method in transportService
-                            leafService.save(leaf);
-                            String searchText = jTextField2.getText();
-                            if(searchText.equals("ටයිප් කරන්න...")){
-                                loadTable();
-                            } else{
-                                searchTable(searchText);
-                            }
+                            supplierService.save(supplier);
                             clear();
 
                         }
 
                     } catch (Exception e) {
-                        logger.log(Level.WARNING, "LeafRate", e);
+                        logger.log(Level.WARNING, "AddSupplier", e);
                         e.printStackTrace();
-
                     }
-                } else {
 
-                    int row = jTable.getSelectedRow();
+                } else{
 
-                    if (row != -1) {  // Ensure a row is selected
+                    try {
+                            // Create a Transport object and set the values
+                            SuppliersModel supplier = new SuppliersModel();
+                            supplier.setId(supplierNo);
+                            supplier.setName(supplierName);
+                            supplier.setAddress(supplierAddress);
+                            supplier.setRoad_name(rodeName);
+                            supplier.setTransport_rate(transportRate);
+                            supplier.setDoc_rate(docRate);
 
-                        try {
-                            // Retrieve the ID from the selected row
-                            String id = (String) jTable.getValueAt(row, 0);  // Assuming 'Id' is in the first column (index 0)
+                            // Call the save method in transportService
+                            SuppliersService supplierService = new SuppliersService();
+                            supplierService.update(supplier);
 
-                            // Create a Leaf object and set the values
-                            Leaf leaf = new Leaf();
-                            leaf.setId(id);  // Set the selected Id
-                            leaf.setYear(year);  // Set the selected year
-                            leaf.setMonth(month);  // Set the selected month
-                            leaf.setLeaf_rate(rate);  // Set the leaf rate
 
-                            // Call the update method in leafService
-                            LeafService leafService = new LeafService();
-                            boolean response = leafService.update(leaf);
-
-                            if(!response){
-                                JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lreKdlr fjk;a o;a;h we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
-
-                        } catch (Exception e) {
-                            // Log the error
-                            e.printStackTrace();
-                            logger.log(Level.WARNING, "LeafRate", e);
-                        }
-
-                        clear();
-
-                        // Unselect the row if any was selected
-                        jTable.clearSelection();
-                        String searchText = jTextField2.getText();
-                        if(searchText.equals("ටයිප් කරන්න...")){
-                            loadTable();
-                        } else{
-                            searchTable(searchText);
-                        }
-
-                        setSaveButton();
+                    } catch (Exception e) {
+                        logger.log(Level.WARNING, "AddSupplier", e);
+                        e.printStackTrace();
                     }
+
                 }
 
             } catch (NumberFormatException e) {
                 // If the rate is not a valid number, show an error message
-                JOptionPane.showMessageDialog(this, "lreKdlr o¿ ñ< wxlhla f,i we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "lreKdlr ,sms øjH .dia;= wxlhla f,i we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }*/
+        }
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
@@ -447,26 +582,129 @@ public class AddSupplier extends javax.swing.JDialog {
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         // TODO add your handling code here:
-        /*int row = jTable.getSelectedRow();
-        clear();
-        if (row != -1) {
-            // Unselect the row
-            jTable.clearSelection();
+        instance = null;
+        if (!supplierNo.isEmpty()) {
+            loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
+        } else {
+            newSupplier();
         }
-        loadTable();
-        jTextField2.setText("ටයිප් කරන්න...");
-        setSaveButton();*/
     }//GEN-LAST:event_jButton18ActionPerformed
+
+    private HashMap<String, String> loadTransport() {
+        transportMap.clear();
+        transportNameMap.clear();
+
+        String name = jTextField5.getText().trim();
+        int limit = name.isEmpty() ? 0 : 5;  // Define the limit if there's input text
+
+        // Set jTextField7 to empty if limit is 0
+        if (limit == 0) {
+            jTextField7.setText("");  // Clear the text field
+        }
+
+        // Initialize the service class
+        TransportService transportService = new TransportService();
+
+        // Fetch transport data using SupplierService
+        HashMap<String, Transport> tMap = transportService.getTransportByRoadName(name, limit);
+
+        // Populate tMap and transportNameMap with the fetched data
+        for (Map.Entry<String, Transport> entry : tMap.entrySet()) {
+            Transport transport = entry.getValue();
+            transportMap.put(transport.getId(), transport); // Adding the transport objects to the transportMap
+            transportNameMap.put(transport.getRoad_name(), transport.getId()); // Adding the Product names and IDs to the transportNameMap
+        }
+
+        return transportNameMap;
+    }
+
+    private HashMap<String, String> loadDoc() {
+        suppliersMap.clear();
+        suppliersDocMap.clear();
+
+        String doc = jTextField8.getText().trim();
+        int limit = doc.isEmpty() ? 0 : 5;  // Define the limit if there's input text
+
+        // Initialize the service class
+        SuppliersService suppliersService = new SuppliersService();
+
+        // Fetch transport data using SupplierService
+        HashMap<String, SuppliersModel> suMap = suppliersService.getSuppliersByDocRate(doc, limit);
+
+        // Populate suMap and transportNameMap with the fetched data
+        for (Map.Entry<String, SuppliersModel> entry : suMap.entrySet()) {
+            SuppliersModel suppliersModel = entry.getValue();
+            suppliersMap.put(suppliersModel.getId(), suppliersModel); // Adding the transport objects to the suppliersMap
+            suppliersDocMap.put(suppliersModel.getDoc_rate(), suppliersModel.getId()); // Adding the Product names and IDs to the transportNameMap
+        }
+
+        return suppliersDocMap;
+    }
+
+
+    private void jTextField5KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
+                Popups.loadPopupTextField5(jPopupMenu1, jTextField5, jTextField7, loadTransport(), transportMap);
+                if (jTextField5.getText().equals("")) {
+                    jPopupMenu1.setVisible(false);
+                }
+            } else {
+                jPopupMenu1.setVisible(false);
+            }
+
+            if (evt.getKeyCode() != KeyEvent.VK_DOWN && evt.getKeyCode() != KeyEvent.VK_UP) {
+                jTextField5.grabFocus();
+            }
+        }
+    }//GEN-LAST:event_jTextField5KeyReleased
+
+    private void jTextField8KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyReleased
+        // TODO add your handling code here:
+        if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
+                Popups.loadPopupTextField8(jPopupMenu2, jTextField8, loadDoc());
+                if (jTextField8.getText().equals("")) {
+                    jPopupMenu2.setVisible(false);
+                }
+            } else {
+                jPopupMenu2.setVisible(false);
+            }
+
+            if (evt.getKeyCode() != KeyEvent.VK_DOWN && evt.getKeyCode() != KeyEvent.VK_UP) {
+                jTextField8.grabFocus();
+            }
+        }
+    }//GEN-LAST:event_jTextField8KeyReleased
+
+    private void jTextField5FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusGained
+        // TODO add your handling code here:
+        if (!supplierNo.isEmpty()) {
+            jTextField5.setText("");
+        }
+    }//GEN-LAST:event_jTextField5FocusGained
+
+    private void jTextField5FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5FocusLost
+
+    private void jTextField8FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField8FocusGained
+        // TODO add your handling code here:
+        if (!supplierNo.isEmpty()) {
+            jTextField8.setText("");
+        }
+    }//GEN-LAST:event_jTextField8FocusGained
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+    /*public static void main(String args[]) {
+        *//* Set the Nimbus look and feel *//*
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        *//* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         *//*
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -500,10 +738,10 @@ public class AddSupplier extends javax.swing.JDialog {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the dialog */
+        *//* Create and display the dialog *//*
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddSupplier dialog = new AddSupplier("", "", "", "");
+                AddSupplier dialog = new AddSupplier("");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -513,7 +751,7 @@ public class AddSupplier extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton15;
@@ -525,6 +763,7 @@ public class AddSupplier extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel21;
@@ -536,12 +775,17 @@ public class AddSupplier extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
+    private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 
 }

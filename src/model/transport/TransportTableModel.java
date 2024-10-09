@@ -60,7 +60,7 @@ public class TransportTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return transport.getId();
+                return transport.getRoot_id();
                 
             case 1:
                 return transport.getRoad_name();

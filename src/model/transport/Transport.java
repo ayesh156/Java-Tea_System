@@ -17,15 +17,17 @@ import java.util.Date;
  */
 public class Transport {
     private String id;
+
+    private String root_id;
     private String road_name;
     private String transport_rate;
 
-    public String getId() {
-        return id;
+    public String getRoot_id() {
+        return root_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRoot_id(String root_id) {
+        this.root_id = root_id;
     }
 
     public String getRoad_name() {
@@ -44,9 +46,21 @@ public class Transport {
         this.transport_rate = transport_rate;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "Transport{" + "id=" + id + ", road_name=" + road_name + ", transport_rate=" + transport_rate + '}';
+        return "Transport{" +
+                "id='" + id + '\'' +
+                ", root_id='" + root_id + '\'' +
+                ", road_name='" + road_name + '\'' +
+                ", transport_rate='" + transport_rate + '\'' +
+                '}';
     }
-    
 }

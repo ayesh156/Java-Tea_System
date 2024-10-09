@@ -203,12 +203,12 @@ public class LeafService {
             String sql = String.format(
                     "SELECT COUNT(*) AS total " +
                             "FROM leaf_rate lr " +
-                            "INNER JOIN month m ON lr.month_id = m.id " +    // Assuming 'month_id' links the two tables
-                            "INNER JOIN year y ON lr.year_id = y.id " +      // Assuming 'year_id' links the two tables
-                            "WHERE lr.leaf_rate = '%%%s%%' " +          // Search in leaf_rate table
-                            "AND m.month = '%%%s%%' " +               // Search in month table
-                            "AND y.year = '%%%s%%'",                    // Search in year table
-                    year, month, rate
+                            "INNER JOIN month m ON lr.month_id = m.id " +
+                            "INNER JOIN year y ON lr.year_id = y.id " +
+                            "WHERE lr.leaf_rate = '%s' " +    // Exact match for leaf_rate
+                            "AND m.month = '%s' " +           // Exact match for month
+                            "AND y.year = '%s'",              // Exact match for year
+                    rate, month, year
             );
 
             ResultSet rs = Mysql.execute(sql);

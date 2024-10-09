@@ -12,12 +12,17 @@ package model.suppliers;
  *
  * @author Cover Star
  */
-public class Suppliers {
+public class SuppliersModel {
     private String id;
     private String name;
 
     private String address;
+    private String doc_rate;
+
+    private int transport_id;
+
     private String road_name;
+    private String transport_rate;
 
     public String getId() {
         return id;
@@ -43,6 +48,22 @@ public class Suppliers {
         this.address = address;
     }
 
+    public String getDoc_rate() {
+        return doc_rate;
+    }
+
+    public void setDoc_rate(String doc_rate) {
+        this.doc_rate = doc_rate;
+    }
+
+    public int getTransport_id() {
+        return transport_id;
+    }
+
+    public void setTransport_id(int transport_id) {
+        this.transport_id = transport_id;
+    }
+
     public String getRoad_name() {
         return road_name;
     }
@@ -51,13 +72,24 @@ public class Suppliers {
         this.road_name = road_name;
     }
 
+    public String getTransport_rate() {
+        return transport_rate;
+    }
+
+    public void setTransport_rate(String transport_rate) {
+        this.transport_rate = transport_rate;
+    }
+
     @Override
     public String toString() {
         return "Suppliers{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", doc_rate='" + doc_rate + '\'' +
+                ", transport_id=" + transport_id +
                 ", road_name='" + road_name + '\'' +
+                ", transport_rate='" + transport_rate + '\'' +
                 '}';
     }
 }

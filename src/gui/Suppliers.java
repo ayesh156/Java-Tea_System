@@ -12,14 +12,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
-import model.leaf.LeafService;
-import model.leaf.LeafTableModel;
+import static gui.Home.logger;
 import model.suppliers.SuppliersService;
 import model.suppliers.SuppliersTableModel;
 import model.year.YearModal;
@@ -67,9 +68,9 @@ public class Suppliers extends javax.swing.JPanel {
         // Customize the table header
         customizeTableHeader(jTable);
 
-        jComboBoxPage.addItem("5");
-        jComboBoxPage.addItem("15");
-        jComboBoxPage.addItem("30");
+        jComboBoxPage.addItem("10");
+        jComboBoxPage.addItem("20");
+        jComboBoxPage.addItem("35");
         jComboBoxPage.addItem("50");
         jComboBoxPage.addItem("100");
         jComboBoxPage.addItemListener(new ItemListener() {
@@ -136,7 +137,10 @@ public class Suppliers extends javax.swing.JPanel {
         card1 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jPanel20 = new javax.swing.JPanel();
-        jButton17 = new javax.swing.JButton();
+        jPanel26 = new javax.swing.JPanel();
+        jPanel28 = new javax.swing.JPanel();
+        jButton15 = new javax.swing.JButton();
+        jButton18 = new javax.swing.JButton();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
@@ -187,29 +191,75 @@ public class Suppliers extends javax.swing.JPanel {
         jPanel17.setLayout(new java.awt.BorderLayout());
 
         jPanel20.setBackground(new java.awt.Color(245, 245, 245));
-        jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 23, 1, 23, new java.awt.Color(245, 245, 245)));
+        jPanel20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 23, 0, 23, new java.awt.Color(245, 245, 245)));
         jPanel20.setMaximumSize(new java.awt.Dimension(32767, 52));
         jPanel20.setMinimumSize(new java.awt.Dimension(991, 52));
         jPanel20.setPreferredSize(new java.awt.Dimension(991, 52));
-        jPanel20.setLayout(new javax.swing.BoxLayout(jPanel20, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel20.setLayout(new java.awt.BorderLayout());
 
-        jButton17.setBackground(new java.awt.Color(57, 117, 104));
-        jButton17.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
-        jButton17.setForeground(new java.awt.Color(255, 255, 255));
-        jButton17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/plus.png"))); // NOI18N
-        jButton17.setText("kj iemhqïlrejka");
-        jButton17.setIconTextGap(8);
-        jButton17.setMargin(new java.awt.Insets(2, 9, 2, 9));
-        jButton17.setMaximumSize(new java.awt.Dimension(264, 52));
-        jButton17.setMinimumSize(new java.awt.Dimension(264, 52));
-        jButton17.setOpaque(true);
-        jButton17.setPreferredSize(new java.awt.Dimension(264, 52));
-        jButton17.addActionListener(new java.awt.event.ActionListener() {
+        jPanel26.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel26.setMaximumSize(new java.awt.Dimension(32767, 60));
+        jPanel26.setMinimumSize(new java.awt.Dimension(964, 60));
+        jPanel26.setName(""); // NOI18N
+        jPanel26.setPreferredSize(new java.awt.Dimension(964, 60));
+
+        javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
+        jPanel26.setLayout(jPanel26Layout);
+        jPanel26Layout.setHorizontalGroup(
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 964, Short.MAX_VALUE)
+        );
+        jPanel26Layout.setVerticalGroup(
+            jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        jPanel20.add(jPanel26, java.awt.BorderLayout.CENTER);
+
+        jPanel28.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel28.setMaximumSize(new java.awt.Dimension(32767, 52));
+        jPanel28.setMinimumSize(new java.awt.Dimension(964, 52));
+        jPanel28.setName(""); // NOI18N
+        jPanel28.setPreferredSize(new java.awt.Dimension(964, 52));
+        jPanel28.setLayout(new java.awt.BorderLayout());
+
+        jButton15.setBackground(new java.awt.Color(57, 117, 104));
+        jButton15.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
+        jButton15.setForeground(new java.awt.Color(255, 255, 255));
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png"))); // NOI18N
+        jButton15.setText("kj iemhqïlrejka");
+        jButton15.setIconTextGap(8);
+        jButton15.setMargin(new java.awt.Insets(2, 9, 2, 9));
+        jButton15.setMaximumSize(new java.awt.Dimension(264, 52));
+        jButton15.setMinimumSize(new java.awt.Dimension(264, 52));
+        jButton15.setOpaque(true);
+        jButton15.setPreferredSize(new java.awt.Dimension(264, 52));
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton17ActionPerformed(evt);
+                jButton15ActionPerformed(evt);
             }
         });
-        jPanel20.add(jButton17);
+        jPanel28.add(jButton15, java.awt.BorderLayout.LINE_START);
+
+        jButton18.setBackground(new java.awt.Color(213, 60, 60));
+        jButton18.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
+        jButton18.setForeground(new java.awt.Color(255, 255, 255));
+        jButton18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/delete.png"))); // NOI18N
+        jButton18.setText("bj;a lrkak");
+        jButton18.setIconTextGap(8);
+        jButton18.setMargin(new java.awt.Insets(2, 9, 2, 9));
+        jButton18.setMaximumSize(new java.awt.Dimension(175, 52));
+        jButton18.setMinimumSize(new java.awt.Dimension(175, 52));
+        jButton18.setOpaque(true);
+        jButton18.setPreferredSize(new java.awt.Dimension(175, 52));
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
+        jPanel28.add(jButton18, java.awt.BorderLayout.LINE_END);
+
+        jPanel20.add(jPanel28, java.awt.BorderLayout.PAGE_START);
 
         jPanel17.add(jPanel20, java.awt.BorderLayout.CENTER);
 
@@ -687,15 +737,11 @@ public class Suppliers extends javax.swing.JPanel {
         if (evt.getClickCount() == 2) {
             int selectedRow = jTable.getSelectedRow();
 
-            // Assuming supplier data is in the first and second columns
+            // Assuming supplier data is in the first column
             String supplierNo = jTable.getValueAt(selectedRow, 0).toString();
-            String supplierName = jTable.getValueAt(selectedRow, 1).toString();
-            String supplierAddress = jTable.getValueAt(selectedRow, 2).toString();
-            String roadName = jTable.getValueAt(selectedRow, 3).toString();
-            // Add more fields as necessary
 
             // Open AddSupplier dialog with the selected supplier's data
-            AddSupplier addSupplierDialog = new AddSupplier(supplierNo, supplierName, supplierAddress, roadName);
+            AddSupplier addSupplierDialog = AddSupplier.getInstance(supplierNo);
             addSupplierDialog.setVisible(true);
         }
     }//GEN-LAST:event_jTableMouseClicked
@@ -713,13 +759,63 @@ public class Suppliers extends javax.swing.JPanel {
 
     }
 
-    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
-        AddSupplier sf = new AddSupplier("", "", "", "");
+       int row = jTable.getSelectedRow();
 
+        if (row != -1) { // If a row is selected
+            jTable.clearSelection();
+        }
+
+        // Open the AddSupplier form for a new supplier
+        AddSupplier sf = AddSupplier.getInstance("");
         sf.setVisible(true);
+    }//GEN-LAST:event_jButton15ActionPerformed
 
-    }//GEN-LAST:event_jButton17ActionPerformed
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        // TODO add your handling code here:
+        int row = jTable.getSelectedRow();  // Get the selected row
+
+        if (row != -1) {  // Ensure a valid row is selected
+            // Assuming the ID is in the first column
+            String id = jTable.getValueAt(row, 0).toString();
+
+            // Show a confirmation dialog
+            int response = JOptionPane.showConfirmDialog(null,
+                    "Tng fuu o;a; uelSug wjYH nj úYajdio@",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            // If the user confirms (YES option)
+            if (response == JOptionPane.YES_OPTION) {
+                setUpdateButton();  // Call setUpdateButton()
+
+                try {
+                    // Call the delete method in transportService
+                    SuppliersService transportService = new SuppliersService();
+                    transportService.delete(id);  // Perform the deletion
+
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Home", e);
+                    e.printStackTrace();
+                }
+
+                // Reload or search table after deletion
+                String searchText = jTextField2.getText();
+                if (searchText.equals("ටයිප් කරන්න...")) {
+                    loadTable();  // Reload the full table
+                } else {
+                    searchTable(searchText);  // Search the table with the given text
+                }
+
+            }
+
+        } else {
+            // If no row is selected, show an error message
+            JOptionPane.showMessageDialog(null, "lreKdlr bj;a lsÍug wjYH o;a;h f;darkak'", "No Selection", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton18ActionPerformed
 
     private void autoResizeColumn(JTable jTable1) {
 
@@ -750,7 +846,8 @@ public class Suppliers extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel card1;
     private javax.swing.JPanel cardPanel;
-    private javax.swing.JButton jButton17;
+    private javax.swing.JButton jButton15;
+    private javax.swing.JButton jButton18;
     private javax.swing.JButton jButtonFirst;
     private javax.swing.JButton jButtonLast;
     private javax.swing.JButton jButtonNext;
@@ -773,7 +870,9 @@ public class Suppliers extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel36;

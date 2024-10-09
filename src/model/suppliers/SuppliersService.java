@@ -2,9 +2,12 @@ package model.suppliers;
 
 
 import model.Mysql;
+import model.transport.Transport;
+import model.transport.TransportService;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -12,29 +15,81 @@ import static gui.Home.logger;
 
 public class SuppliersService {
 
-//    public void update(Suppliers suppliers) {
-////        System.out.println(suppliers.getRoad_name() + " "+ suppliers.getTransport_rate() + " "+ suppliers.getId());
-//        try {
-//            String sql = String.format(
-//                    "UPDATE suppliers SET road_name = '%s', transport_rate = '%s' WHERE id = '%s'",
-//                    suppliers.getRoad_name(), suppliers.getTransport_rate(), suppliers.getId());
-//            Mysql.execute(sql); // Execute the update query
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            logger .log(Level.WARNING, "Suppliers", ex);
-//        }
-//    }
+    private TransportService transportService = new TransportService();
 
-//    public void save(Suppliers suppliers) {
-//        try {
-//            String sql = String.format("INSERT INTO suppliers (id, road_name, transport_rate) VALUES ('%s', '%s', '%s')",
-//                    suppliers.getId(), suppliers.getRoad_name(), suppliers.getTransport_rate());
-//            Mysql.execute(sql);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            logger .log(Level.WARNING, "Suppliers", ex);
-//        }
-//    }
+    public void update(SuppliersModel supplier) {
+
+        try {
+
+            // Search for transport ID using road_name and transportRate
+            int transportId = findTransportId(supplier.getRoad_name(), supplier.getTransport_rate());
+
+            // If transport ID is found, update the supplier
+            if (transportId != -1) {
+                String sql = String.format(
+                        "UPDATE suppliers SET name = '%s', address = '%s', doc_rate = '%s', transport_id = %d WHERE id = '%s'",
+                        supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId, supplier.getId()
+                );
+
+                Mysql.execute(sql); // Execute the update query
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Update Add Supplier", ex);
+        }
+
+
+    }
+
+    public void save(SuppliersModel supplier) {
+
+        try {
+            // Search for transport ID using road_name and transportRate
+            int transportId = findTransportId(supplier.getRoad_name(), supplier.getTransport_rate());
+
+            System.out.println(transportId);
+
+            // If transport ID is found, save the supplier
+            if (transportId != -1) {
+                String sql = String.format(
+                        "INSERT INTO suppliers (id,name, address, doc_rate, transport_id) VALUES ('%s', '%s', '%s', '%s', %d)",
+                        supplier.getId() ,supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId
+                );
+
+                Mysql.execute(sql); // Execute the insert query
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Save Add Supplier", ex);
+        }
+
+    }
+
+    private int findTransportId(String roadName, String transportRate) {
+        // Implement your logic to query the transport table and retrieve the transport ID
+        // Return the transport ID or -1 if not found
+        String query = String.format(
+                "SELECT id FROM transport WHERE road_name = '%s' AND transport_rate = '%s'",
+                roadName, transportRate
+        );
+
+        try {
+            // Execute the query and process the result to get the transport ID
+            // Example:
+            ResultSet resultSet = Mysql.execute(query);
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Find Add Supplier", ex);
+        }
+
+        return -1; // Indicate that the transport ID was not found
+    }
 
     public void delete(String id) {
         try {
@@ -42,23 +97,58 @@ public class SuppliersService {
             Mysql.execute(sql); // Execute the delete query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger .log(Level.WARNING, "Home", ex);
         }
     }
 
-    public List<Suppliers> findAll(int page, int pageSize) {
-        List<Suppliers> listSuppliers = new ArrayList<>();
+    public HashMap<String, SuppliersModel> getSuppliersByDocRate(String docRate, int limit) {
+        HashMap<String, SuppliersModel> suppliersMap = new HashMap<>();
+
+        try {
+            String queryLimit = limit > 0 ? " LIMIT " + limit : "";
+            String sql = "SELECT * FROM `suppliers` WHERE `doc_rate` LIKE '%" + docRate + "%'" + queryLimit;
+
+            ResultSet results = Mysql.execute(sql);
+
+            while (results.next()) {
+                String id = results.getString("id");
+
+                // Check if the supplier is already in the map
+                if (!suppliersMap.containsKey(id)) {
+                    SuppliersModel suppliersModel = new SuppliersModel();
+                    suppliersModel.setId(id);
+                    suppliersModel.setDoc_rate(results.getString("doc_rate"));
+
+                    // Add the supplier to the map
+                    suppliersMap.put(id, suppliersModel);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return suppliersMap;
+    }
+
+    public List<SuppliersModel> findAll(int page, int pageSize) {
+        List<SuppliersModel> listSuppliers = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format("SELECT * FROM suppliers ORDER BY id ASC LIMIT %d, %d", offset, pageSize);
             ResultSet rs = Mysql.execute(sql);
 
             while (rs != null && rs.next()) {
-                Suppliers p = new Suppliers();
+                SuppliersModel p = new SuppliersModel();
                 p.setId(rs.getString("id"));
                 p.setName(rs.getString("name"));
                 p.setAddress(rs.getString("address"));
-                p.setRoad_name(rs.getString("road_name"));
+                p.setTransport_id(rs.getInt("transport_id"));
+
+                // Fetch transport data using transport_id
+                Transport transport = transportService.getTransportById(p.getTransport_id());
+                if (transport != null) {
+                    p.setRoad_name(transport.getRoad_name());
+                }
                 listSuppliers.add(p);
             }
         } catch (Exception ex) {
@@ -68,22 +158,29 @@ public class SuppliersService {
         return listSuppliers;
     }
 
-    public List<Suppliers> find(String searchText, int page, int pageSize) {
-        List<Suppliers> listSuppliers = new ArrayList<>();
+    public List<SuppliersModel> find(String searchText, int page, int pageSize) {
+        List<SuppliersModel> listSuppliers = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format(
-                    "SELECT * FROM suppliers WHERE name LIKE '%%%s%%' OR address LIKE '%%%s%%' OR road_name LIKE '%%%s%%' LIMIT %d, %d",
+                    "SELECT * FROM suppliers s INNER JOIN transport t ON s.transport_id = t.id  " +
+                            "WHERE s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%' LIMIT %d, %d",
                     searchText, searchText, searchText, offset, pageSize
             );
             ResultSet rs = Mysql.execute(sql);
 
             while (rs != null && rs.next()) {
-                Suppliers p = new Suppliers();
+                SuppliersModel p = new SuppliersModel();
                 p.setId(rs.getString("id"));
                 p.setName(rs.getString("name"));
                 p.setAddress(rs.getString("address"));
-                p.setRoad_name(rs.getString("road_name"));
+                p.setTransport_id(rs.getInt("transport_id"));
+
+                // Fetch transport data using transport_id
+                Transport transport = transportService.getTransportById(p.getTransport_id());
+                if (transport != null) {
+                    p.setRoad_name(transport.getRoad_name());
+                }
                 listSuppliers.add(p);
             }
         } catch (Exception ex) {
@@ -92,6 +189,7 @@ public class SuppliersService {
         }
         return listSuppliers;
     }
+
 
     public int findById(String id) {
         int total = 0;
@@ -116,7 +214,8 @@ public class SuppliersService {
         int total = 0;
         try {
             String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM suppliers WHERE name LIKE '%%%s%%' OR address LIKE '%%%s%%' OR road_name LIKE '%%%s%%'",
+                    "SELECT COUNT(*) AS total FROM suppliers s INNER JOIN transport t ON s.transport_id = t.id  " +
+                            "WHERE s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%'",
                     searchText, searchText, searchText
                     );
             ResultSet rs = Mysql.execute(sql);
@@ -129,6 +228,93 @@ public class SuppliersService {
             logger .log(Level.WARNING, "Suppliers", ex);
         }
         return total;
+    }
+
+    public HashMap<String, SuppliersModel> getSuppliersName(String name, int limit) {
+        HashMap<String, SuppliersModel> suppliersMap = new HashMap<>();
+
+        try {
+            String queryLimit = limit > 0 ? " LIMIT " + limit : "";
+            String sql = "SELECT * FROM `suppliers` WHERE `name` LIKE '%" + name + "%'" + queryLimit;
+
+            ResultSet results = Mysql.execute(sql);
+
+            while (results.next()) {
+                SuppliersModel suppliers = new SuppliersModel();
+                suppliers.setId(results.getString("id"));
+                suppliers.setName(results.getString("name"));
+                suppliers.setAddress(results.getString("address"));
+                suppliers.setDoc_rate(results.getString("doc_rate"));
+
+                // Add the transport data to the map
+                suppliersMap.put(suppliers.getId(), suppliers);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return suppliersMap;
+    }
+
+    public HashMap<String, SuppliersModel> getSuppliersId(String id, int limit) {
+        HashMap<String, SuppliersModel> suppliersMap = new HashMap<>();
+
+        try {
+            String queryLimit = limit > 0 ? " LIMIT " + limit : "";
+            String sql = "SELECT * FROM `suppliers` WHERE `id` LIKE '%" + id + "%'" + queryLimit;
+
+            ResultSet results = Mysql.execute(sql);
+
+            while (results.next()) {
+                SuppliersModel suppliers = new SuppliersModel();
+                suppliers.setId(results.getString("id"));
+                suppliers.setName(results.getString("name"));
+                suppliers.setAddress(results.getString("address"));
+                suppliers.setDoc_rate(results.getString("doc_rate"));
+
+                // Add the transport data to the map
+                suppliersMap.put(suppliers.getId(), suppliers);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return suppliersMap;
+    }
+
+    public SuppliersModel findByDataById(String fId) {
+        SuppliersModel supplier = null;
+        try {
+            System.out.println(fId);
+            // SQL query to find if another record exists with the same year, month, and rate, excluding the current record
+            String sql = String.format(
+                    "SELECT * FROM suppliers WHERE id = '%s'",
+                    fId
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                supplier = new SuppliersModel();
+                supplier.setId(rs.getString("id"));
+                supplier.setName(rs.getString("name"));
+                supplier.setAddress(rs.getString("address"));
+                supplier.setTransport_id(rs.getInt("transport_id"));
+                supplier.setDoc_rate(rs.getString("doc_rate"));
+
+                // Fetch transport data using transport_id
+                Transport transport = transportService.getTransportById(supplier.getTransport_id());
+                if (transport != null) {
+                    supplier.setRoad_name(transport.getRoad_name());
+                    supplier.setTransport_rate(transport.getTransport_rate());
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "LeafRate", ex);
+        }
+        return supplier;
     }
 
 

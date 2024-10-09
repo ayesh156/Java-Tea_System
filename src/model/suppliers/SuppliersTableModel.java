@@ -17,20 +17,20 @@ import java.util.List;
  */
 public class SuppliersTableModel extends AbstractTableModel {
 
-    List<Suppliers> listSuppliers = new ArrayList<Suppliers>();
+    List<SuppliersModel> listSuppliers = new ArrayList<SuppliersModel>();
     private final String HEADER[] = {"ie' wx'","ie' ku", ",smskh", "ud¾.fha ku"};
 
-    public void setList(List<Suppliers> listSuppliers) {
+    public void setList(List<SuppliersModel> listSuppliers) {
         this.listSuppliers = listSuppliers;
     }
 
-    public void save(Suppliers suppliers) {
-        listSuppliers.add(suppliers);
+    public void save(SuppliersModel suppliersModel) {
+        listSuppliers.add(suppliersModel);
         fireTableRowsInserted(getRowCount() - 1, getRowCount() - 1);
     }
 
-    public void edit(int index, Suppliers suppliers) {
-        listSuppliers.set(index, suppliers);
+    public void edit(int index, SuppliersModel suppliersModel) {
+        listSuppliers.set(index, suppliersModel);
         fireTableRowsUpdated(index, index);
     }
 
@@ -39,7 +39,7 @@ public class SuppliersTableModel extends AbstractTableModel {
         fireTableRowsDeleted(index, index);
     }
 
-    public Suppliers findOne(int index) {
+    public SuppliersModel findOne(int index) {
         return listSuppliers.get(index);
     }
 
@@ -56,20 +56,20 @@ public class SuppliersTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Suppliers suppliers = listSuppliers.get(rowIndex);
+        SuppliersModel suppliersModel = listSuppliers.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
-                return suppliers.getId();
+                return suppliersModel.getId();
                 
             case 1:
-                return suppliers.getName();
+                return suppliersModel.getName();
                 
             case 2:
-                return suppliers.getAddress();
+                return suppliersModel.getAddress();
 
             case 3:
-                return suppliers.getRoad_name();
+                return suppliersModel.getRoad_name();
 
             default:
                 return null;

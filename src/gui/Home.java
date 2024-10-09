@@ -1454,6 +1454,11 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        DailyLeaf leafRate = new DailyLeaf();
+        cardPanel.removeAll();
+        cardPanel.add(leafRate);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1570,7 +1575,7 @@ public class Home extends javax.swing.JFrame {
             jTextField5.setText(String.valueOf(jTable.getValueAt(row, 1)));
             jTextField1.setText(String.valueOf(jTable.getValueAt(row, 2)));
 
-            jTextField4.setEnabled(false);
+            jTextField4.setEditable(false);
             setUpdateButton();
         }
     }//GEN-LAST:event_jTableMouseClicked
@@ -1668,7 +1673,7 @@ public class Home extends javax.swing.JFrame {
                         }
 
                         clear();
-                        jTextField4.setEnabled(true);
+                        jTextField4.setEditable(true);
 
                         // Unselect the row if any was selected
                         String searchText = jTextField2.getText();
@@ -1777,7 +1782,7 @@ public class Home extends javax.swing.JFrame {
         loadTable();
         jTextField2.setText("ටයිප් කරන්න...");
         setSaveButton();
-        jTextField4.setEnabled(true);
+        jTextField4.setEditable(true);
     }//GEN-LAST:event_jButton18ActionPerformed
 
     private void autoResizeColumn(JTable jTable1) {
