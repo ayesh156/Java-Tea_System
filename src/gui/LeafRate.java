@@ -47,7 +47,7 @@ public class LeafRate extends javax.swing.JPanel {
     Integer totalPage = 1;
     Integer totalData = 0;
 
-    private static LeafService leafService;
+    private static LeafService dailyLeafService;
     
 
 
@@ -56,7 +56,7 @@ public class LeafRate extends javax.swing.JPanel {
      */
     public LeafRate() {
 
-        leafService = new LeafService();
+        dailyLeafService = new LeafService();
 
         initComponents();
 
@@ -778,7 +778,7 @@ public class LeafRate extends javax.swing.JPanel {
 
     private void loadTable() {
 
-        totalData = leafService.count();
+        totalData = dailyLeafService.count();
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -808,7 +808,7 @@ public class LeafRate extends javax.swing.JPanel {
         }
 
         leafTableModel = new LeafTableModel();
-        leafTableModel.setList(leafService.findAll(page, rowCountPerPage));
+        leafTableModel.setList(dailyLeafService.findAll(page, rowCountPerPage));
         jTable.setModel(leafTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
@@ -823,7 +823,7 @@ public class LeafRate extends javax.swing.JPanel {
 
     private void searchTable(String searchText) {
 
-        totalData = leafService.findCount(searchText);
+        totalData = dailyLeafService.findCount(searchText);
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -849,7 +849,7 @@ public class LeafRate extends javax.swing.JPanel {
         }
 
         leafTableModel = new LeafTableModel();
-        leafTableModel.setList(leafService.find(searchText, page, rowCountPerPage));
+        leafTableModel.setList(dailyLeafService.find(searchText, page, rowCountPerPage));
         jTable.setModel(leafTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
@@ -950,29 +950,43 @@ public class LeafRate extends javax.swing.JPanel {
 
             String id = (String) jTable.getValueAt(row, 0);
 
-            try {
 
-                // Call the delete method in transportService
-                LeafService leafService = new LeafService();
-                leafService.delete(id);
 
-            } catch (Exception e) {
-                logger.log(Level.WARNING, "LeafRate", e);
-                e.printStackTrace();
+            // Show a confirmation dialog
+            int response = JOptionPane.showConfirmDialog(null,
+                    "Tng fuu o;a; uelSug wjYH nj úYajdio@",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
 
-            }
+            // If the user confirms (YES option)
+            if (response == JOptionPane.YES_OPTION) {
 
-            clear();
-            if (row != -1) {
-                // Unselect the row
-                jTable.clearSelection();
-            }
-            setSaveButton();
-            String searchText = jTextField2.getText();
-            if(searchText.equals("ටයිප් කරන්න...")){
-                loadTable();
-            } else{
-                searchTable(searchText);
+                try {
+
+                    // Call the delete method in transportService
+                    LeafService dailyLeafService = new LeafService();
+                    dailyLeafService.delete(id);
+
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "LeafRate", e);
+                    e.printStackTrace();
+
+                }
+
+                clear();
+                if (row != -1) {
+                    // Unselect the row
+                    jTable.clearSelection();
+                }
+                setSaveButton();
+                String searchText = jTextField2.getText();
+                if (searchText.equals("ටයිප් කරන්න...")) {
+                    loadTable();
+                } else {
+                    searchTable(searchText);
+                }
+
             }
         }
     }//GEN-LAST:event_jButton16ActionPerformed
@@ -1009,8 +1023,8 @@ public class LeafRate extends javax.swing.JPanel {
                 if ("iqrlskak".equals(jButton15.getText())) {
                     try {
 
-                        LeafService leafService = new LeafService();
-                        int fleaf = leafService.findByData(yearString, month, rate);
+                        LeafService dailyLeafService = new LeafService();
+                        int fleaf = dailyLeafService.findByData(yearString, month, rate);
 
                         if (fleaf > 0) {
                             // ID exists, show error message
@@ -1024,7 +1038,7 @@ public class LeafRate extends javax.swing.JPanel {
                             leaf.setLeaf_rate(rate);
 
                             // Call the save method in transportService
-                            leafService.save(leaf);
+                            dailyLeafService.save(leaf);
                             String searchText = jTextField2.getText();
                             if(searchText.equals("ටයිප් කරන්න...")){
                                 loadTable();
@@ -1058,9 +1072,9 @@ public class LeafRate extends javax.swing.JPanel {
                             leaf.setMonth(month);  // Set the selected month
                             leaf.setLeaf_rate(rate);  // Set the leaf rate
 
-                            // Call the update method in leafService
-                            LeafService leafService = new LeafService();
-                            boolean response = leafService.update(leaf);
+                            // Call the update method in dailyLeafService
+                            LeafService dailyLeafService = new LeafService();
+                            boolean response = dailyLeafService.update(leaf);
 
                             if(!response){
                                 JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lreKdlr fjk;a o;a;h we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);

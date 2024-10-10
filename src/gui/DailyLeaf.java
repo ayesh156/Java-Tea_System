@@ -10,6 +10,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.*;
 import java.util.List;
@@ -20,6 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import model.dailyLeaf.DailyLeafModel;
+import model.dailyLeaf.DailyLeafService;
 import model.leaf.Leaf;
 import model.leaf.LeafService;
 import model.leaf.LeafTableModel;
@@ -27,12 +31,14 @@ import model.Mysql;
 import model.month.MonthModal;
 import model.month.MonthService;
 import model.dailyLeaf.Popups;
+import model.dailyLeaf.DailyLeafTableModel;
 import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
 import model.transport.Transport;
 import model.transport.TransportService;
 import model.year.YearModal;
 import model.year.YearService;
+
 import static gui.Home.logger;
 
 /**
@@ -48,15 +54,14 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private java.util.HashMap<String, JButton> buttonMap = new HashMap<>();
 
-    LeafTableModel leafTableModel;
+    DailyLeafTableModel dailyLeafTableModel;
 
     Integer page = 1;
     Integer rowCountPerPage = 5;
     Integer totalPage = 1;
     Integer totalData = 0;
 
-    private static LeafService leafService;
-    
+    private static DailyLeafService dailyLeafService;
 
 
     /**
@@ -64,7 +69,7 @@ public class DailyLeaf extends javax.swing.JPanel {
      */
     public DailyLeaf() {
 
-        leafService = new LeafService();
+        dailyLeafService = new DailyLeafService();
 
         initComponents();
 
@@ -159,7 +164,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         }
 
         // Set the combo box model with the years dynamically
-        
+
     }
 
     private void loadYearsCombobox() {
@@ -179,9 +184,8 @@ public class DailyLeaf extends javax.swing.JPanel {
         }
 
         // Set the combo box model with the years dynamically
-       
-    }
 
+    }
 
 
     /**
@@ -439,6 +443,7 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField6KeyPressed(evt);
             }
+
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField6KeyReleased(evt);
             }
@@ -472,6 +477,7 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField7KeyPressed(evt);
             }
+
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField7KeyReleased(evt);
             }
@@ -496,7 +502,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         jLabel26.setBackground(new java.awt.Color(255, 255, 255));
         jLabel26.setFont(new java.awt.Font("FMMalithi", 0, 26)); // NOI18N
         jLabel26.setForeground(new java.awt.Color(15, 15, 18));
-        jLabel26.setText("m%jdyk .dia;=j");
+        jLabel26.setText("m%jdyk wkqmd;h");
         jLabel26.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 10, 1, new java.awt.Color(255, 255, 255)));
         jLabel26.setMaximumSize(new java.awt.Dimension(2147483647, 40));
         jLabel26.setMinimumSize(new java.awt.Dimension(296, 40));
@@ -533,12 +539,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
-            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 558, Short.MAX_VALUE)
+                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 558, Short.MAX_VALUE)
         );
         jPanel31Layout.setVerticalGroup(
-            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 47, Short.MAX_VALUE)
+                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 47, Short.MAX_VALUE)
         );
 
         jPanel28.add(jPanel31, java.awt.BorderLayout.CENTER);
@@ -554,12 +560,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
-            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 158, Short.MAX_VALUE)
+                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 158, Short.MAX_VALUE)
         );
         jPanel33Layout.setVerticalGroup(
-            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 52, Short.MAX_VALUE)
+                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 52, Short.MAX_VALUE)
         );
 
         jPanel32.add(jPanel33, java.awt.BorderLayout.CENTER);
@@ -706,6 +712,7 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField2FocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField2FocusLost(evt);
             }
@@ -828,19 +835,19 @@ public class DailyLeaf extends javax.swing.JPanel {
 
         jTable.setFont(new java.awt.Font("Iskoola Pota", 0, 22)); // NOI18N
         jTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object[][]{
 
-            },
-            new String [] {
-                "ID", "Name", "Category"
-            }
+                },
+                new String[]{
+                        "ID", "Name", "Category"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
+            boolean[] canEdit = new boolean[]{
+                    false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         jTable.setRowHeight(52);
@@ -884,12 +891,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel18Layout.setVerticalGroup(
-            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         card1.add(jPanel18, java.awt.BorderLayout.PAGE_START);
@@ -971,7 +978,7 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private void loadTable() {
 
-        totalData = leafService.count();
+        totalData = dailyLeafService.count();
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -987,12 +994,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         if (page.equals(totalPage)) {
             jButtonNext.setEnabled(false);
             jButtonLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/dis_last_arrow.png")));
-            jButtonLast.setBackground(new Color(249, 249,249));
+            jButtonLast.setBackground(new Color(249, 249, 249));
             jButtonLast.setFocusPainted(false);
 
         } else {
             jButtonNext.setEnabled(true);
-            jButtonLast.setBackground(new Color(255, 255,255));
+            jButtonLast.setBackground(new Color(255, 255, 255));
             jButtonLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/last_arrow.png")));
         }
 
@@ -1000,15 +1007,13 @@ public class DailyLeaf extends javax.swing.JPanel {
             page = 1;
         }
 
-        leafTableModel = new LeafTableModel();
-        leafTableModel.setList(leafService.findAll(page, rowCountPerPage));
-        jTable.setModel(leafTableModel);
+        dailyLeafTableModel = new DailyLeafTableModel();
+        dailyLeafTableModel.setList(dailyLeafService.findAll(page, rowCountPerPage));
+        jTable.setModel(dailyLeafTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
         autoResizeColumn(jTable);
-
-        jTable.getColumnModel().getColumn(0).setPreferredWidth(20);
 
         jButtonNum.setText(page.toString());
 
@@ -1018,10 +1023,10 @@ public class DailyLeaf extends javax.swing.JPanel {
         suppliersMap.clear();
         suppliersNameMap.clear();
 
-        String id = jTextField4.getText().trim();
+        String id = jTextField5.getText().trim();
         int limit = id.isEmpty() ? 0 : 5;  // Define the limit if there's input text
 
-        // Set jTextField7 to empty if limit is 0
+        // Set jTextField4 to empty if limit is 0
         if (limit == 0) {
             jTextField4.setText("");  // Clear the text field
         }
@@ -1030,7 +1035,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch transport data using SupplierService
-        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersId(id, limit);
+        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersName(id, limit);
 
         // Populate tMap and suppliersNameMap with the fetched data
         for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
@@ -1049,7 +1054,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         String id = jTextField4.getText().trim();  // Getting ID from jTextField4
         int limit = id.isEmpty() ? 0 : 5;  // Limit the results to 5 if an ID is provided
 
-        // Set jTextField7 to empty if limit is 0
+        // Set jTextField5 to empty if limit is 0
         if (limit == 0) {
             jTextField5.setText("");  // Clear the text field if no ID is provided
         }
@@ -1095,7 +1100,7 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private void searchTable(String searchText) {
 
-        totalData = leafService.findCount(searchText);
+        totalData = dailyLeafService.findCount(searchText);
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -1120,9 +1125,9 @@ public class DailyLeaf extends javax.swing.JPanel {
             page = 1;
         }
 
-        leafTableModel = new LeafTableModel();
-        leafTableModel.setList(leafService.find(searchText, page, rowCountPerPage));
-        jTable.setModel(leafTableModel);
+        dailyLeafTableModel = new DailyLeafTableModel();
+        dailyLeafTableModel.setList(dailyLeafService.find(searchText, page, rowCountPerPage));
+        jTable.setModel(dailyLeafTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
@@ -1192,12 +1197,51 @@ public class DailyLeaf extends javax.swing.JPanel {
         // Check if the row index is valid
         if (row >= 0 && row < jTable.getRowCount()) {
             // Safely retrieve the values from the selected row
+            DailyLeafService ss = new DailyLeafService();
+
+            DailyLeafModel s = ss.findByDataById(String.valueOf(jTable.getValueAt(row, 0)));
+            jTextField5.setText(s.getSupplier_name());
+            jTextField4.setText(s.getSupplier_id());
+
+            try {
+
+                // Define the desired date format
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                // Parse the date string into a java.util.Date object
+                Date date = sdf.parse(String.valueOf(s.getDate()));
+                jDateChooser2.setDate(date);
+
+            } catch (ParseException e) {
+                e.printStackTrace(); // Handle the parsing error here
+                JOptionPane.showMessageDialog(null, "Invalid date format.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Convert gross_qty and net_qty to float for calculation
+            float grossQty = Float.parseFloat(s.getGross_qty());
+            float netQty = Float.parseFloat(s.getNet_qty());
+
+            // Perform the subtraction (gross_qty - net_qty)
+            float result = grossQty - netQty;
+
+            // Convert the values to String and remove the trailing .0 if necessary
+            String grossQtyStr = (grossQty % 1 == 0) ? String.valueOf((int) grossQty) : String.valueOf(grossQty);
+            String resultStr = (result % 1 == 0) ? String.valueOf((int) result) : String.valueOf(result);
+            String netQtyStr = (netQty % 1 == 0) ? String.valueOf((int) netQty) : String.valueOf(netQty);
+
+            // Set the text in the respective JTextFields
+            jTextField7.setText(grossQtyStr);
+            jTextField6.setText(resultStr);
+            jTextField3.setText(netQtyStr);
+
+            jTextField10.setText(s.getTransport_rate());
+
 
             setUpdateButton();
         }
     }//GEN-LAST:event_jTableMouseClicked
 
-    private void setUpdateButton(){
+    private void setUpdateButton() {
         // Update button properties
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
         jButton15.setText("fjkia'"); // Assuming you meant "Update" instead of "fjkia"
@@ -1211,132 +1255,242 @@ public class DailyLeaf extends javax.swing.JPanel {
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
 
-        String id = jTextField4.getText().trim();
-        String name = jTextField5.getText().trim();
+        String s_name = jTextField5.getText().trim();
+        String s_id = jTextField4.getText().trim();
+        Date selectedDate = jDateChooser2.getDate();
+        String gross_qty = jTextField7.getText().trim();
+        String deduction_qty = jTextField6.getText().trim();
+        String net_qty = jTextField3.getText().trim();
+        String trans_rate = jTextField10.getText().trim();
 
-        if (id.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ud¾. wxlh we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ud¾.fha ku we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else {
+        // Check if s_name is empty
+        if (s_name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "iemhqïlref.a ku we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        // Check if s_id is empty
+        else {
+
             try {
-                // Validate if rate is a valid number (either integer or float)
-
 
                 // First check if the ID already exists
+                SuppliersService checkAvailability = new SuppliersService();
+                int fNameAvailability = checkAvailability.findByName(s_name);
+                int fidAvailability = checkAvailability.findById(s_id);
 
-                if ("iqrlskak".equals(jButton15.getText())) {
-                    try {
-
-                        TransportService transportService = new TransportService();
-                        int ftransport = transportService.findById(id);
-
-                        if (ftransport > 0) {
-                            // ID exists, show error message
-                            JOptionPane.showMessageDialog(this, "fuu wxlh oekgu;a mj;S' lreKdlr fjk;a wxlhla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
-                        } else {
-
-                            // Create a Transport object and set the values
-                            Transport transport = new Transport();
-                            transport.setId(id);
-                            transport.setRoad_name(name);
-
-                            // Call the save method in transportService
-                            transportService.save(transport);
-                            String searchText = jTextField2.getText();
-                            if(searchText.equals("ටයිප් කරන්න...")){
-                                loadTable();
-                            } else{
-                                searchTable(searchText);
-                            }
-                            clear();
-
-                        }
-
-                    } catch (Exception e) {
-                        logger.log(Level.WARNING, "Home", e);
-                        e.printStackTrace();
-
-                    }
+                if (fNameAvailability <= 0) {
+                    JOptionPane.showMessageDialog(this, "oekgu;a mj;sk kula we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (s_id.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "iemhqïlref.a wxlh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                } else if (fidAvailability <= 0) {
+                    JOptionPane.showMessageDialog(this, "oekgu;a mj;sk wxlhla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
 
-                    int row = jTable.getSelectedRow();
+                    // Check if selectedDate is null
+                    if (selectedDate == null) {
+                        JOptionPane.showMessageDialog(this, "Èkhla f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                    if (row != -1) {  // Ensure a row is selected
+                    // Check if gross_qty is empty
+                    else if (gross_qty.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "o< m%udKh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                        try {
+                    // Check if gross_qty is a valid number
+                    else if (!isNumeric(gross_qty)) {
+                        JOptionPane.showMessageDialog(this, "o< m%udKh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                            Transport transport = new Transport();
-                            transport.setId(id);
-                            transport.setRoad_name(name);
+                    // Check if deduction_qty is a valid number
+                    else if (!isNumeric(deduction_qty)) {
+                        JOptionPane.showMessageDialog(this, "wvq lsÍï m%udKh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                            // Call the update method in transportService
-                            TransportService transportService = new TransportService();
-                            transportService.update(transport);
+                    // Check if trans_rate is empty
+                    else if (trans_rate.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "m%jdyk wkqmd;h we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                        } catch (Exception e) {
-                            logger.log(Level.WARNING, "Home", e);
-                            e.printStackTrace();
+                    // Check if trans_rate is a valid number
+                    else if (!isNumeric(trans_rate)) {
+
+                        JOptionPane.showMessageDialog(this, "m%jdyk wkqmd;h wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+
+                    } else {
+
+                        TransportService ratevailability = new TransportService();
+                        int fRateAvailability = ratevailability.findByRate(trans_rate);
+
+                        if (fRateAvailability <= 0) {
+                            JOptionPane.showMessageDialog(this, "oekgu;a mj;sk m%jdyk wkqmd;hla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+
+                            java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
+
+                            if ("iqrlskak".equals(jButton15.getText())) {
+
+                                DailyLeafService dailyLeafService = new DailyLeafService();
+                                int fDataAvailability = dailyLeafService.findByDataExist(s_id, sqlDate, gross_qty, net_qty, trans_rate);
+
+                                if (fDataAvailability > 0) {
+                                    JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lrKdlr fjk;a o;a;hla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                                } else {
+
+                                    try {
+
+                                        DailyLeafModel dailyLeafModel = new DailyLeafModel();
+                                        dailyLeafModel.setSupplier_id(s_id);
+                                        dailyLeafModel.setSupplier_name(s_name);
+                                        dailyLeafModel.setDate(sqlDate);
+                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        dailyLeafModel.setNet_qty(net_qty);
+                                        dailyLeafModel.setTransport_rate(trans_rate);
+
+                                        // Call the save method in transportService
+                                        DailyLeafService saveLeafService = new DailyLeafService();
+                                        saveLeafService.save(dailyLeafModel);
+
+                                    } catch (Exception e) {
+                                        logger.log(Level.WARNING, "Daily_Leaf", e);
+                                        e.printStackTrace();
+
+                                    }
+
+                                    String searchText = jTextField2.getText();
+                                    if (searchText.equals("ටයිප් කරන්න...")) {
+                                        loadTable();
+                                    } else {
+                                        searchTable(searchText);
+                                    }
+                                    clear();
+
+                                }
+
+                            } else {
+
+                                int row = jTable.getSelectedRow();
+
+                                if (row != -1) {  // Ensure a row is selected
+
+                                    Object idObject = jTable.getValueAt(row, 0); // Retrieve the value as an Object
+                                    String id = idObject != null ? idObject.toString() : ""; // Convert to String if not null
+
+                                    try {
+
+                                        // Convert the id to an int
+                                        int intId = Integer.parseInt(id);
+
+                                        DailyLeafModel dailyLeafModel = new DailyLeafModel();
+                                        dailyLeafModel.setId(intId);
+                                        dailyLeafModel.setSupplier_id(s_id);
+                                        dailyLeafModel.setSupplier_name(s_name);
+                                        dailyLeafModel.setDate(sqlDate);
+                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        dailyLeafModel.setNet_qty(net_qty);
+                                        dailyLeafModel.setTransport_rate(trans_rate);
+
+                                        // Call the update method in transportService
+                                        DailyLeafService updateLeafService = new DailyLeafService();
+                                        updateLeafService.update(dailyLeafModel);
+
+                                    } catch (Exception e) {
+                                        logger.log(Level.WARNING, "Daily_Leaf", e);
+                                        e.printStackTrace();
+
+                                    }
+
+                                    clear();
+                                    jTextField4.setEditable(true);
+
+                                    // Unselect the row if any was selected
+                                    String searchText = jTextField2.getText();
+                                    if (searchText.equals("ටයිප් කරන්න...")) {
+                                        loadTable();
+                                    } else {
+                                        searchTable(searchText);
+                                    }
+                                    setSaveButton();
+
+                                }
+
+                            }
 
                         }
-
-                        clear();
-                        jTextField4.setEditable(true);
-
-                        // Unselect the row if any was selected
-                        String searchText = jTextField2.getText();
-                        if(searchText.equals("ටයිප් කරන්න...")){
-                            loadTable();
-                        } else{
-                            searchTable(searchText);
-                        }
-                        setSaveButton();
 
                     }
+
                 }
 
-            } catch (NumberFormatException e) {
-                // If the rate is not a valid number, show an error message
-                JOptionPane.showMessageDialog(this, "lreKdlr m%jdyk wkqmd;h wxlhla f,i we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_jButton15ActionPerformed
-
-    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        // TODO add your handling code here:
-        String id = jTextField4.getText().trim();
-
-        if (id.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "lreKdlr ud¾.hla f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else {
-
-            int row = jTable.getSelectedRow();
-
-            setUpdateButton();
-
-            try {
-
-                // Call the delete method in transportService
-                TransportService transportService = new TransportService();
-                transportService.delete(id);
-
             } catch (Exception e) {
-                logger.log(Level.WARNING, "Home", e);
+                logger.log(Level.WARNING, "Daily_Leaf", e);
                 e.printStackTrace();
 
             }
+        }
 
-            clear();
-            if (row != -1) {
-                // Unselect the row
-                jTable.clearSelection();
-            }
-            setSaveButton();
-            String searchText = jTextField2.getText();
-            if(searchText.equals("ටයිප් කරන්න...")){
-                loadTable();
-            } else{
-                searchTable(searchText);
+
+    }//GEN-LAST:event_jButton15ActionPerformed
+
+    // Utility method to check if a string is a valid number
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false; // Return false for empty strings
+        }
+        try {
+            Double.parseDouble(str); // Attempt to parse the string as a double
+            return true; // If parsing succeeds, it's a valid number
+        } catch (NumberFormatException e) {
+            return false; // If an exception occurs, it's not a valid number
+        }
+    }
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+        int row = jTable.getSelectedRow();
+
+
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "lreKdlr bj;a lsÍug wjYH o;a;h f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            // Show a confirmation dialog
+            int response = JOptionPane.showConfirmDialog(null,
+                    "Tng fuu o;a; uelSug wjYH nj úYajdio@",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            // If the user confirms (YES option)
+            if (response == JOptionPane.YES_OPTION) {
+
+                Object idObject = jTable.getValueAt(row, 0); // Retrieve the value as an Object
+                String id = idObject != null ? idObject.toString() : ""; // Convert to String if not null
+
+                setUpdateButton();
+
+                try {
+
+                    // Call the delete method in transportService
+                    DailyLeafService dailyLeafService = new DailyLeafService();
+                    dailyLeafService.delete(id);
+
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, "Daily_Leaf", e);
+                    e.printStackTrace();
+
+                }
+
+                clear();
+                if (row != -1) {
+                    // Unselect the row
+                    jTable.clearSelection();
+                }
+                setSaveButton();
+                String searchText = jTextField2.getText();
+                if (searchText.equals("ටයිප් කරන්න...")) {
+                    loadTable();
+                } else {
+                    searchTable(searchText);
+                }
             }
         }
     }//GEN-LAST:event_jButton16ActionPerformed
@@ -1373,7 +1527,7 @@ public class DailyLeaf extends javax.swing.JPanel {
             }
         }
 
-        
+
     }//GEN-LAST:event_jTextField5KeyReleased
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
@@ -1440,8 +1594,12 @@ public class DailyLeaf extends javax.swing.JPanel {
             // Perform subtraction
             double result = num7 - num6;
 
-            // Set the result in jTextField3
-            jTextField3.setText(String.valueOf(result));
+            // Remove trailing .0 if result is a whole number
+            if (result % 1 == 0) {
+                jTextField3.setText(String.valueOf((int) result)); // Cast to int to remove .0
+            } else {
+                jTextField3.setText(String.valueOf(result)); // Keep it as a double
+            }
         } catch (NumberFormatException e) {
             // Handle invalid input (non-numeric values)
             JOptionPane.showMessageDialog(null, "lreKdlr o¿ m%udK wxl f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -1452,60 +1610,64 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private void jTextField6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyPressed
         // TODO add your handling code here:
-        
-         String value6 = jTextField6.getText();
-         // If jTextField6 contains "0", clear it before entering a new value
-    if (value6.equals("0")) {
-        jTextField6.setText(""); // Clear jTextField6 if it is "0"
-    }
+
+        String value6 = jTextField6.getText();
+        // If jTextField6 contains "0", clear it before entering a new value
+        if (value6.equals("0")) {
+            jTextField6.setText(""); // Clear jTextField6 if it is "0"
+        }
     }//GEN-LAST:event_jTextField6KeyPressed
 
     private void jTextField7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyPressed
         // TODO add your handling code here:
         String value7 = jTextField7.getText();
-         // If jTextField6 contains "0", clear it before entering a new value
-    if (value7.equals("0")) {
-        jTextField7.setText(""); // Clear jTextField6 if it is "0"
-    }
+        // If jTextField6 contains "0", clear it before entering a new value
+        if (value7.equals("0")) {
+            jTextField7.setText(""); // Clear jTextField6 if it is "0"
+        }
     }//GEN-LAST:event_jTextField7KeyPressed
 
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
         // TODO add your handling code here:
         // Retrieve the values from jTextField6 and jTextField7
-    String value6 = jTextField6.getText().trim();
-    String value7 = jTextField7.getText().trim();
+        String value6 = jTextField6.getText().trim();
+        String value7 = jTextField7.getText().trim();
 
-    // If jTextField7 is empty, set it to "0"
-    if (value7.isEmpty()) {
-        value7 = "0"; // Set value7 to "0"
-        jTextField7.setText(value7); // Update the text field
-    }
+        // If jTextField7 is empty, set it to "0"
+        if (value7.isEmpty()) {
+            value7 = "0"; // Set value7 to "0"
+            jTextField7.setText(value7); // Update the text field
+        }
 
-    // If jTextField6 is empty, set it to "0"
-    if (value6.isEmpty()) {
-        value6 = "0"; // Set value6 to "0"
-        jTextField6.setText(value6); // Update the text field
-    }
+        // If jTextField6 is empty, set it to "0"
+        if (value6.isEmpty()) {
+            value6 = "0"; // Set value6 to "0"
+            jTextField6.setText(value6); // Update the text field
+        }
 
-    try {
-        // Parse value6 and value7 to double
-        double num6 = Double.parseDouble(value6);
-        double num7 = Double.parseDouble(value7); // Both fields should not be empty at this point
+        try {
+            // Parse value6 and value7 to double
+            double num6 = Double.parseDouble(value6);
+            double num7 = Double.parseDouble(value7); // Both fields should not be empty at this point
 
-        // Perform subtraction
-        double result = num7 - num6;
+            // Perform subtraction
+            double result = num7 - num6;
 
-        // Set the result in jTextField3
-        jTextField3.setText(String.valueOf(result));
-    } catch (NumberFormatException e) {
-        // Handle invalid input (non-numeric values)
-        JOptionPane.showMessageDialog(null, "lreKdlr o¿ m%udK wxl f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
-        // Clear the result field on error
-        jTextField3.setText("");
-    }
+            // Remove trailing .0 if result is a whole number
+            if (result % 1 == 0) {
+                jTextField3.setText(String.valueOf((int) result)); // Cast to int to remove .0
+            } else {
+                jTextField3.setText(String.valueOf(result)); // Keep it as a double
+            }
+        } catch (NumberFormatException e) {
+            // Handle invalid input (non-numeric values)
+            JOptionPane.showMessageDialog(null, "lreKdlr o¿ m%udK wxl f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
+            // Clear the result field on error
+            jTextField3.setText("");
+        }
     }//GEN-LAST:event_jTextField7KeyReleased
 
-    private void setSaveButton(){
+    private void setSaveButton() {
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));
         jButton15.setText("iqrlskak");
         jButton15.setBackground(new Color(57, 117, 104));

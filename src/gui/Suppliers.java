@@ -797,7 +797,7 @@ public class Suppliers extends javax.swing.JPanel {
                     transportService.delete(id);  // Perform the deletion
 
                 } catch (Exception e) {
-                    logger.log(Level.WARNING, "Home", e);
+                    logger.log(Level.WARNING, "Suppliers", e);
                     e.printStackTrace();
                 }
 

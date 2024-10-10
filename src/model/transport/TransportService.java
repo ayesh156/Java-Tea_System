@@ -78,6 +78,44 @@ public class TransportService {
         return transportMap;
     }
 
+    public int findById(String id) {
+        int total = 0;
+        try {
+            String sql = String.format(
+                    "SELECT COUNT(*) AS total FROM suppliers WHERE id = '%s'",
+                    id
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger .log(Level.WARNING, "Suppliers", ex);
+        }
+        return total;
+    }
+
+    public int findByName(String road_name) {
+        int total = 0;
+        try {
+            String sql = String.format(
+                    "SELECT COUNT(*) AS total FROM transport WHERE road_name = '%s'",
+                    road_name
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger .log(Level.WARNING, "Home", ex);
+        }
+        return total;
+    }
+
     public HashMap<String, Transport> getSuppliersByTransRate(String tranRate, int limit) {
         HashMap<String, Transport> TransportMap = new HashMap<>();
 
@@ -152,12 +190,12 @@ public class TransportService {
         return listTransport;
     }
 
-    public int findById(String root_id) {
+    public int findByRate(String rate) {
         int total = 0;
         try {
             String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM transport WHERE root_id = '%s'",
-                    root_id
+                    "SELECT COUNT(*) AS total FROM transport WHERE transport_rate = '%s'",
+                    rate
             );
             ResultSet rs = Mysql.execute(sql);
 

@@ -284,6 +284,44 @@ public class SuppliersService {
         return suppliersMap;
     }
 
+    public int findByName(String name) {
+        int total = 0;
+        try {
+            String sql = String.format(
+                    "SELECT COUNT(*) AS total FROM suppliers WHERE name = '%s'",
+                    name
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger .log(Level.WARNING, "Home", ex);
+        }
+        return total;
+    }
+
+    public int findByDocRate(String doc_rate) {
+        int total = 0;
+        try {
+            String sql = String.format(
+                    "SELECT COUNT(*) AS total FROM suppliers WHERE doc_rate = '%s'",
+                    doc_rate
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger .log(Level.WARNING, "Home", ex);
+        }
+        return total;
+    }
+
     public SuppliersModel findByDataById(String fId) {
         SuppliersModel supplier = null;
         try {

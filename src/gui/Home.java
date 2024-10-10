@@ -1463,6 +1463,11 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        Tea tea = new Tea();
+        cardPanel.removeAll();
+        cardPanel.add(tea);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1736,10 +1741,20 @@ public class Home extends javax.swing.JFrame {
         String id = jTextField4.getText().trim();
 
         if (id.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "lreKdlr ud¾.hla f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "lreKdlr bj;a lsÍug wjYH o;a;h f;darkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
 
             int row = jTable.getSelectedRow();
+            
+            // Show a confirmation dialog
+            int response = JOptionPane.showConfirmDialog(null,
+                    "Tng fuu o;a; uelSug wjYH nj úYajdio@",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            // If the user confirms (YES option)
+            if (response == JOptionPane.YES_OPTION) {
 
             setUpdateButton();
 
@@ -1766,6 +1781,7 @@ public class Home extends javax.swing.JFrame {
                 loadTable();
             } else{
                 searchTable(searchText);
+            }
             }
         }
 
