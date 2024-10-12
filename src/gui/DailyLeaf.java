@@ -9,10 +9,8 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,13 +19,8 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
 import model.dailyLeaf.DailyLeafModel;
 import model.dailyLeaf.DailyLeafService;
-import model.leaf.Leaf;
-import model.leaf.LeafService;
-import model.leaf.LeafTableModel;
-import model.Mysql;
 import model.month.MonthModal;
 import model.month.MonthService;
 import model.dailyLeaf.Popups;
@@ -38,7 +31,6 @@ import model.transport.Transport;
 import model.transport.TransportService;
 import model.year.YearModal;
 import model.year.YearService;
-
 import static gui.Home.logger;
 
 /**
@@ -52,7 +44,6 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private HashMap<String, String> transportRateMap = new HashMap<>(); //to keep Transport Rate with IDss
 
-    private java.util.HashMap<String, JButton> buttonMap = new HashMap<>();
 
     DailyLeafTableModel dailyLeafTableModel;
 
@@ -1215,6 +1206,7 @@ public class DailyLeaf extends javax.swing.JPanel {
             } catch (ParseException e) {
                 e.printStackTrace(); // Handle the parsing error here
                 JOptionPane.showMessageDialog(null, "Invalid date format.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Suppliers_Service - Daily_Leaf", e);
             }
 
             // Convert gross_qty and net_qty to float for calculation
@@ -1326,6 +1318,13 @@ public class DailyLeaf extends javax.swing.JPanel {
 
                             java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 
+                            // Handle gross qty safely
+                            try {
+                                float fg_qty = (gross_qty != null && !gross_qty.isEmpty()) ? Float.parseFloat(gross_qty) : 0.0f;
+
+                                // Convert the values to String and remove the trailing .0 if necessary
+                                String gqtyStr = (fg_qty % 1 == 0) ? String.valueOf((int) fg_qty) : String.valueOf(fg_qty);
+
                             if ("iqrlskak".equals(jButton15.getText())) {
 
                                 DailyLeafService dailyLeafService = new DailyLeafService();
@@ -1341,7 +1340,7 @@ public class DailyLeaf extends javax.swing.JPanel {
                                         dailyLeafModel.setSupplier_id(s_id);
                                         dailyLeafModel.setSupplier_name(s_name);
                                         dailyLeafModel.setDate(sqlDate);
-                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        dailyLeafModel.setGross_qty(gqtyStr);
                                         dailyLeafModel.setNet_qty(net_qty);
                                         dailyLeafModel.setTransport_rate(trans_rate);
 
@@ -1384,7 +1383,7 @@ public class DailyLeaf extends javax.swing.JPanel {
                                         dailyLeafModel.setSupplier_id(s_id);
                                         dailyLeafModel.setSupplier_name(s_name);
                                         dailyLeafModel.setDate(sqlDate);
-                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        dailyLeafModel.setGross_qty(gqtyStr);
                                         dailyLeafModel.setNet_qty(net_qty);
                                         dailyLeafModel.setTransport_rate(trans_rate);
 
@@ -1412,6 +1411,9 @@ public class DailyLeaf extends javax.swing.JPanel {
 
                                 }
 
+                            }
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(null, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);
                             }
 
                         }

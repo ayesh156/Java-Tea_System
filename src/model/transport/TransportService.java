@@ -26,7 +26,7 @@ public class TransportService {
             Mysql.execute(sql); // Execute the update query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
     }
 
@@ -37,7 +37,7 @@ public class TransportService {
             Mysql.execute(sql);
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Home", ex);
         }
     }
 
@@ -47,7 +47,7 @@ public class TransportService {
             Mysql.execute(sql); // Execute the delete query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
     }
 
@@ -73,6 +73,7 @@ public class TransportService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Transport_Service", e);
         }
 
         return transportMap;
@@ -92,7 +93,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return total;
     }
@@ -111,7 +112,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return total;
     }
@@ -140,6 +141,7 @@ public class TransportService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Transport_Service", e);
         }
 
         return TransportMap;
@@ -161,7 +163,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return listTransport;
     }
@@ -185,7 +187,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return listTransport;
     }
@@ -204,7 +206,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return total;
     }
@@ -223,7 +225,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return total;
     }
@@ -247,7 +249,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Transport", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return transport;
     }
@@ -263,7 +265,7 @@ public class TransportService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Transport_Service", ex);
         }
         return totalCount;
     }

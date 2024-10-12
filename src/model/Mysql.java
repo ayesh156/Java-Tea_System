@@ -7,8 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.logging.Level;
+
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import static gui.Home.logger;
 
 public class Mysql{
 
@@ -39,6 +43,7 @@ public class Mysql{
             connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + databseName + "", username, password);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Mysql", e);
         }
     }
 

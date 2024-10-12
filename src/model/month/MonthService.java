@@ -7,11 +7,14 @@ import java.sql.ResultSet;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
+import static gui.Home.logger;
 
 public class MonthService {
 
     public List<MonthModal> findAll() {
-        List<MonthModal> listTransport = new ArrayList<>();
+        List<MonthModal> listMonth = new ArrayList<>();
         try {
             String sql = String.format("SELECT * FROM month");
             ResultSet rs = Mysql.execute(sql);
@@ -20,12 +23,13 @@ public class MonthService {
                 MonthModal p = new MonthModal();
                 p.setId(rs.getString("id"));
                 p.setMonth(rs.getString("month"));
-                listTransport.add(p);
+                listMonth.add(p);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            logger.log(Level.WARNING, "Month_Service", ex);
         }
-        return listTransport;
+        return listMonth;
     }
 
 }

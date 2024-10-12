@@ -6,11 +6,8 @@
 package gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -18,19 +15,14 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.function.Supplier;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -43,9 +35,6 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
-import model.Mysql;
-import model.leaf.LeafService;
 import model.transport.Transport;
 import model.transport.TransportService;
 import model.transport.TransportTableModel;
@@ -96,7 +85,7 @@ public class Home extends javax.swing.JFrame {
         // Customize the table header
         customizeTableHeader(jTable);
 
-        jComboBoxPage.addItem("5");
+        jComboBoxPage.addItem("6");
         jComboBoxPage.addItem("15");
         jComboBoxPage.addItem("30");
         jComboBoxPage.addItem("50");
@@ -155,7 +144,7 @@ public class Home extends javax.swing.JFrame {
             handler.setFormatter(new SimpleFormatter());
             logger.addHandler(handler);
         } catch (Exception e) {
-            logger.log(Level.WARNING, "logger", e);
+            logger.log(Level.WARNING, "Logger", e);
         }
 
     }
@@ -1454,9 +1443,9 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        DailyLeaf leafRate = new DailyLeaf();
+        DailyLeaf dailyLeaf = new DailyLeaf();
         cardPanel.removeAll();
-        cardPanel.add(leafRate);
+        cardPanel.add(dailyLeaf);
         cardPanel.revalidate();
         cardPanel.repaint();
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -1472,6 +1461,11 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        Manure manure = new Manure();
+        cardPanel.removeAll();
+        cardPanel.add(manure);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1484,6 +1478,11 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
+        Advance advance = new Advance();
+        cardPanel.removeAll();
+        cardPanel.add(advance);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButton1FocusGained
@@ -1533,6 +1532,12 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+         Dolomite dolomite = new Dolomite();
+         cardPanel.removeAll();
+         cardPanel.add(dolomite);
+         cardPanel.revalidate();
+         cardPanel.repaint();
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton7FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jButton7FocusGained

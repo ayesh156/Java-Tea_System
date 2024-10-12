@@ -42,7 +42,7 @@ public class LeafService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
 
         }
         return false;
@@ -71,7 +71,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return total;
     }
@@ -93,7 +93,7 @@ public class LeafService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
     }
 
@@ -121,7 +121,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return yearId;
     }
@@ -150,7 +150,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return monthId;
     }
@@ -162,7 +162,7 @@ public class LeafService {
             Mysql.execute(sql); // Execute the delete query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
     }
 
@@ -192,7 +192,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return listLeaf;
     }
@@ -218,13 +218,13 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return total;
     }
 
     public List<Leaf> find(String searchText, int page, int pageSize) {
-        List<Leaf> listTransport = new ArrayList<>();
+        List<Leaf> listLeaf = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format(
@@ -245,13 +245,13 @@ public class LeafService {
                 leaf.setYear(Year.of(rs.getInt("year")));
                 leaf.setMonth(rs.getString("month"));
                 leaf.setLeaf_rate(rs.getString("leaf_rate"));
-                listTransport.add(leaf);
+                listLeaf.add(leaf);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
-        return listTransport;
+        return listLeaf;
     }
 
     public int findCount(String searchText) {
@@ -274,7 +274,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return total;
     }
@@ -290,7 +290,7 @@ public class LeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Leaf_Service", ex);
         }
         return totalCount;
     }

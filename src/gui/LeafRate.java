@@ -8,7 +8,6 @@ package gui;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.sql.ResultSet;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -24,11 +23,8 @@ import javax.swing.table.TableColumn;
 import model.leaf.Leaf;
 import model.leaf.LeafService;
 import model.leaf.LeafTableModel;
-import model.Mysql;
 import model.month.MonthModal;
 import model.month.MonthService;
-import model.transport.Transport;
-import model.transport.TransportService;
 import model.year.YearModal;
 import model.year.YearService;
 import static gui.Home.logger;
@@ -76,7 +72,7 @@ public class LeafRate extends javax.swing.JPanel {
         // Customize the table header
         customizeTableHeader(jTable);
 
-        jComboBoxPage.addItem("5");
+        jComboBoxPage.addItem("7");
         jComboBoxPage.addItem("15");
         jComboBoxPage.addItem("30");
         jComboBoxPage.addItem("50");
@@ -969,7 +965,7 @@ public class LeafRate extends javax.swing.JPanel {
                     dailyLeafService.delete(id);
 
                 } catch (Exception e) {
-                    logger.log(Level.WARNING, "LeafRate", e);
+                    logger.log(Level.WARNING, "Leaf_Rate", e);
                     e.printStackTrace();
 
                 }
@@ -1050,7 +1046,7 @@ public class LeafRate extends javax.swing.JPanel {
                         }
 
                     } catch (Exception e) {
-                        logger.log(Level.WARNING, "LeafRate", e);
+                        logger.log(Level.WARNING, "Leaf_Rate", e);
                         e.printStackTrace();
 
                     }
@@ -1084,7 +1080,7 @@ public class LeafRate extends javax.swing.JPanel {
                         } catch (Exception e) {
                             // Log the error
                             e.printStackTrace();
-                            logger.log(Level.WARNING, "LeafRate", e);
+                            logger.log(Level.WARNING, "Leaf_Rate", e);
                         }
 
                         clear();

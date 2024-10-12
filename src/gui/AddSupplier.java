@@ -10,14 +10,10 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-
 import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
-
 import static gui.Home.logger;
-
 import javax.swing.*;
-
 import model.suppliers.Popups;
 import model.transport.Transport;
 import model.transport.TransportService;
@@ -558,7 +554,7 @@ public class AddSupplier extends javax.swing.JDialog {
                                 }
 
                             } catch (Exception e) {
-                                logger.log(Level.WARNING, "AddSupplier", e);
+                                logger.log(Level.WARNING, "Add_Supplier", e);
                                 e.printStackTrace();
                             }
 
@@ -580,7 +576,7 @@ public class AddSupplier extends javax.swing.JDialog {
 
 
                             } catch (Exception e) {
-                                logger.log(Level.WARNING, "AddSupplier", e);
+                                logger.log(Level.WARNING, "Add_Supplier", e);
                                 e.printStackTrace();
                             }
 

@@ -52,8 +52,6 @@ public class DailyLeafModel {
         this.gross_qty = gross_qty;
     }
 
-
-
     public String getNet_qty() {
         return net_qty;
     }

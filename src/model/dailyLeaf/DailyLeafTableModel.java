@@ -19,7 +19,7 @@ import java.util.List;
 public class DailyLeafTableModel extends AbstractTableModel {
 
     List<DailyLeafModel> listLeaf = new ArrayList<DailyLeafModel>();
-    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "Y=oaO m%udKh", "m%jdyk .dia;=j"};
+    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "Y=oaO m%udKh", "m%jdyk wkqmd;h"};
 
     public void setList(List<DailyLeafModel> listLeaf) {
         this.listLeaf = listLeaf;

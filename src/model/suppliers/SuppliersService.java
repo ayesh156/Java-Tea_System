@@ -37,7 +37,7 @@ public class SuppliersService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Update Add Supplier", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
 
 
@@ -63,7 +63,7 @@ public class SuppliersService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Save Add Supplier", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
 
     }
@@ -85,7 +85,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Find Add Supplier", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
 
         return -1; // Indicate that the transport ID was not found
@@ -97,7 +97,7 @@ public class SuppliersService {
             Mysql.execute(sql); // Execute the delete query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
     }
 
@@ -125,6 +125,7 @@ public class SuppliersService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", e);
         }
 
         return suppliersMap;
@@ -153,7 +154,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return listSuppliers;
     }
@@ -185,7 +186,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return listSuppliers;
     }
@@ -205,7 +206,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return total;
     }
@@ -225,7 +226,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return total;
     }
@@ -252,6 +253,7 @@ public class SuppliersService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", e);
         }
 
         return suppliersMap;
@@ -279,6 +281,7 @@ public class SuppliersService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", e);
         }
 
         return suppliersMap;
@@ -298,7 +301,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return total;
     }
@@ -317,7 +320,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Home", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return total;
     }
@@ -350,7 +353,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return supplier;
     }
@@ -366,7 +369,7 @@ public class SuppliersService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return totalCount;
     }

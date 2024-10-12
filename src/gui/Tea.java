@@ -9,10 +9,8 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,24 +19,17 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
-import model.dailyLeaf.DailyLeafModel;
-import model.dailyLeaf.DailyLeafService;
-import model.leaf.Leaf;
-import model.leaf.LeafService;
-import model.leaf.LeafTableModel;
-import model.Mysql;
+import model.tea.TeaService;
 import model.month.MonthModal;
 import model.month.MonthService;
-import model.dailyLeaf.Popups;
-import model.dailyLeaf.DailyLeafTableModel;
+import model.SupNameIdPopups;
 import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
+import model.tea.TeaModel;
+import model.tea.TeaTableModel;
 import model.transport.Transport;
-import model.transport.TransportService;
 import model.year.YearModal;
 import model.year.YearService;
-
 import static gui.Home.logger;
 
 /**
@@ -47,21 +38,16 @@ import static gui.Home.logger;
 public class Tea extends javax.swing.JPanel {
 
     private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
-    private HashMap<String, Transport> transportMap = new HashMap<>(); //to keep Transport names with IDss
     private HashMap<String, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
 
-    private HashMap<String, String> transportRateMap = new HashMap<>(); //to keep Transport Rate with IDss
-
-    private java.util.HashMap<String, JButton> buttonMap = new HashMap<>();
-
-    DailyLeafTableModel dailyLeafTableModel;
+    TeaTableModel teaTableModel;
 
     Integer page = 1;
     Integer rowCountPerPage = 5;
     Integer totalPage = 1;
     Integer totalData = 0;
 
-    private static DailyLeafService dailyLeafService;
+    private static TeaService teaService;
 
 
     /**
@@ -69,7 +55,7 @@ public class Tea extends javax.swing.JPanel {
      */
     public Tea() {
 
-        dailyLeafService = new DailyLeafService();
+        teaService = new TeaService();
 
         initComponents();
 
@@ -931,7 +917,7 @@ public class Tea extends javax.swing.JPanel {
 
     private void loadTable() {
 
-        totalData = dailyLeafService.count();
+        totalData = teaService.count();
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -960,9 +946,9 @@ public class Tea extends javax.swing.JPanel {
             page = 1;
         }
 
-        dailyLeafTableModel = new DailyLeafTableModel();
-        dailyLeafTableModel.setList(dailyLeafService.findAll(page, rowCountPerPage));
-        jTable.setModel(dailyLeafTableModel);
+        teaTableModel = new TeaTableModel();
+        teaTableModel.setList(teaService.findAll(page, rowCountPerPage));
+        jTable.setModel(teaTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
@@ -1031,7 +1017,7 @@ public class Tea extends javax.swing.JPanel {
 
     private void searchTable(String searchText) {
 
-        totalData = dailyLeafService.findCount(searchText);
+        totalData = teaService.findCount(searchText);
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -1056,9 +1042,9 @@ public class Tea extends javax.swing.JPanel {
             page = 1;
         }
 
-        dailyLeafTableModel = new DailyLeafTableModel();
-        dailyLeafTableModel.setList(dailyLeafService.find(searchText, page, rowCountPerPage));
-        jTable.setModel(dailyLeafTableModel);
+        teaTableModel = new TeaTableModel();
+        teaTableModel.setList(teaService.find(searchText, page, rowCountPerPage));
+        jTable.setModel(teaTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
@@ -1128,9 +1114,9 @@ public class Tea extends javax.swing.JPanel {
         // Check if the row index is valid
         if (row >= 0 && row < jTable.getRowCount()) {
             // Safely retrieve the values from the selected row
-            DailyLeafService ss = new DailyLeafService();
+            TeaService ss = new TeaService();
 
-            DailyLeafModel s = ss.findByDataById(String.valueOf(jTable.getValueAt(row, 0)));
+            TeaModel s = ss.findByDataById(String.valueOf(jTable.getValueAt(row, 0)));
             jTextField5.setText(s.getSupplier_name());
             jTextField4.setText(s.getSupplier_id());
 
@@ -1146,23 +1132,24 @@ public class Tea extends javax.swing.JPanel {
             } catch (ParseException e) {
                 e.printStackTrace(); // Handle the parsing error here
                 JOptionPane.showMessageDialog(null, "Invalid date format.", "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.WARNING, "Invalid date format. - Tea", e);
             }
 
-            // Convert gross_qty and net_qty to float for calculation
-            float grossQty = Float.parseFloat(s.getGross_qty());
-            float netQty = Float.parseFloat(s.getNet_qty());
+            // Handle qty and price safely
+            try {
+                float qty = (s.getQty() != null && !s.getQty().isEmpty()) ? Float.parseFloat(s.getQty()) : 0.0f;
+                float price = (s.getPrice() != null && !s.getPrice().isEmpty()) ? Float.parseFloat(s.getPrice()) : 0.0f;
 
-            // Perform the subtraction (gross_qty - net_qty)
-            float result = grossQty - netQty;
+                // Convert the values to String and remove the trailing .0 if necessary
+                String qtyStr = (qty % 1 == 0) ? String.valueOf((int) qty) : String.valueOf(qty);
+                String priceStr = (price % 1 == 0) ? String.valueOf((int) price) : String.valueOf(price);
 
-            // Convert the values to String and remove the trailing .0 if necessary
-            String grossQtyStr = (grossQty % 1 == 0) ? String.valueOf((int) grossQty) : String.valueOf(grossQty);
-            String resultStr = (result % 1 == 0) ? String.valueOf((int) result) : String.valueOf(result);
-            String netQtyStr = (netQty % 1 == 0) ? String.valueOf((int) netQty) : String.valueOf(netQty);
-
-            // Set the text in the respective JTextFields
-            jTextField7.setText(grossQtyStr);
-            jTextField6.setText(resultStr);
+                // Set the text in the respective JTextFields
+                jTextField7.setText(qtyStr);
+                jTextField6.setText(priceStr);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
 
             setUpdateButton();
@@ -1186,8 +1173,8 @@ public class Tea extends javax.swing.JPanel {
         String s_name = jTextField5.getText().trim();
         String s_id = jTextField4.getText().trim();
         Date selectedDate = jDateChooser2.getDate();
-        String gross_qty = jTextField7.getText().trim();
-        String deduction_qty = jTextField6.getText().trim();
+        String qty = jTextField7.getText().trim();
+        String price = jTextField6.getText().trim();
 
         // Check if s_name is empty
         if (s_name.isEmpty()) {
@@ -1217,65 +1204,62 @@ public class Tea extends javax.swing.JPanel {
                     }
 
                     // Check if gross_qty is empty
-                    else if (gross_qty.isEmpty()) {
-                        JOptionPane.showMessageDialog(this, "o< m%udKh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    else if (qty.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "m%udKh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
                     }
 
                     // Check if gross_qty is a valid number
-                    else if (!isNumeric(gross_qty)) {
-                        JOptionPane.showMessageDialog(this, "o< m%udKh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    else if (!isNumeric(qty)) {
+                        JOptionPane.showMessageDialog(this, "m%udKh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
                     }
 
-                    // Check if deduction_qty is a valid number
-                    else if (!isNumeric(deduction_qty)) {
-                        JOptionPane.showMessageDialog(this, "wvq lsÍï m%udKh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    // Check if gross_qty is empty
+                    else if (price.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "uqo, we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
                     }
 
-                    // Check if trans_rate is empty
-//                    else if (trans_rate.isEmpty()) {
-//                        JOptionPane.showMessageDialog(this, "m%jdyk wkqmd;h we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
-//                    }
+                    // Check if gross_qty is a valid number
+                    else if (!isNumeric(price)) {
+                        JOptionPane.showMessageDialog(this, "uqo, wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
 
-                    // Check if trans_rate is a valid number
-//                    else if (!isNumeric(trans_rate)) {
-
-//                        JOptionPane.showMessageDialog(this, "m%jdyk wkqmd;h wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
-
-//                    }
                 else {
-
-                        TransportService ratevailability = new TransportService();
-//                        int fRateAvailability = ratevailability.findByRate(trans_rate);
-
-//                        if (fRateAvailability <= 0) {
-//                            JOptionPane.showMessageDialog(this, "oekgu;a mj;sk m%jdyk wkqmd;hla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
-//                        } else {
 
                             java.sql.Date sqlDate = new java.sql.Date(selectedDate.getTime());
 
+                        // Handle qty and price safely
+                        try {
+                            float fqty = (qty != null && !qty.isEmpty()) ? Float.parseFloat(qty) : 0.0f;
+                            float fprice = (price != null && !price.isEmpty()) ? Float.parseFloat(price) : 0.0f;
+
+                            // Convert the values to String and remove the trailing .0 if necessary
+                            String qtyStr = (fqty % 1 == 0) ? String.valueOf((int) fqty) : String.valueOf(fqty);
+                            String priceStr = (fprice % 1 == 0) ? String.valueOf((int) fprice) : String.valueOf(fprice);
+
                             if ("iqrlskak".equals(jButton15.getText())) {
 
-                                DailyLeafService dailyLeafService = new DailyLeafService();
-//                                int fDataAvailability = dailyLeafService.findByDataExist(s_id, sqlDate, gross_qty, net_qty, trans_rate);
+                                TeaService teaService = new TeaService();
+                                int fDataAvailability = teaService.findByDataExist(s_id, sqlDate, qty, price);
 
-//                                if (fDataAvailability > 0) {
-//                                    JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lrKdlr fjk;a o;a;hla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
-//                                } else {
+                                if (fDataAvailability > 0) {
+                                    JOptionPane.showMessageDialog(this, "fuu o;a;h oekgu;a mj;S' lrKdlr fjk;a o;a;hla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
+                                } else {
 
                                     try {
 
-                                        DailyLeafModel dailyLeafModel = new DailyLeafModel();
-                                        dailyLeafModel.setSupplier_id(s_id);
-                                        dailyLeafModel.setSupplier_name(s_name);
-                                        dailyLeafModel.setDate(sqlDate);
-                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        TeaModel teaModel = new TeaModel();
+                                        teaModel.setSupplier_id(s_id);
+                                        teaModel.setSupplier_name(s_name);
+                                        teaModel.setDate(sqlDate);
+                                        teaModel.setQty(qtyStr);
+                                        teaModel.setPrice(priceStr);
 
                                         // Call the save method in transportService
-                                        DailyLeafService saveLeafService = new DailyLeafService();
-                                        saveLeafService.save(dailyLeafModel);
+                                        TeaService saveTeaService = new TeaService();
+                                        saveTeaService.save(teaModel);
 
                                     } catch (Exception e) {
-                                        logger.log(Level.WARNING, "Daily_Leaf", e);
+                                        logger.log(Level.WARNING, "Tea", e);
                                         e.printStackTrace();
 
                                     }
@@ -1288,7 +1272,7 @@ public class Tea extends javax.swing.JPanel {
                                     }
                                     clear();
 
-//                                }
+                                }
 
                             } else {
 
@@ -1304,19 +1288,20 @@ public class Tea extends javax.swing.JPanel {
                                         // Convert the id to an int
                                         int intId = Integer.parseInt(id);
 
-                                        DailyLeafModel dailyLeafModel = new DailyLeafModel();
-                                        dailyLeafModel.setId(intId);
-                                        dailyLeafModel.setSupplier_id(s_id);
-                                        dailyLeafModel.setSupplier_name(s_name);
-                                        dailyLeafModel.setDate(sqlDate);
-                                        dailyLeafModel.setGross_qty(gross_qty);
+                                        TeaModel teaModel = new TeaModel();
+                                        teaModel.setId(intId);
+                                        teaModel.setSupplier_id(s_id);
+                                        teaModel.setSupplier_name(s_name);
+                                        teaModel.setDate(sqlDate);
+                                        teaModel.setQty(qtyStr);
+                                        teaModel.setPrice(priceStr);
 
                                         // Call the update method in transportService
-                                        DailyLeafService updateLeafService = new DailyLeafService();
-                                        updateLeafService.update(dailyLeafModel);
+                                        TeaService updateTeaService = new TeaService();
+                                        updateTeaService.update(teaModel);
 
                                     } catch (Exception e) {
-                                        logger.log(Level.WARNING, "Daily_Leaf", e);
+                                        logger.log(Level.WARNING, "Tea", e);
                                         e.printStackTrace();
 
                                     }
@@ -1336,15 +1321,16 @@ public class Tea extends javax.swing.JPanel {
                                 }
 
                             }
-
-//                        }
+                        } catch (NumberFormatException e) {
+                            JOptionPane.showMessageDialog(null, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
 
                     }
 
                 }
 
             } catch (Exception e) {
-                logger.log(Level.WARNING, "Daily_Leaf", e);
+                logger.log(Level.WARNING, "Tea", e);
                 e.printStackTrace();
 
             }
@@ -1393,11 +1379,11 @@ public class Tea extends javax.swing.JPanel {
                 try {
 
                     // Call the delete method in transportService
-                    DailyLeafService dailyLeafService = new DailyLeafService();
-                    dailyLeafService.delete(id);
+                    TeaService teaService = new TeaService();
+                    teaService.delete(id);
 
                 } catch (Exception e) {
-                    logger.log(Level.WARNING, "Daily_Leaf", e);
+                    logger.log(Level.WARNING, "Tea", e);
                     e.printStackTrace();
 
                 }
@@ -1437,7 +1423,7 @@ public class Tea extends javax.swing.JPanel {
 
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
             if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
-                Popups.loadPopupTextField5(jPopupMenu1, jTextField5, jTextField4, loadSuppliers(), suppliersMap);
+                SupNameIdPopups.loadPopupTextField5(jPopupMenu1, jTextField5, jTextField4, loadSuppliers(), suppliersMap);
                 if (jTextField5.getText().equals("")) {
                     jPopupMenu1.setVisible(false);
                 }
@@ -1458,7 +1444,7 @@ public class Tea extends javax.swing.JPanel {
 
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
             if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
-                Popups.loadPopupTextField4(jPopupMenu2, jTextField5, jTextField4, loadSuppliersId(), suppliersMap);
+                SupNameIdPopups.loadPopupTextField4(jPopupMenu2, jTextField5, jTextField4, loadSuppliersId(), suppliersMap);
                 if (jTextField4.getText().equals("")) {
                     jPopupMenu2.setVisible(false);
                 }
@@ -1477,7 +1463,6 @@ public class Tea extends javax.swing.JPanel {
     private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased
         // Retrieve the values from jTextField6 and jTextField7
         String value6 = jTextField6.getText().trim();
-        String value7 = jTextField7.getText().trim();
 
         // If jTextField6 is empty, set it to "0"
         if (value6.isEmpty()) {
@@ -1485,29 +1470,13 @@ public class Tea extends javax.swing.JPanel {
             jTextField6.setText(value6); // Update the text field
         }
 
-        // If jTextField7 is empty, set it to "0"
-        if (value7.isEmpty()) {
-            value7 = "0"; // Set value7 to "0"
-            jTextField7.setText(value7); // Update the text field
-        }
-
         try {
-            // Parse value6 and value7 to double
-            double num6 = Double.parseDouble(value6);
-            double num7 = Double.parseDouble(value7); // Both fields should not be empty at this point
+            // Parse value6 to double
+            Double.parseDouble(value6);
 
-            // Perform subtraction
-            double result = num7 - num6;
-
-            // Remove trailing .0 if result is a whole number
-            if (result % 1 == 0) {
-//                jTextField3.setText(String.valueOf((int) result)); // Cast to int to remove .0
-            } else {
-//                jTextField3.setText(String.valueOf(result)); // Keep it as a double
-            }
         } catch (NumberFormatException e) {
             // Handle invalid input (non-numeric values)
-            JOptionPane.showMessageDialog(null, "lreKdlr o¿ m%udK wxl f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "lreKdlr uqo, wxlhla f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
             // Clear the result field on error
 //            jTextField3.setText("");
         }
@@ -1534,8 +1503,7 @@ public class Tea extends javax.swing.JPanel {
 
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
         // TODO add your handling code here:
-        // Retrieve the values from jTextField6 and jTextField7
-        String value6 = jTextField6.getText().trim();
+        // Retrieve the values from jTextField7
         String value7 = jTextField7.getText().trim();
 
         // If jTextField7 is empty, set it to "0"
@@ -1544,29 +1512,13 @@ public class Tea extends javax.swing.JPanel {
             jTextField7.setText(value7); // Update the text field
         }
 
-        // If jTextField6 is empty, set it to "0"
-        if (value6.isEmpty()) {
-            value6 = "0"; // Set value6 to "0"
-            jTextField6.setText(value6); // Update the text field
-        }
-
         try {
-            // Parse value6 and value7 to double
-            double num6 = Double.parseDouble(value6);
-            double num7 = Double.parseDouble(value7); // Both fields should not be empty at this point
-
-            // Perform subtraction
-            double result = num7 - num6;
-
-            // Remove trailing .0 if result is a whole number
-            if (result % 1 == 0) {
-//                jTextField3.setText(String.valueOf((int) result)); // Cast to int to remove .0
-            } else {
-//                jTextField3.setText(String.valueOf(result)); // Keep it as a double
-            }
+            // Parse value7 to double
+            Double.parseDouble(value7); // Both fields should not be empty at this point
+           
         } catch (NumberFormatException e) {
             // Handle invalid input (non-numeric values)
-            JOptionPane.showMessageDialog(null, "lreKdlr o¿ m%udK wxl f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "lreKdlr m%udKh wxlhla f,i we;=,;a lrkak'", "Input Error", JOptionPane.ERROR_MESSAGE);
             // Clear the result field on error
 //            jTextField3.setText("");
         }

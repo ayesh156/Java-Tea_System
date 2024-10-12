@@ -8,23 +8,17 @@ package gui;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-
 import static gui.Home.logger;
 import model.suppliers.SuppliersService;
 import model.suppliers.SuppliersTableModel;
-import model.year.YearModal;
-import model.year.YearService;
 
 /**
  * @author ECOTEC

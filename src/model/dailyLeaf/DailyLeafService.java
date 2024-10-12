@@ -2,13 +2,9 @@ package model.dailyLeaf;
 
 
 import model.Mysql;
-import model.suppliers.SuppliersModel;
-import model.transport.Transport;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -24,7 +20,7 @@ public class DailyLeafService {
             Mysql.execute(sql); // Execute the update query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
     }
 
@@ -37,7 +33,7 @@ public class DailyLeafService {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
     }
 
@@ -47,35 +43,8 @@ public class DailyLeafService {
             Mysql.execute(sql); // Execute the delete query
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
-    }
-
-    // Method to fetch transport data based on the road name
-    public HashMap<String, Transport> getTransportByRoadName(String roadName, int limit) {
-        HashMap<String, Transport> transportMap = new HashMap<>();
-
-        try {
-            String queryLimit = limit > 0 ? " LIMIT " + limit : "";
-            String sql = "SELECT * FROM `transport` WHERE `road_name` LIKE '%" + roadName + "%'" + queryLimit;
-
-            ResultSet results = Mysql.execute(sql);
-
-            while (results.next()) {
-                Transport transport = new Transport();
-                transport.setId(results.getString("id"));
-                transport.setRoot_id(results.getString("root_id"));
-                transport.setRoad_name(results.getString("road_name"));
-                transport.setTransport_rate(results.getString("transport_rate"));
-
-                // Add the transport data to the map
-                transportMap.put(transport.getId(), transport);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return transportMap;
     }
 
     public int findByDataExist(String s_id, Date date, String gross_qty, String net_qty, String trans_rate) {
@@ -92,42 +61,14 @@ public class DailyLeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger .log(Level.WARNING, "Suppliers", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
         return total;
     }
 
-    public HashMap<String, Transport> getSuppliersByTransRate(String tranRate, int limit) {
-        HashMap<String, Transport> TransportMap = new HashMap<>();
-
-        try {
-            String queryLimit = limit > 0 ? " LIMIT " + limit : "";
-            String sql = "SELECT * FROM `transport` WHERE `transport_rate` LIKE '%" + tranRate + "%'" + queryLimit;
-
-            ResultSet results = Mysql.execute(sql);
-
-            while (results.next()) {
-                String id = results.getString("id");
-
-                // Check if the supplier is already in the map
-                if (!TransportMap.containsKey(id)) {
-                    Transport transport = new Transport();
-                    transport.setId(id);
-                    transport.setTransport_rate(results.getString("transport_rate"));
-
-                    // Add the supplier to the map
-                    TransportMap.put(id, transport);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return TransportMap;
-    }
 
     public List<DailyLeafModel> findAll(int page, int pageSize) {
-        List<DailyLeafModel> listTransport = new ArrayList<>();
+        List<DailyLeafModel> listDailyLeaf = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format("SELECT * FROM daily_leaf LIMIT %d, %d", offset, pageSize);
@@ -141,13 +82,13 @@ public class DailyLeafService {
                 p.setDate(rs.getDate("date"));
                 p.setNet_qty(rs.getString("net_qty"));
                 p.setTransport_rate(rs.getString("transport_rate"));
-                listTransport.add(p);
+                listDailyLeaf.add(p);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
-        return listTransport;
+        return listDailyLeaf;
     }
 
     public DailyLeafModel findByDataById(String fId) {
@@ -173,13 +114,13 @@ public class DailyLeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "LeafRate", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
         return dailyLeaf;
     }
 
     public List<DailyLeafModel> find(String searchText, int page, int pageSize) {
-        List<DailyLeafModel> listTransport = new ArrayList<>();
+        List<DailyLeafModel> listDailyLeaf = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format(
@@ -196,40 +137,22 @@ public class DailyLeafService {
                 p.setDate(rs.getDate("date"));
                 p.setNet_qty(rs.getString("net_qty"));
                 p.setTransport_rate(rs.getString("transport_rate"));
-                listTransport.add(p);
+                listDailyLeaf.add(p);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
-        return listTransport;
+        return listDailyLeaf;
     }
 
-    public int findById(String root_id) {
-        int total = 0;
-        try {
-            String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM transport WHERE root_id = '%s'",
-                    root_id
-            );
-            ResultSet rs = Mysql.execute(sql);
-
-            while (rs != null && rs.next()) {
-                total = rs.getInt("total");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
-        }
-        return total;
-    }
 
     public int findCount(String searchText) {
         int total = 0;
         try {
             String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM transport WHERE road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%'",
-                    searchText, searchText
+                    "SELECT COUNT(*) AS total FROM daily_leaf WHERE supplier_name LIKE '%%%s%%' OR supplier_id LIKE '%%%s%%' OR date LIKE '%%%s%%'",
+                    searchText, searchText, searchText
             );
             ResultSet rs = Mysql.execute(sql);
 
@@ -238,33 +161,9 @@ public class DailyLeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
         return total;
-    }
-
-    public Transport getTransportById(int transportId) {
-        Transport transport = null;
-        try {
-
-            String sql = String.format(
-                    "SELECT * FROM transport WHERE id = %d",
-                    transportId
-            );
-            ResultSet rs = Mysql.execute(sql);
-
-            if (rs != null && rs.next()) {
-                transport = new Transport();
-                transport.setId(rs.getString("id"));
-                transport.setRoot_id(rs.getString("root_id"));
-                transport.setRoad_name(rs.getString("road_name"));
-                transport.setTransport_rate(rs.getString("transport_rate"));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.log(Level.WARNING, "Transport", ex);
-        }
-        return transport;
     }
 
 
@@ -278,7 +177,7 @@ public class DailyLeafService {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.log(Level.WARNING, "Daily_Leaf", ex);
+            logger.log(Level.WARNING, "Daily_Leaf_Service", ex);
         }
         return totalCount;
     }
