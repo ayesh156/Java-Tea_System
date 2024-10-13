@@ -1470,10 +1470,20 @@ public class Home extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
+        Debits debits = new Debits();
+        cardPanel.removeAll();
+        cardPanel.add(debits);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
+        LeafBill leafBill = new LeafBill();
+        cardPanel.removeAll();
+        cardPanel.add(leafBill);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed

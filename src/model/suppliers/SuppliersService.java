@@ -191,6 +191,24 @@ public class SuppliersService {
         return listSuppliers;
     }
 
+    public List<String> getAllSupplierIds() {
+        List<String> supplierIds = new ArrayList<>();
+        try {
+            String sql = String.format(
+                    "SELECT DISTINCT id FROM suppliers"
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            while (rs != null && rs.next()) {
+                supplierIds.add(rs.getString("id"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
+        }
+        return supplierIds;
+    }
+
 
     public int findById(String id) {
         int total = 0;
