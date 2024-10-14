@@ -6,10 +6,9 @@ import model.transport.Transport;
 import model.transport.TransportService;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static gui.Home.logger;
 
@@ -191,23 +190,48 @@ public class SuppliersService {
         return listSuppliers;
     }
 
-    public List<String> getAllSupplierIds() {
-        List<String> supplierIds = new ArrayList<>();
-        try {
-            String sql = String.format(
-                    "SELECT DISTINCT id FROM suppliers"
-            );
-            ResultSet rs = Mysql.execute(sql);
+    public Map<String, SupplierDetails> getAllSuppliers(int page, int pageSize) {
+        Map<String, SupplierDetails> suppliersMap = new HashMap<>();
 
-            while (rs != null && rs.next()) {
-                supplierIds.add(rs.getString("id"));
+        // Calculate the offset for pagination
+        int offset = (page - 1) * pageSize; // Assuming page is 1-based
+
+        // Use try-with-resources for ResultSet to ensure it is closed
+        try {
+            // SQL query to fetch suppliers ordered by id ASC and apply pagination
+            String sql = String.format(
+                    "SELECT CAST(id AS UNSIGNED) as id, name, doc_rate, transport_id, arrears FROM suppliers ORDER BY CAST(id AS UNSIGNED) ASC LIMIT %d, %d",
+                    offset,
+                    pageSize
+            );
+
+            try (ResultSet rs = Mysql.execute(sql)) {  // Automatically closes ResultSet
+                while (rs != null && rs.next()) {
+                    String supplierId = rs.getString("id");
+                    String supplierName = rs.getString("name");
+                    String docRate = rs.getString("doc_rate");
+                    int transportId = rs.getInt("transport_id"); // Fetch transport_id
+                    String arrears = rs.getString("arrears"); // Fetch transport_id
+
+                    // Fetch transport data using transport_id
+                    Transport transport = transportService.getTransportById(transportId);
+                    String transportRate = (transport != null) ? transport.getTransport_rate() : null;
+
+                    // Create SupplierDetails instance with name, docRate, and transportRate
+                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, arrears);
+                    suppliersMap.put(supplierId, supplierDetails);
+                }
             }
+
+            return suppliersMap; // Return the suppliersMap directly, as it is already ordered by SQL
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
-        return supplierIds;
+
+        return suppliersMap; // Return an empty map if an exception occurs
     }
+
 
 
     public int findById(String id) {
@@ -264,6 +288,13 @@ public class SuppliersService {
                 suppliers.setName(results.getString("name"));
                 suppliers.setAddress(results.getString("address"));
                 suppliers.setDoc_rate(results.getString("doc_rate"));
+                suppliers.setTransport_id(results.getInt("transport_id"));
+
+                // Fetch transport data using transport_id
+                Transport transport = transportService.getTransportById(suppliers.getTransport_id());
+                if (transport != null) {
+                    suppliers.setTransport_rate(transport.getTransport_rate());
+                }
 
                 // Add the transport data to the map
                 suppliersMap.put(suppliers.getId(), suppliers);
@@ -292,6 +323,13 @@ public class SuppliersService {
                 suppliers.setName(results.getString("name"));
                 suppliers.setAddress(results.getString("address"));
                 suppliers.setDoc_rate(results.getString("doc_rate"));
+                suppliers.setTransport_id(results.getInt("transport_id"));
+
+                // Fetch transport data using transport_id
+                Transport transport = transportService.getTransportById(suppliers.getTransport_id());
+                if (transport != null) {
+                    suppliers.setTransport_rate(transport.getTransport_rate());
+                }
 
                 // Add the transport data to the map
                 suppliersMap.put(suppliers.getId(), suppliers);
@@ -343,10 +381,26 @@ public class SuppliersService {
         return total;
     }
 
+    public void updateSupplierArrears(String supplierId, String newArrears) {
+        try {
+            // SQL query to update arrears for the supplier using supplierId
+            String sql = String.format(
+                    "UPDATE suppliers SET arrears = '%s' WHERE id = '%s'",
+                    newArrears,
+                    supplierId
+            );
+            Mysql.execute(sql);  // Assuming executeUpdate() for running update queries
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
+        }
+    }
+
+
     public SuppliersModel findByDataById(String fId) {
         SuppliersModel supplier = null;
         try {
-            System.out.println(fId);
             // SQL query to find if another record exists with the same year, month, and rate, excluding the current record
             String sql = String.format(
                     "SELECT * FROM suppliers WHERE id = '%s'",

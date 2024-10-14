@@ -32,4 +32,26 @@ public class MonthService {
         return listMonth;
     }
 
+    public String findMonthById(String id) {
+        String monthValue = null; // Variable to store the month value
+        try {
+            // SQL query to find the month by id
+            String sql = String.format("SELECT month FROM month WHERE id = '%s'", id);
+            ResultSet rs = Mysql.execute(sql);
+
+            if (rs != null && rs.next()) {
+                String monthString = rs.getString("month"); // Get the month string
+                // Split the month string by " - " and get the second value
+                String[] monthParts = monthString.split(" - ");
+                if (monthParts.length > 1) {
+                    monthValue = monthParts[1]; // Get the second value
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Month_Service", ex);
+        }
+        return monthValue; // Return the extracted month value or null if not found
+    }
+
 }

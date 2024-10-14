@@ -8,11 +8,23 @@ public class LeafBillModel {
     private int id;
 
     private String supplier_id;
+    private String supplier_name;
+    private String doc_rate;
     private String advance_price;
     private String debit_price;
     private String gross_tqty;
     private String net_tqty;
     private String transport_rate;
+    private String tea;
+    private String manure;
+    private String dolomite;
+    private String leafRate;
+    private String totalLeafPrice;
+    private String totalDeductions;
+    private String arrears;
+    private String finalAmount;
+    private boolean arrearsSetZero;
+    private String newArrears;
 
     public int getId() {
         return id;
@@ -70,16 +82,124 @@ public class LeafBillModel {
         this.transport_rate = transport_rate;
     }
 
+    public String getSupplier_name() {
+        return supplier_name;
+    }
+
+    public void setSupplier_name(String supplier_name) {
+        this.supplier_name = supplier_name;
+    }
+
+    public String getDoc_rate() {
+        return doc_rate;
+    }
+
+    public void setDoc_rate(String doc_rate) {
+        this.doc_rate = doc_rate;
+    }
+
+    public String getTea() {
+        return tea;
+    }
+
+    public void setTea(String tea) {
+        this.tea = tea;
+    }
+
+    public String getManure() {
+        return manure;
+    }
+
+    public void setManure(String manure) {
+        this.manure = manure;
+    }
+
+    public String getDolomite() {
+        return dolomite;
+    }
+
+    public void setDolomite(String dolomite) {
+        this.dolomite = dolomite;
+    }
+
+    public String getLeafRate() {
+        return leafRate;
+    }
+
+    public void setLeafRate(String leafRate) {
+        this.leafRate = leafRate;
+    }
+
+    public String getTotalLeafPrice() {
+        return totalLeafPrice;
+    }
+
+    public void setTotalLeafPrice(String totalLeafPrice) {
+        this.totalLeafPrice = totalLeafPrice;
+    }
+
+    public String getTotalDeductions() {
+        return totalDeductions;
+    }
+
+    public void setTotalDeductions(String totalDeductions) {
+        this.totalDeductions = totalDeductions;
+    }
+
+    public String getArrears() {
+        return arrears;
+    }
+
+    public void setArrears(String arrears) {
+        this.arrears = arrears;
+    }
+
+    public String getFinalAmount() {
+        return finalAmount;
+    }
+
+    public void setFinalAmount(String finalAmount) {
+        this.finalAmount = finalAmount;
+    }
+
+    public boolean isArrearsSetZero() {
+        return arrearsSetZero;
+    }
+
+    public void setArrearsSetZero(boolean arrearsSetZero) {
+        this.arrearsSetZero = arrearsSetZero;
+    }
+
+    public String getNewArrears() {
+        return newArrears;
+    }
+
+    public void setNewArrears(String newArrears) {
+        this.newArrears = newArrears;
+    }
+
     @Override
     public String toString() {
         return "LeafBillModel{" +
                 "id=" + id +
                 ", supplier_id='" + supplier_id + '\'' +
+                ", supplier_name='" + supplier_name + '\'' +
+                ", doc_rate='" + doc_rate + '\'' +
                 ", advance_price='" + advance_price + '\'' +
                 ", debit_price='" + debit_price + '\'' +
                 ", gross_tqty='" + gross_tqty + '\'' +
                 ", net_tqty='" + net_tqty + '\'' +
                 ", transport_rate='" + transport_rate + '\'' +
+                ", tea='" + tea + '\'' +
+                ", manure='" + manure + '\'' +
+                ", dolomite='" + dolomite + '\'' +
+                ", leafRate='" + leafRate + '\'' +
+                ", totalLeafPrice='" + totalLeafPrice + '\'' +
+                ", totalDeductions='" + totalDeductions + '\'' +
+                ", arrears='" + arrears + '\'' +
+                ", finalAmount='" + finalAmount + '\'' +
+                ", arrearsSetZero=" + arrearsSetZero +
+                ", newArrears=" + newArrears +
                 '}';
     }
 }

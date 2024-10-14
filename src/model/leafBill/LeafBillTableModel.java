@@ -19,7 +19,7 @@ import java.util.List;
 public class LeafBillTableModel extends AbstractTableModel {
 
     List<LeafBillModel> listLeafBill = new ArrayList<LeafBillModel>();
-    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "uqo,","ie' wx'","ie' ku","Èkh", "uqo,"};
+    private final String HEADER[] = {"ie' wx'", "ie' ku", "o< o¿ m%'", "Y=oaO o¿ m%'", "yr uqo,a", "w;a;sldrï", ",s' ø' .dia;=", "m%' .dia;=", "úh<s f;a", "fmdfydr", "fvd,uhsÜ", "lsf,da 1 ñ,", "uq¿ uqo,", "ysÕ uqo,a", "uq¿ wvqlsÍï", "wjika uqo,"};
 
     public void setList(List<LeafBillModel> listLeafBill) {
         this.listLeafBill = listLeafBill;
@@ -61,11 +61,37 @@ public class LeafBillTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return listLeaf.getId();
-            case 1:
                 return listLeaf.getSupplier_id();
-
-
+            case 1:
+                return listLeaf.getSupplier_name();
+            case 2:
+                return listLeaf.getGross_tqty();
+            case 3:
+                return listLeaf.getNet_tqty();
+            case 4:
+                return listLeaf.getDebit_price();
+            case 5:
+                return listLeaf.getAdvance_price();
+            case 6:
+                return listLeaf.getDoc_rate();
+            case 7:
+                return listLeaf.getTransport_rate();
+            case 8:
+                return listLeaf.getTea();
+            case 9:
+                return listLeaf.getManure();
+            case 10:
+                return listLeaf.getDolomite();
+            case 11:
+                return listLeaf.getLeafRate();
+            case 12:
+                return listLeaf.getTotalLeafPrice();
+            case 13:
+                return listLeaf.getArrears();
+            case 14:
+                return listLeaf.getTotalDeductions();
+            case 15:
+                return listLeaf.getFinalAmount();
             default:
                 return null;
         }

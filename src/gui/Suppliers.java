@@ -228,6 +228,11 @@ public class Suppliers extends javax.swing.JPanel {
         jButton15.setMinimumSize(new java.awt.Dimension(264, 52));
         jButton15.setOpaque(true);
         jButton15.setPreferredSize(new java.awt.Dimension(264, 52));
+        jButton15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton15MouseClicked(evt);
+            }
+        });
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
@@ -738,6 +743,7 @@ public class Suppliers extends javax.swing.JPanel {
             AddSupplier addSupplierDialog = AddSupplier.getInstance(supplierNo);
             addSupplierDialog.setVisible(true);
         }
+        
     }//GEN-LAST:event_jTableMouseClicked
 
     private void setUpdateButton() {
@@ -755,15 +761,7 @@ public class Suppliers extends javax.swing.JPanel {
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
-       int row = jTable.getSelectedRow();
-
-        if (row != -1) { // If a row is selected
-            jTable.clearSelection();
-        }
-
-        // Open the AddSupplier form for a new supplier
-        AddSupplier sf = AddSupplier.getInstance("");
-        sf.setVisible(true);
+       
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -810,6 +808,21 @@ public class Suppliers extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "lreKdlr bj;a lsÍug wjYH o;a;h f;darkak'", "No Selection", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void jButton15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton15MouseClicked
+        // TODO add your handling code here:
+         if (evt.getClickCount() == 2) {
+         int row = jTable.getSelectedRow();
+
+        if (row != -1) { // If a row is selected
+            jTable.clearSelection();
+        }
+
+        // Open the AddSupplier form for a new supplier
+        AddSupplier sf = AddSupplier.getInstance("");
+        sf.setVisible(true);
+         }
+    }//GEN-LAST:event_jButton15MouseClicked
 
     private void autoResizeColumn(JTable jTable1) {
 

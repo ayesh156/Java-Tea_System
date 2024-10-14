@@ -39,11 +39,7 @@ import static gui.Home.logger;
 public class DailyLeaf extends javax.swing.JPanel {
 
     private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
-    private HashMap<String, Transport> transportMap = new HashMap<>(); //to keep Transport names with IDss
     private HashMap<String, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
-
-    private HashMap<String, String> transportRateMap = new HashMap<>(); //to keep Transport Rate with IDss
-
 
     DailyLeafTableModel dailyLeafTableModel;
 
@@ -434,7 +430,6 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField6KeyPressed(evt);
             }
-
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField6KeyReleased(evt);
             }
@@ -468,7 +463,6 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField7KeyPressed(evt);
             }
-
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField7KeyReleased(evt);
             }
@@ -501,6 +495,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         jLabel26.setVerifyInputWhenFocusTarget(false);
         jPanel48.add(jLabel26, java.awt.BorderLayout.PAGE_START);
 
+        jTextField10.setEditable(false);
         jTextField10.setBackground(new java.awt.Color(245, 245, 245));
         jTextField10.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
         jTextField10.setForeground(new java.awt.Color(15, 15, 18));
@@ -530,12 +525,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
-                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 558, Short.MAX_VALUE)
+            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 558, Short.MAX_VALUE)
         );
         jPanel31Layout.setVerticalGroup(
-                jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 47, Short.MAX_VALUE)
+            jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 47, Short.MAX_VALUE)
         );
 
         jPanel28.add(jPanel31, java.awt.BorderLayout.CENTER);
@@ -551,12 +546,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
-                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 158, Short.MAX_VALUE)
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 158, Short.MAX_VALUE)
         );
         jPanel33Layout.setVerticalGroup(
-                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 52, Short.MAX_VALUE)
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 52, Short.MAX_VALUE)
         );
 
         jPanel32.add(jPanel33, java.awt.BorderLayout.CENTER);
@@ -703,7 +698,6 @@ public class DailyLeaf extends javax.swing.JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField2FocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField2FocusLost(evt);
             }
@@ -826,19 +820,19 @@ public class DailyLeaf extends javax.swing.JPanel {
 
         jTable.setFont(new java.awt.Font("Iskoola Pota", 0, 22)); // NOI18N
         jTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][]{
+            new Object [][] {
 
-                },
-                new String[]{
-                        "ID", "Name", "Category"
-                }
+            },
+            new String [] {
+                "ID", "Name", "Category"
+            }
         ) {
-            boolean[] canEdit = new boolean[]{
-                    false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         jTable.setRowHeight(52);
@@ -882,12 +876,12 @@ public class DailyLeaf extends javax.swing.JPanel {
         javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
-                jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel18Layout.setVerticalGroup(
-                jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         card1.add(jPanel18, java.awt.BorderLayout.PAGE_START);
@@ -1020,6 +1014,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         // Set jTextField4 to empty if limit is 0
         if (limit == 0) {
             jTextField4.setText("");  // Clear the text field
+            jTextField10.setText("");  // Clear the text field
         }
 
         // Initialize the service class
@@ -1032,7 +1027,8 @@ public class DailyLeaf extends javax.swing.JPanel {
         for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel); // Adding the transport objects to the suppliersMap
-            suppliersNameMap.put(suppliersModel.getName(), suppliersModel.getId()); // Adding the Product names and IDs to the suppliersNameMap
+            String supplierDetails = suppliersModel.getId() + "|" + suppliersModel.getTransport_rate();
+            suppliersNameMap.put(suppliersModel.getName(), supplierDetails);
         }
 
         return suppliersNameMap;
@@ -1048,6 +1044,7 @@ public class DailyLeaf extends javax.swing.JPanel {
         // Set jTextField5 to empty if limit is 0
         if (limit == 0) {
             jTextField5.setText("");  // Clear the text field if no ID is provided
+            jTextField10.setText("");  // Clear the text field if no ID is provided
         }
 
         // Initialize the service class
@@ -1060,33 +1057,11 @@ public class DailyLeaf extends javax.swing.JPanel {
         for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel);  // Map supplier ID to the Supplier object
-            suppliersNameMap.put(suppliersModel.getId(), suppliersModel.getName());  // Map supplier ID to supplier name
+            String supplierDetails = suppliersModel.getName() + "|" + suppliersModel.getTransport_rate();
+            suppliersNameMap.put(suppliersModel.getId(), supplierDetails);
         }
 
         return suppliersNameMap;  // Return the map with supplier ID and name
-    }
-
-    private HashMap<String, String> loadRate() {
-        transportMap.clear();
-        transportRateMap.clear();
-
-        String tran = jTextField10.getText().trim();
-        int limit = tran.isEmpty() ? 0 : 5;  // Define the limit if there's input text
-
-        // Initialize the service class
-        TransportService transportService = new TransportService();
-
-        // Fetch transport data using SupplierService
-        HashMap<String, Transport> suMap = transportService.getSuppliersByTransRate(tran, limit);
-
-        // Populate suMap and transportNameMap with the fetched data
-        for (Map.Entry<String, Transport> entry : suMap.entrySet()) {
-            Transport transport = entry.getValue();
-            transportMap.put(transport.getId(), transport); // Adding the transport objects to the suppliersMap
-            transportRateMap.put(transport.getTransport_rate(), transport.getId()); // Adding the Product names and IDs to the transportNameMap
-        }
-
-        return transportRateMap;
     }
 
     private void searchTable(String searchText) {
@@ -1516,7 +1491,7 @@ public class DailyLeaf extends javax.swing.JPanel {
 
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
             if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
-                Popups.loadPopupTextField5(jPopupMenu1, jTextField5, jTextField4, loadSuppliers(), suppliersMap);
+                Popups.loadPopupTextField5(jPopupMenu1, jTextField5, jTextField4, jTextField10, loadSuppliers(), suppliersMap);
                 if (jTextField5.getText().equals("")) {
                     jPopupMenu1.setVisible(false);
                 }
@@ -1537,7 +1512,7 @@ public class DailyLeaf extends javax.swing.JPanel {
 
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
             if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
-                Popups.loadPopupTextField4(jPopupMenu2, jTextField5, jTextField4, loadSuppliersId(), suppliersMap);
+                Popups.loadPopupTextField4(jPopupMenu2, jTextField5, jTextField4, jTextField10, loadSuppliersId(), suppliersMap);
                 if (jTextField4.getText().equals("")) {
                     jPopupMenu2.setVisible(false);
                 }
@@ -1555,20 +1530,6 @@ public class DailyLeaf extends javax.swing.JPanel {
 
     private void jTextField10KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField10KeyReleased
         // TODO add your handling code here:
-        if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
-            if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
-                model.suppliers.Popups.loadPopupTextField8(jPopupMenu2, jTextField10, loadRate());
-                if (jTextField10.getText().equals("")) {
-                    jPopupMenu2.setVisible(false);
-                }
-            } else {
-                jPopupMenu2.setVisible(false);
-            }
-
-            if (evt.getKeyCode() != KeyEvent.VK_DOWN && evt.getKeyCode() != KeyEvent.VK_UP) {
-                jTextField10.grabFocus();
-            }
-        }
     }//GEN-LAST:event_jTextField10KeyReleased
 
     private void jTextField6KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyReleased

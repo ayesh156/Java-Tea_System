@@ -766,6 +766,7 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="jTextField10">
                               <Properties>
+                                <Property name="editable" type="boolean" value="false"/>
                                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="f5" green="f5" red="f5" type="rgb"/>
                                 </Property>

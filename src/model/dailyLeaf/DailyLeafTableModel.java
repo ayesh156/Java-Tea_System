@@ -19,7 +19,7 @@ import java.util.List;
 public class DailyLeafTableModel extends AbstractTableModel {
 
     List<DailyLeafModel> listLeaf = new ArrayList<DailyLeafModel>();
-    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "Y=oaO m%udKh", "m%jdyk wkqmd;h"};
+    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "o< m%udKh", "Y=oaO m%udKh"};
 
     public void setList(List<DailyLeafModel> listLeaf) {
         this.listLeaf = listLeaf;
@@ -71,10 +71,10 @@ public class DailyLeafTableModel extends AbstractTableModel {
                 return leaf.getDate();
                 
             case 4:
-                return leaf.getNet_qty();
+                return leaf.getGross_qty();
                 
             case 5:
-                return leaf.getTransport_rate();
+                return leaf.getNet_qty();
 
             default:
                 return null;

@@ -8,8 +8,10 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,6 +56,8 @@ public class LeafBill extends javax.swing.JPanel {
 
     private static SuppliersService suppliersService;
 
+    private static MonthService monthService;
+
 
     /**
      * Creates new form Suppliers
@@ -62,6 +66,7 @@ public class LeafBill extends javax.swing.JPanel {
 
         leafBillService = new LeafBillService();
         suppliersService = new SuppliersService();
+        monthService = new MonthService();
 
         initComponents();
 
@@ -866,7 +871,7 @@ public class LeafBill extends javax.swing.JPanel {
 
     private void loadTable() {
 
-//        totalData = leafBillService.count();
+        totalData = suppliersService.count();
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -896,14 +901,14 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         leafBillTableModel = new LeafBillTableModel();
-//        leafBillTableModel.setList(leafBillService.findAll(page, rowCountPerPage));
+        leafBillTableModel.setList(leafBillService.findAll(page, rowCountPerPage));
         jTable.setModel(leafBillTableModel);
 
         // Set the same width for all columns
-//        setSameColumnWidth(jTable, 500);  // Set all columns to a width of 100 pixels
+        setSameColumnWidth(jTable, 100);  // Set all columns to a width of 100 pixels
 
-        // Set up custom column widths
-        setupCustomColumnWidths(jTable);
+//        // Set up custom column widths
+//        setupCustomColumnWidths(jTable);
 
         // Setup table scroll (pass jTable and JScrollPane)
         setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
@@ -1167,23 +1172,61 @@ public class LeafBill extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        // Get the current date
+        LocalDate now = LocalDate.now();
+
+        // Calculate the first and last day of the previous month
+        LocalDate firstDayOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
+
+        // Extract year and month for the query
+        String year = String.valueOf(firstDayOfLastMonth.getYear());
+        String monthId = String.valueOf(firstDayOfLastMonth.getMonthValue());
+
+        String monthName = monthService.findMonthById(monthId);
+
         // Create an instance of the service class if necessary
         LeafBillService leafBillService = new LeafBillService(); // Ensure this is your actual service class name
 
+        int totalSuppliers = suppliersService.count();
+
         // Call the findAll method with desired page and pageSize
         int page = 1; // Example page number
-        int pageSize = 10; // Example page size
-        List<LeafBillModel> leafBillList = leafBillService.findAll(page, pageSize);
+        List<LeafBillModel> leafBillList = leafBillService.findAll(page, totalSuppliers);
 
         // Print the details of each LeafBillModel in the console
         for (LeafBillModel leafBill : leafBillList) {
-            System.out.println("Supplier ID: " + leafBill.getSupplier_id());
-            System.out.println("Advance Price: " + leafBill.getAdvance_price());
-            System.out.println("Debit Price: " + leafBill.getDebit_price());
-            System.out.println("Total Gross Qty: " + leafBill.getGross_tqty());
-            System.out.println("Total Net Qty: " + leafBill.getNet_tqty());
-            System.out.println("Total Transport Rate: " + leafBill.getTransport_rate());
+            System.out.println("Year : " + year);
+            System.out.println("Month : " + monthName);
+            System.out.println("Passbook No : " + leafBill.getSupplier_id());
+            System.out.println("Leaf Qty : " + leafBill.getNet_tqty());
+            System.out.println("1KG Price : " + leafBill.getLeafRate());
+            System.out.println("Total Price : " + leafBill.getTotalLeafPrice());
+            System.out.println("Arrears : " + leafBill.getArrears());
+            System.out.println("Advance : " + leafBill.getAdvance_price());
+            System.out.println("Transport Fee : " + leafBill.getTransport_rate());
+            System.out.println("Document Fee : " + leafBill.getDoc_rate());
+            System.out.println("Dry Tea  : " + leafBill.getTea());
+            System.out.println("Debits  : " + leafBill.getDebit_price());
+            System.out.println("Manure  : " + leafBill.getManure());
+            System.out.println("Dolomite  : " + leafBill.getDolomite());
+            System.out.println("Total Deduction  : " + leafBill.getTotalDeductions());
+            System.out.println("Final Amount  : " + leafBill.getFinalAmount());
             System.out.println("----------------------------");
+
+            if(leafBill.isArrearsSetZero()){
+                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), "0");
+            }
+
+            double newArrearsDouble = Double.parseDouble(leafBill.getNewArrears());
+
+            if(newArrearsDouble > 0){
+                // Assuming this is part of your method
+                DecimalFormat df = new DecimalFormat("#.00");
+                String formattedNewArrears = df.format(newArrearsDouble);
+
+                // Update supplier's arrears with the formatted value
+                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), formattedNewArrears);
+            }
 
             // Optional: Display it in a GUI component, e.g., JTextArea or JTable
         }

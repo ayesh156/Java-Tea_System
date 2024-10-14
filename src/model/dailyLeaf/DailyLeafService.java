@@ -80,8 +80,8 @@ public class DailyLeafService {
                 p.setSupplier_id(rs.getString("supplier_id"));
                 p.setSupplier_name(rs.getString("supplier_name"));
                 p.setDate(rs.getDate("date"));
+                p.setGross_qty(rs.getString("gross_qty"));
                 p.setNet_qty(rs.getString("net_qty"));
-                p.setTransport_rate(rs.getString("transport_rate"));
                 listDailyLeaf.add(p);
             }
         } catch (Exception ex) {
@@ -135,8 +135,8 @@ public class DailyLeafService {
                 p.setSupplier_id(rs.getString("supplier_id"));
                 p.setSupplier_name(rs.getString("supplier_name"));
                 p.setDate(rs.getDate("date"));
+                p.setGross_qty(rs.getString("gross_qty"));
                 p.setNet_qty(rs.getString("net_qty"));
-                p.setTransport_rate(rs.getString("transport_rate"));
                 listDailyLeaf.add(p);
             }
         } catch (Exception ex) {

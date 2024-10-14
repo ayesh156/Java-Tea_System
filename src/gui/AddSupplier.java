@@ -4,7 +4,6 @@
  */
 
 package gui;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -45,6 +44,7 @@ public class AddSupplier extends javax.swing.JDialog {
             setUpdateButton();
             loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
         } else {
+            setSaveButton();
             newSupplier(); // Clear fields if `supplierNo` is empty
         }
     }
@@ -54,6 +54,12 @@ public class AddSupplier extends javax.swing.JDialog {
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/update.png")));
         jButton15.setText("fjkia'"); // Assuming you meant "Update" instead of "fjkia"
         jButton15.setBackground(new Color(30, 30, 30));
+    }
+
+    private void setSaveButton() {
+        jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));
+        jButton15.setText("iqrlskak");
+        jButton15.setBackground(new Color(57, 117, 104));
     }
 
     // Method to get the single instance of AddSupplier
@@ -595,7 +601,7 @@ public class AddSupplier extends javax.swing.JDialog {
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         // TODO add your handling code here:
-
+        supplierNo = ""; // Reset supplierNo
         this.dispose();
 
     }//GEN-LAST:event_jButton16ActionPerformed
