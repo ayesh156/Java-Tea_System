@@ -34,6 +34,11 @@ import model.suppliers.SuppliersService;
 import model.year.YearModal;
 import model.year.YearService;
 import static gui.Home.logger;
+import java.nio.file.FileSystems;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  * @author ECOTEC
@@ -1227,8 +1232,33 @@ public class LeafBill extends javax.swing.JPanel {
                 // Update supplier's arrears with the formatted value
                 suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), formattedNewArrears);
             }
+            
+             
 
             // Optional: Display it in a GUI component, e.g., JTextArea or JTable
+        }
+        
+        try {
+            
+            String userDirectory = FileSystems.getDefault()
+                    .getPath("")
+                    .toAbsolutePath()
+                    .toString();
+
+            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+            
+
+  
+            JRTableModelDataSource datasource = new JRTableModelDataSource(jTable.getModel());
+
+
+            JasperPrint report = JasperFillManager.fillReport(url, null, datasource);
+            //JasperPrintManager.printReport(report, false); //prirent report dirrectly
+            JasperViewer.viewReport(report, false); //for testing
+            
+            } catch (Exception e) {
+            logger.log(Level.WARNING, "print_invoice_history_btn", e);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jButton17ActionPerformed
 

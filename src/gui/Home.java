@@ -641,7 +641,7 @@ public class Home extends javax.swing.JFrame {
         jButton5.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
         jButton5.setForeground(new java.awt.Color(147, 159, 171));
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
-        jButton5.setText("f;a");
+        jButton5.setText("úh<s f;a");
         jButton5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
         jButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton5.setIconTextGap(10);
