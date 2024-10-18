@@ -232,6 +232,48 @@ public class SuppliersService {
         return suppliersMap; // Return an empty map if an exception occurs
     }
 
+    public Map<String, SupplierDetails> searchLeafBillSuppliers(String searchText, int page, int pageSize) {
+        Map<String, SupplierDetails> suppliersMap = new HashMap<>();
+
+        // Calculate the offset for pagination
+        int offset = (page - 1) * pageSize; // Assuming page is 1-based
+
+        // Use try-with-resources for ResultSet to ensure it is closed
+        try {
+            // SQL query to fetch suppliers ordered by id ASC and apply pagination
+            String sql = String.format(
+                    "SELECT CAST(id AS UNSIGNED) as id, name, doc_rate, transport_id, arrears FROM suppliers WHERE name LIKE '%%%s%%' ORDER BY CAST(id AS UNSIGNED) ASC LIMIT %d, %d",
+                    searchText,
+                    offset,
+                    pageSize
+            );
+
+            try (ResultSet rs = Mysql.execute(sql)) {  // Automatically closes ResultSet
+                while (rs != null && rs.next()) {
+                    String supplierId = rs.getString("id");
+                    String supplierName = rs.getString("name");
+                    String docRate = rs.getString("doc_rate");
+                    int transportId = rs.getInt("transport_id"); // Fetch transport_id
+                    String arrears = rs.getString("arrears"); // Fetch transport_id
+
+                    // Fetch transport data using transport_id
+                    Transport transport = transportService.getTransportById(transportId);
+                    String transportRate = (transport != null) ? transport.getTransport_rate() : null;
+
+                    // Create SupplierDetails instance with name, docRate, and transportRate
+                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, arrears);
+                    suppliersMap.put(supplierId, supplierDetails);
+                }
+            }
+
+            return suppliersMap; // Return the suppliersMap directly, as it is already ordered by SQL
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
+        }
+
+        return suppliersMap; // Return an empty map if an exception occurs
+    }
 
 
     public int findById(String id) {
@@ -444,6 +486,25 @@ public class SuppliersService {
             logger.log(Level.WARNING, "Suppliers_Service", ex);
         }
         return totalCount;
+    }
+
+    public int findCountName(String searchText) {
+        int total = 0;
+        try {
+            String sql = String.format(
+                    "SELECT COUNT(*) AS total FROM suppliers WHERE name LIKE '%%%s%%'",
+                    searchText
+            );
+            ResultSet rs = Mysql.execute(sql);
+
+            if (rs != null && rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.log(Level.WARNING, "Suppliers_Service", ex);
+        }
+        return total;
     }
 
 

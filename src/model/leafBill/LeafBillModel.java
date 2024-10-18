@@ -25,6 +25,15 @@ public class LeafBillModel {
     private String finalAmount;
     private boolean arrearsSetZero;
     private String newArrears;
+    private String billNumber;
+
+    public String getBillNumber() {
+        return billNumber;
+    }
+
+    public void setBillNumber(String billNumber) {
+        this.billNumber = billNumber;
+    }
 
     public int getId() {
         return id;
@@ -199,7 +208,8 @@ public class LeafBillModel {
                 ", arrears='" + arrears + '\'' +
                 ", finalAmount='" + finalAmount + '\'' +
                 ", arrearsSetZero=" + arrearsSetZero +
-                ", newArrears=" + newArrears +
+                ", newArrears='" + newArrears + '\'' +
+                ", billNumber='" + billNumber + '\'' +
                 '}';
     }
 }

@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -91,11 +92,11 @@ public class LeafBill extends javax.swing.JPanel {
         // Customize the table header
         customizeTableHeader(jTable);
 
-        jComboBoxPage.addItem("6");
-        jComboBoxPage.addItem("15");
-        jComboBoxPage.addItem("30");
-        jComboBoxPage.addItem("50");
+        jComboBoxPage.addItem("200");
+        jComboBoxPage.addItem("150");
         jComboBoxPage.addItem("100");
+        jComboBoxPage.addItem("50");
+        jComboBoxPage.addItem("6");
         jComboBoxPage.addItemListener(new ItemListener() {
 
             public void itemStateChanged(ItemEvent e) {
@@ -476,8 +477,8 @@ public class LeafBill extends javax.swing.JPanel {
         jButton19.setBackground(new java.awt.Color(30, 39, 46));
         jButton19.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
         jButton19.setForeground(new java.awt.Color(255, 255, 255));
-        jButton19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/all_loading.png"))); // NOI18N
-        jButton19.setText("ish,a, ,nd .kak");
+        jButton19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/print.png"))); // NOI18N
+        jButton19.setText("uqøKh lrkak");
         jButton19.setIconTextGap(8);
         jButton19.setMargin(new java.awt.Insets(2, 9, 2, 9));
         jButton19.setMaximumSize(new java.awt.Dimension(220, 52));
@@ -910,7 +911,7 @@ public class LeafBill extends javax.swing.JPanel {
         jTable.setModel(leafBillTableModel);
 
         // Set the same width for all columns
-        setSameColumnWidth(jTable, 100);  // Set all columns to a width of 100 pixels
+        setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
 
 //        // Set up custom column widths
 //        setupCustomColumnWidths(jTable);
@@ -1013,7 +1014,7 @@ public class LeafBill extends javax.swing.JPanel {
 
     private void searchTable(String searchText) {
 
-//        totalData = leafBillService.findCount(searchText);
+        totalData = suppliersService.findCountName(searchText);
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -1039,17 +1040,17 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         leafBillTableModel = new LeafBillTableModel();
-//        leafBillTableModel.setList(leafBillService.find(searchText, page, rowCountPerPage));
+        leafBillTableModel.setList(leafBillService.find(searchText, page, rowCountPerPage));
         jTable.setModel(leafBillTableModel);
+
+        // Set the same width for all columns
+        setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
+
+//        // Set up custom column widths
+//        setupCustomColumnWidths(jTable);
 
         // Setup table scroll (pass jTable and JScrollPane)
         setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
-
-        // Set the same width for all columns
-//        setSameColumnWidth(jTable, 500);  // Set all columns to a width of 100 pixels
-
-        // Set up custom column widths
-        setupCustomColumnWidths(jTable);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
@@ -1177,8 +1178,59 @@ public class LeafBill extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+        totalData = suppliersService.findCountName(jTextField5.getText());
+        rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
+        Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
+        totalPage = totalPageD.intValue();
+
+        if (page.equals(1)) {
+            jButtonFirst.setEnabled(false);
+            jButtonPrevious.setEnabled(false);
+        } else {
+            jButtonFirst.setEnabled(true);
+            jButtonPrevious.setEnabled(true);
+        }
+
+        if (page.equals(totalPage)) {
+            jButtonLast.setEnabled(false);
+            jButtonNext.setEnabled(false);
+        } else {
+            jButtonLast.setEnabled(true);
+            jButtonNext.setEnabled(true);
+        }
+
+        if (page > totalPage) {
+            page = 1;
+        }
+
+        leafBillTableModel = new LeafBillTableModel();
+        leafBillTableModel.setList(leafBillService.findByYearMonth(jTextField5.getText(), jComboBox2.getSelectedItem(), jComboBox1.getSelectedItem(), page, rowCountPerPage));
+        jTable.setModel(leafBillTableModel);
+
+        // Set the same width for all columns
+        setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
+
+//        // Set up custom column widths
+//        setupCustomColumnWidths(jTable);
+
+        // Setup table scroll (pass jTable and JScrollPane)
+        setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
+
+        jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
+        jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
+        autoResizeColumn(jTable);
+        jButtonNum.setText(page.toString());
+    }//GEN-LAST:event_jButton17ActionPerformed
+
+
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        // TODO add your handling code here:
         // Get the current date
         LocalDate now = LocalDate.now();
+
+        // Format the current date as 'yyyy-MM-dd' (e.g., 2024-10-18)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedCurrentDate = now.format(formatter);
 
         // Calculate the first and last day of the previous month
         LocalDate firstDayOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
@@ -1188,6 +1240,21 @@ public class LeafBill extends javax.swing.JPanel {
         String monthId = String.valueOf(firstDayOfLastMonth.getMonthValue());
 
         String monthName = monthService.findMonthById(monthId);
+
+        Object searchYear =  jComboBox2.getSelectedItem();
+        Object searchMonth =  jComboBox1.getSelectedItem();
+
+        // If searchYear is provided, override the year
+        if (!"අවුරුද්ද".equals(searchYear)) {
+            year = searchYear.toString();
+        }
+
+        // If searchMonth is provided, override the month
+        if (!"මාසය".equals(searchMonth)) {
+            // Extract the numeric month from the format "1 - month name"
+            String[] monthParts = searchMonth.toString().split(" - ");
+            monthName = monthParts[1];
+        }
 
         // Create an instance of the service class if necessary
         LeafBillService leafBillService = new LeafBillService(); // Ensure this is your actual service class name
@@ -1200,23 +1267,6 @@ public class LeafBill extends javax.swing.JPanel {
 
         // Print the details of each LeafBillModel in the console
         for (LeafBillModel leafBill : leafBillList) {
-            System.out.println("Year : " + year);
-            System.out.println("Month : " + monthName);
-            System.out.println("Passbook No : " + leafBill.getSupplier_id());
-            System.out.println("Leaf Qty : " + leafBill.getNet_tqty());
-            System.out.println("1KG Price : " + leafBill.getLeafRate());
-            System.out.println("Total Price : " + leafBill.getTotalLeafPrice());
-            System.out.println("Arrears : " + leafBill.getArrears());
-            System.out.println("Advance : " + leafBill.getAdvance_price());
-            System.out.println("Transport Fee : " + leafBill.getTransport_rate());
-            System.out.println("Document Fee : " + leafBill.getDoc_rate());
-            System.out.println("Dry Tea  : " + leafBill.getTea());
-            System.out.println("Debits  : " + leafBill.getDebit_price());
-            System.out.println("Manure  : " + leafBill.getManure());
-            System.out.println("Dolomite  : " + leafBill.getDolomite());
-            System.out.println("Total Deduction  : " + leafBill.getTotalDeductions());
-            System.out.println("Final Amount  : " + leafBill.getFinalAmount());
-            System.out.println("----------------------------");
 
             if(leafBill.isArrearsSetZero()){
                 suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), "0");
@@ -1232,8 +1282,6 @@ public class LeafBill extends javax.swing.JPanel {
                 // Update supplier's arrears with the formatted value
                 suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), formattedNewArrears);
             }
-            
-             
 
             // Optional: Display it in a GUI component, e.g., JTextArea or JTable
         }
@@ -1246,13 +1294,16 @@ public class LeafBill extends javax.swing.JPanel {
                     .toString();
 
             String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
-            
 
+            // Create a Map to store parameters
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("year_param", year); // Pass the year parameter
+            parameters.put("monthName_param", monthName); // Pass the month name parameter
+            parameters.put("currentDate_param", formattedCurrentDate); // Pass the formatted current date as a parameter
   
             JRTableModelDataSource datasource = new JRTableModelDataSource(jTable.getModel());
 
-
-            JasperPrint report = JasperFillManager.fillReport(url, null, datasource);
+            JasperPrint report = JasperFillManager.fillReport(url, parameters, datasource);
             //JasperPrintManager.printReport(report, false); //prirent report dirrectly
             JasperViewer.viewReport(report, false); //for testing
             
@@ -1260,12 +1311,6 @@ public class LeafBill extends javax.swing.JPanel {
             logger.log(Level.WARNING, "print_invoice_history_btn", e);
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jButton17ActionPerformed
-
-
-    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        // TODO add your handling code here:
-          
     }//GEN-LAST:event_jButton19ActionPerformed
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed

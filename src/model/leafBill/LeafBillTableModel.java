@@ -19,7 +19,7 @@ import java.util.List;
 public class LeafBillTableModel extends AbstractTableModel {
 
     List<LeafBillModel> listLeafBill = new ArrayList<LeafBillModel>();
-    private final String HEADER[] = {"ie' wx'", "ie' ku", "o< o¿ m%'", "Y=oaO o¿ m%'", "yr uqo,a", "w;a;sldrï", ",s' ø' .dia;=", "m%' .dia;=", "úh<s f;a", "fmdfydr", "fvd,uhsÜ", "lsf,da 1 ñ,", "uq¿ uqo,", "ysÕ uqo,a", "uq¿ wvqlsÍï", "wjika uqo,"};
+    private final String HEADER[] = {"ie' wx'", "ì,a wxlh", "ie' ku", "o< o¿ m%'", "Y=oaO o¿ m%'", "yr uqo,a", "w;a;sldrï", ",s' ø' .dia;=", "m%' .dia;=", "úh<s f;a", "fmdfydr", "fvd,uhsÜ", "lsf,da 1 ñ,", "uq¿ uqo,", "ysÕ uqo,a", "uq¿ wvqlsÍï", "wjika uqo,"};
 
     public void setList(List<LeafBillModel> listLeafBill) {
         this.listLeafBill = listLeafBill;
@@ -63,37 +63,55 @@ public class LeafBillTableModel extends AbstractTableModel {
             case 0:
                 return listLeaf.getSupplier_id();
             case 1:
-                return listLeaf.getSupplier_name();
+                return listLeaf.getBillNumber();
             case 2:
-                return listLeaf.getGross_tqty();
+                return listLeaf.getSupplier_name();
             case 3:
-                return listLeaf.getNet_tqty();
+                return checkZero(listLeaf.getGross_tqty());
             case 4:
-                return listLeaf.getDebit_price();
+                return checkZero(listLeaf.getNet_tqty());
             case 5:
-                return listLeaf.getAdvance_price();
+                return checkZero(listLeaf.getDebit_price());
             case 6:
-                return listLeaf.getDoc_rate();
+                return checkZero(listLeaf.getAdvance_price());
             case 7:
-                return listLeaf.getTransport_rate();
+                return checkZero(listLeaf.getDoc_rate());
             case 8:
-                return listLeaf.getTea();
+                return checkZero(listLeaf.getTransport_rate());
             case 9:
-                return listLeaf.getManure();
+                return checkZero(listLeaf.getTea());
             case 10:
-                return listLeaf.getDolomite();
+                return checkZero(listLeaf.getManure());
             case 11:
-                return listLeaf.getLeafRate();
+                return checkZero(listLeaf.getDolomite());
             case 12:
-                return listLeaf.getTotalLeafPrice();
+                return checkZero(listLeaf.getLeafRate());
             case 13:
-                return listLeaf.getArrears();
+                return checkZero(listLeaf.getTotalLeafPrice());
             case 14:
-                return listLeaf.getTotalDeductions();
+                return checkZero(listLeaf.getArrears());
             case 15:
-                return listLeaf.getFinalAmount();
+                return checkZero(listLeaf.getTotalDeductions());
+            case 16:
+                return checkZero(listLeaf.getFinalAmount());
             default:
                 return null;
+        }
+    }
+
+    private String checkZero(String value) {
+        // Convert value to double to check against 0
+        try {
+            if (value == null || Double.parseDouble(value) == 0.0) {
+                return "";
+            }
+
+            // Format the value to 2 decimal places if it is numeric
+            double numericValue = Double.parseDouble(value);
+            return String.format("%.2f", numericValue);
+        } catch (NumberFormatException e) {
+            // In case of non-numeric values, just return the value as it is
+            return value;
         }
     }
 }
