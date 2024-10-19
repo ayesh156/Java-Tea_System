@@ -1349,7 +1349,6 @@
                       <Color blue="57" green="50" red="49" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" value="w;a;sldr&#xef;"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 50]"/>
                     </Property>

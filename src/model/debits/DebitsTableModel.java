@@ -19,7 +19,7 @@ import java.util.List;
 public class DebitsTableModel extends AbstractTableModel {
 
     List<DebitsModel> listDebits = new ArrayList<DebitsModel>();
-    private final String HEADER[] = {"ie' wx'","ie' ku","Èkh", "uqo,"};
+    private final String HEADER[] = {"wx'","ie' wx'","ie' ku","Èkh", "uqo,"};
 
     public void setList(List<DebitsModel> listDebits) {
         this.listDebits = listDebits;

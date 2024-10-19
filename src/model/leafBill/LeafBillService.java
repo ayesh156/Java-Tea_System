@@ -61,11 +61,12 @@ public class LeafBillService {
             if (rsLeafRate != null && rsLeafRate.next()) {
                 previousMonthLeafRate = rsLeafRate.getString("leaf_rate");
             } else {
-                System.out.println("No results found for the query.");
+                previousMonthLeafRate = "0";
             }
 
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
+            logger.log(Level.WARNING, "Leaf_Bill_Service", e);
         }
 
         // Create a DateTimeFormatter for the desired format
@@ -244,6 +245,7 @@ public class LeafBillService {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
                     arrearsDouble = 0.0; // Default value if conversion fails
+                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
                 }
 
                 // Sum the values
@@ -273,7 +275,7 @@ public class LeafBillService {
                 if (finalAmount < 0) {
                     // If finalAmount is negative, insert its absolute value as arrears into suppliers table
 
-                    if(formattedTotalPriceValue != 0) {
+                    if (formattedTotalPriceValue != 0) {
 //                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
                         newArrears = Math.abs(finalAmount);
                     }
@@ -282,8 +284,6 @@ public class LeafBillService {
                     // If finalAmount is positive, deduct the supplier's arrears from it
                     if (supplierArrears > 0) {
                         if (finalAmount >= supplierArrears) {
-                            // Deduct full arrears
-                            finalAmount -= supplierArrears;
 
                             arrearsSetZero = true;
                             // Reset supplier's arrears to 0
@@ -292,7 +292,7 @@ public class LeafBillService {
                             // Deduct partial arrears, and remaining arrears stay in supplier's record
                             double remainingArrears = supplierArrears - finalAmount;
 
-                            if(formattedTotalPriceValue != 0){
+                            if (formattedTotalPriceValue != 0) {
                                 // Update the remaining arrears in the suppliers table
                                 suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
                             }
@@ -337,7 +337,7 @@ public class LeafBillService {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                logger.log(Level.WARNING, "Advance_Service", ex);
+                logger.log(Level.WARNING, "Leaf_Bill_Service", ex);
             }
         }
         return listLeafBill;
@@ -379,11 +379,12 @@ public class LeafBillService {
             if (rsLeafRate != null && rsLeafRate.next()) {
                 previousMonthLeafRate = rsLeafRate.getString("leaf_rate");
             } else {
-                System.out.println("No results found for the query.");
+                previousMonthLeafRate = "0";
             }
 
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
+            logger.log(Level.WARNING, "Leaf_Bill_Service", e);
         }
 
         // Create a DateTimeFormatter for the desired format
@@ -562,6 +563,7 @@ public class LeafBillService {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
                     arrearsDouble = 0.0; // Default value if conversion fails
+                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
                 }
 
                 // Sum the values
@@ -591,7 +593,7 @@ public class LeafBillService {
                 if (finalAmount < 0) {
                     // If finalAmount is negative, insert its absolute value as arrears into suppliers table
 
-                    if(formattedTotalPriceValue != 0) {
+                    if (formattedTotalPriceValue != 0) {
 //                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
                         newArrears = Math.abs(finalAmount);
                     }
@@ -600,9 +602,6 @@ public class LeafBillService {
                     // If finalAmount is positive, deduct the supplier's arrears from it
                     if (supplierArrears > 0) {
                         if (finalAmount >= supplierArrears) {
-                            // Deduct full arrears
-                            finalAmount -= supplierArrears;
-
                             arrearsSetZero = true;
                             // Reset supplier's arrears to 0
 //                            suppliersService.updateSupplierArrears(supplierId, "0");
@@ -610,7 +609,7 @@ public class LeafBillService {
                             // Deduct partial arrears, and remaining arrears stay in supplier's record
                             double remainingArrears = supplierArrears - finalAmount;
 
-                            if(formattedTotalPriceValue != 0){
+                            if (formattedTotalPriceValue != 0) {
                                 // Update the remaining arrears in the suppliers table
                                 suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
                             }
@@ -655,13 +654,13 @@ public class LeafBillService {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                logger.log(Level.WARNING, "Advance_Service", ex);
+                logger.log(Level.WARNING, "Leaf_Bill_Service", ex);
             }
         }
         return listLeafBill;
     }
 
-    public List<LeafBillModel> findByYearMonth(String searchText, Object searchYear, Object searchMonth,int page, int pageSize) {
+    public List<LeafBillModel> findByYearMonth(String searchText, Object searchYear, Object searchMonth, int page, int pageSize) {
 
         // Use getAllSuppliers to get a map of supplier details (name and doc_rate)
         Map<String, SupplierDetails> suppliersMap = suppliersService.searchLeafBillSuppliers(searchText, page, pageSize);
@@ -726,6 +725,7 @@ public class LeafBillService {
 
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
+            logger.log(Level.WARNING, "Leaf_Bill_Service", e);
         }
 
         // Create a DateTimeFormatter for the desired format
@@ -904,6 +904,7 @@ public class LeafBillService {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
                     arrearsDouble = 0.0; // Default value if conversion fails
+                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
                 }
 
                 // Sum the values
@@ -932,8 +933,7 @@ public class LeafBillService {
 
                 if (finalAmount < 0) {
                     // If finalAmount is negative, insert its absolute value as arrears into suppliers table
-
-                    if(formattedTotalPriceValue != 0) {
+                    if (formattedTotalPriceValue != 0) {
 //                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
                         newArrears = Math.abs(finalAmount);
                     }
@@ -942,17 +942,13 @@ public class LeafBillService {
                     // If finalAmount is positive, deduct the supplier's arrears from it
                     if (supplierArrears > 0) {
                         if (finalAmount >= supplierArrears) {
-                            // Deduct full arrears
-                            finalAmount -= supplierArrears;
-
                             arrearsSetZero = true;
                             // Reset supplier's arrears to 0
 //                            suppliersService.updateSupplierArrears(supplierId, "0");
                         } else {
                             // Deduct partial arrears, and remaining arrears stay in supplier's record
                             double remainingArrears = supplierArrears - finalAmount;
-
-                            if(formattedTotalPriceValue != 0){
+                            if (formattedTotalPriceValue != 0) {
                                 // Update the remaining arrears in the suppliers table
                                 suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
                             }
@@ -997,7 +993,7 @@ public class LeafBillService {
 
             } catch (Exception ex) {
                 ex.printStackTrace();
-                logger.log(Level.WARNING, "Advance_Service", ex);
+                logger.log(Level.WARNING, "Leaf_Bill_Service", ex);
             }
         }
         return listLeafBill;

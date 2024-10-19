@@ -956,7 +956,7 @@
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="57" green="50" red="49" type="rgb"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="f;a"/>
+                        <Property name="text" type="java.lang.String" value="&#xfa;h&lt;s f;a"/>
                       </Properties>
                     </Component>
                   </SubComponents>
@@ -1504,7 +1504,6 @@
                       <Color blue="57" green="50" red="49" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" value="&#xfa;h&lt;s f;a"/>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[32767, 50]"/>
                     </Property>

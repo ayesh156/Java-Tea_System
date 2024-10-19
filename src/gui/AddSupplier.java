@@ -4,15 +4,20 @@
  */
 
 package gui;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+
 import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
+
 import static gui.Home.logger;
+
 import javax.swing.*;
+
 import model.suppliers.Popups;
 import model.transport.Transport;
 import model.transport.TransportService;
@@ -40,12 +45,14 @@ public class AddSupplier extends javax.swing.JDialog {
 
         supplierNo = sNo;
 
-        if (!supplierNo.isEmpty()) {
+        if (supplierNo != null && !supplierNo.trim().isEmpty()) {
+
             setUpdateButton();
-            loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
+            loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is valid
+
         } else {
             setSaveButton();
-            newSupplier(); // Clear fields if `supplierNo` is empty
+            newSupplier(); // Clear fields if `supplierNo` is empty or null
         }
     }
 
@@ -84,16 +91,19 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField4.setText("");
         jTextField4.setEditable(true);
         jTextField6.setText("");
+        jTextField9.setText("0");
         jTextArea1.setText("");
         jTextField5.setText("");
         jTextField7.setText("");
         jTextField8.setText("");
         jLabel15.setText("kj iemhqïlrejka");
+        jTextField9.setEditable(false);
         // Add code to clear any other input fields
     }
 
     private void loadSupplierData(String supplierNo) {
         jTextField4.setText(supplierNo);
+        jTextField9.setEditable(true);
         jTextField4.setEditable(false);
         SuppliersService ss = new SuppliersService();
 
@@ -103,6 +113,7 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField5.setText(s.getRoad_name());
         jTextField7.setText(s.getTransport_rate());
         jTextField8.setText(s.getDoc_rate());
+        jTextField9.setText(s.getArrears());
 
         jLabel15.setText("iemhqïlrejka fjkia lsÍu");
     }
@@ -124,8 +135,12 @@ public class AddSupplier extends javax.swing.JDialog {
         jLabel15 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel19 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
         jTextField4 = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        jTextField9 = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
@@ -187,6 +202,19 @@ public class AddSupplier extends javax.swing.JDialog {
         jPanel3.setPreferredSize(new java.awt.Dimension(975, 100));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setMinimumSize(new java.awt.Dimension(430, 95));
+        jPanel10.setPreferredSize(new java.awt.Dimension(430, 98));
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        jTextField4.setBackground(new java.awt.Color(245, 245, 245));
+        jTextField4.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
+        jTextField4.setForeground(new java.awt.Color(15, 15, 18));
+        jTextField4.setMaximumSize(new java.awt.Dimension(2147483647, 52));
+        jTextField4.setMinimumSize(new java.awt.Dimension(882, 55));
+        jTextField4.setPreferredSize(new java.awt.Dimension(882, 55));
+        jPanel10.add(jTextField4, java.awt.BorderLayout.PAGE_END);
+
         jLabel19.setBackground(new java.awt.Color(255, 255, 255));
         jLabel19.setFont(new java.awt.Font("FMMalithi", 0, 31)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(15, 15, 18));
@@ -196,15 +224,43 @@ public class AddSupplier extends javax.swing.JDialog {
         jLabel19.setMinimumSize(new java.awt.Dimension(296, 40));
         jLabel19.setPreferredSize(new java.awt.Dimension(296, 40));
         jLabel19.setVerifyInputWhenFocusTarget(false);
-        jPanel3.add(jLabel19, java.awt.BorderLayout.PAGE_START);
+        jPanel10.add(jLabel19, java.awt.BorderLayout.PAGE_START);
 
-        jTextField4.setBackground(new java.awt.Color(245, 245, 245));
-        jTextField4.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(15, 15, 18));
-        jTextField4.setMaximumSize(new java.awt.Dimension(2147483647, 52));
-        jTextField4.setMinimumSize(new java.awt.Dimension(882, 55));
-        jTextField4.setPreferredSize(new java.awt.Dimension(882, 55));
-        jPanel3.add(jTextField4, java.awt.BorderLayout.PAGE_END);
+        jPanel3.add(jPanel10, java.awt.BorderLayout.LINE_START);
+
+        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel11.setMinimumSize(new java.awt.Dimension(430, 95));
+        jPanel11.setPreferredSize(new java.awt.Dimension(430, 98));
+        jPanel11.setLayout(new java.awt.BorderLayout());
+
+        jTextField9.setBackground(new java.awt.Color(245, 245, 245));
+        jTextField9.setFont(new java.awt.Font("Iskoola Pota", 0, 24)); // NOI18N
+        jTextField9.setForeground(new java.awt.Color(15, 15, 18));
+        jTextField9.setMaximumSize(new java.awt.Dimension(2147483647, 52));
+        jTextField9.setMinimumSize(new java.awt.Dimension(882, 55));
+        jTextField9.setPreferredSize(new java.awt.Dimension(882, 55));
+        jTextField9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField9KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField9KeyReleased(evt);
+            }
+        });
+        jPanel11.add(jTextField9, java.awt.BorderLayout.PAGE_END);
+
+        jLabel25.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel25.setFont(new java.awt.Font("FMMalithi", 0, 31)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel25.setText("ysÕ uqo,");
+        jLabel25.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 10, 1, new java.awt.Color(255, 255, 255)));
+        jLabel25.setMaximumSize(new java.awt.Dimension(2147483647, 40));
+        jLabel25.setMinimumSize(new java.awt.Dimension(296, 40));
+        jLabel25.setPreferredSize(new java.awt.Dimension(296, 40));
+        jLabel25.setVerifyInputWhenFocusTarget(false);
+        jPanel11.add(jLabel25, java.awt.BorderLayout.PAGE_START);
+
+        jPanel3.add(jPanel11, java.awt.BorderLayout.LINE_END);
 
         jPanel2.add(jPanel3);
 
@@ -298,7 +354,6 @@ public class AddSupplier extends javax.swing.JDialog {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField5FocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField5FocusLost(evt);
             }
@@ -456,12 +511,12 @@ public class AddSupplier extends javax.swing.JDialog {
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
-                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 483, Short.MAX_VALUE)
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 483, Short.MAX_VALUE)
         );
         jPanel33Layout.setVerticalGroup(
-                jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 52, Short.MAX_VALUE)
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 52, Short.MAX_VALUE)
         );
 
         jPanel28.add(jPanel33, java.awt.BorderLayout.CENTER);
@@ -492,6 +547,7 @@ public class AddSupplier extends javax.swing.JDialog {
 
         String sNo = jTextField4.getText().trim();
         String supplierName = jTextField6.getText().trim();
+        String arrears = jTextField9.getText().trim();
         String supplierAddress = jTextArea1.getText().trim();
         String rodeName = jTextField5.getText().trim();
         String transportRate = jTextField7.getText().trim();
@@ -501,6 +557,8 @@ public class AddSupplier extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "iemhqïlref.a wxlh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (supplierName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "iemhqïlref.a ku we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else if (!isNumeric(arrears)) {
+            JOptionPane.showMessageDialog(this, "ysÕ uqo, wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (supplierAddress.isEmpty()) {
             JOptionPane.showMessageDialog(this, "iemhqïlref.a ,smskh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (rodeName.isEmpty()) {
@@ -571,6 +629,7 @@ public class AddSupplier extends javax.swing.JDialog {
                                 SuppliersModel supplier = new SuppliersModel();
                                 supplier.setId(supplierNo);
                                 supplier.setName(supplierName);
+                                supplier.setArrears(arrears);
                                 supplier.setAddress(supplierAddress);
                                 supplier.setRoad_name(rodeName);
                                 supplier.setTransport_rate(transportRate);
@@ -598,6 +657,20 @@ public class AddSupplier extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_jButton15ActionPerformed
+
+    // Utility method to check if a string is a valid number
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false; // Return false for empty strings
+        }
+        try {
+            Double.parseDouble(str); // Attempt to parse the string as a double
+            return true; // If parsing succeeds, it's a valid number
+        } catch (NumberFormatException e) {
+            return false; // If an exception occurs, it's not a valid number
+        }
+    }
+
 
     private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
         // TODO add your handling code here:
@@ -722,6 +795,20 @@ public class AddSupplier extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jTextField8FocusGained
 
+    private void jTextField9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField9KeyPressed
+        // TODO add your handling code here:
+        String value9 = jTextField9.getText().trim();
+        // If jTextField6 contains "0", clear it before entering a new value
+        if (value9.equals("0")) {
+            jTextField9.setText(""); // Clear jTextField6 if it is "0"
+        }
+    }//GEN-LAST:event_jTextField9KeyPressed
+
+    private void jTextField9KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField9KeyReleased
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTextField9KeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -790,7 +877,10 @@ public class AddSupplier extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel28;
@@ -812,6 +902,7 @@ public class AddSupplier extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
 }

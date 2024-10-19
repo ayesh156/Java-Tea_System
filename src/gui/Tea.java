@@ -591,7 +591,7 @@ public class Tea extends javax.swing.JPanel {
 
         jLabel15.setFont(new java.awt.Font("FMEmanee", 0, 30)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(73, 80, 87));
-        jLabel15.setText("f;a");
+        jLabel15.setText("úh<s f;a");
         jPanel21.add(jLabel15);
 
         jPanel17.add(jPanel21, java.awt.BorderLayout.PAGE_START);
@@ -823,7 +823,6 @@ public class Tea extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("FMMalithi", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(73, 80, 87));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("úh<s f;a");
         jLabel10.setMaximumSize(new java.awt.Dimension(32767, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(1011, 50));
         jLabel10.setOpaque(true);

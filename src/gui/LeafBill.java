@@ -531,7 +531,7 @@ public class LeafBill extends javax.swing.JPanel {
 
         jLabel15.setFont(new java.awt.Font("FMEmanee", 0, 30)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(73, 80, 87));
-        jLabel15.setText("w;a;sldrï");
+        jLabel15.setText("o¿ ì,am;a");
         jPanel21.add(jLabel15);
 
         jPanel17.add(jPanel21, java.awt.BorderLayout.PAGE_START);
@@ -764,7 +764,6 @@ public class LeafBill extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("FMMalithi", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(73, 80, 87));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("w;a;sldrï");
         jLabel10.setMaximumSize(new java.awt.Dimension(32767, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(1011, 50));
         jLabel10.setOpaque(true);
@@ -1292,8 +1291,16 @@ public class LeafBill extends javax.swing.JPanel {
                     .getPath("")
                     .toAbsolutePath()
                     .toString();
+            
+            //            WE CAN USE ONLY NEDBEANS IDE
+            
+//            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+            
+            //             WE CAN USE AFTER BUILD
+            
+            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
 
-            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();
@@ -1308,7 +1315,7 @@ public class LeafBill extends javax.swing.JPanel {
             JasperViewer.viewReport(report, false); //for testing
             
             } catch (Exception e) {
-            logger.log(Level.WARNING, "print_invoice_history_btn", e);
+            logger.log(Level.WARNING, "Print_Leaf_Bill", e);
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButton19ActionPerformed

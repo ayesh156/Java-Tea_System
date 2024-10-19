@@ -23,6 +23,7 @@ public class SuppliersModel {
 
     private String road_name;
     private String transport_rate;
+    private String arrears;
 
     public String getId() {
         return id;
@@ -80,9 +81,17 @@ public class SuppliersModel {
         this.transport_rate = transport_rate;
     }
 
+    public String getArrears() {
+        return arrears;
+    }
+
+    public void setArrears(String arrears) {
+        this.arrears = arrears;
+    }
+
     @Override
     public String toString() {
-        return "Suppliers{" +
+        return "SuppliersModel{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
@@ -90,6 +99,7 @@ public class SuppliersModel {
                 ", transport_id=" + transport_id +
                 ", road_name='" + road_name + '\'' +
                 ", transport_rate='" + transport_rate + '\'' +
+                ", arrears='" + arrears + '\'' +
                 '}';
     }
 }

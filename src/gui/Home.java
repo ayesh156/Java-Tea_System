@@ -68,6 +68,14 @@ public class Home extends javax.swing.JFrame {
         // Inside initComponents() method, find and replace the jPanel6 initialization
         // Replace jPanel6 with your custom panel
         loadSidebarButtonMap();
+        
+        try {
+            ImageIcon imageIcon = new ImageIcon(Home.class.getResource("/resources/logo.png"));
+            this.setIconImage(imageIcon.getImage());
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Image Logo", e);
+            e.printStackTrace();
+        }
 
         // Get screen dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -420,7 +428,6 @@ public class Home extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 0, 0));
         setMinimumSize(new java.awt.Dimension(1280, 985));
-        setPreferredSize(new java.awt.Dimension(1280, 985));
         setSize(new java.awt.Dimension(1280, 985));
 
         jPanel1.setMinimumSize(new java.awt.Dimension(269, 986));
@@ -1115,7 +1122,7 @@ public class Home extends javax.swing.JFrame {
 
         jLabel15.setFont(new java.awt.Font("FMEmanee", 0, 30)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(73, 80, 87));
-        jLabel15.setText("m%jdyk .dia;=");
+        jLabel15.setText("m%jdyk wkqmd;h");
         jPanel21.add(jLabel15);
 
         jPanel17.add(jPanel21, java.awt.BorderLayout.PAGE_START);
@@ -1348,7 +1355,6 @@ public class Home extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("FMMalithi", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(73, 80, 87));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("m%jdyk wkqmd;h");
         jLabel10.setMaximumSize(new java.awt.Dimension(32767, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(1011, 50));
         jLabel10.setOpaque(true);
@@ -1648,7 +1654,7 @@ public class Home extends javax.swing.JFrame {
 
                             // Create a Transport object and set the values
                             Transport transport = new Transport();
-                            transport.setId(id);
+                            transport.setRoot_id(id);
                             transport.setRoad_name(name);
                             transport.setTransport_rate(rate);
 
@@ -1678,7 +1684,7 @@ public class Home extends javax.swing.JFrame {
                         try {
 
                             Transport transport = new Transport();
-                            transport.setId(id);
+                            transport.setRoot_id(id);
                             transport.setRoad_name(name);
                             transport.setTransport_rate(rate);
 

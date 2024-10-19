@@ -20,8 +20,6 @@ public class LeafService {
 
             int fleaf = findByDataId(String.valueOf(leaf.getYear()), leaf.getMonth(), leaf.getLeaf_rate(), leaf.getId());
 
-            System.out.println(fleaf);
-
             if (fleaf < 1) {
 
                 // Ensure the year is in the year table and retrieve its ID
@@ -36,7 +34,6 @@ public class LeafService {
                 );
                 Mysql.execute(sql);// Execute the update query
 
-                System.out.println( yearId+" "+ monthId + " "+ leaf.getLeaf_rate()+ " "+ leaf.getId());
                 return true;
             }
 

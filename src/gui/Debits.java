@@ -749,7 +749,6 @@ public class Debits extends javax.swing.JPanel {
         jLabel10.setFont(new java.awt.Font("FMMalithi", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(73, 80, 87));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("yr uqo,a");
         jLabel10.setMaximumSize(new java.awt.Dimension(32767, 50));
         jLabel10.setMinimumSize(new java.awt.Dimension(1011, 50));
         jLabel10.setOpaque(true);

@@ -83,7 +83,7 @@ public class TransportService {
         int total = 0;
         try {
             String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM suppliers WHERE id = '%s'",
+                    "SELECT COUNT(*) AS total FROM transport WHERE root_id = '%s'",
                     id
             );
             ResultSet rs = Mysql.execute(sql);

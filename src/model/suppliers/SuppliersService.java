@@ -26,8 +26,8 @@ public class SuppliersService {
             // If transport ID is found, update the supplier
             if (transportId != -1) {
                 String sql = String.format(
-                        "UPDATE suppliers SET name = '%s', address = '%s', doc_rate = '%s', transport_id = %d WHERE id = '%s'",
-                        supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId, supplier.getId()
+                        "UPDATE suppliers SET name = '%s', address = '%s', doc_rate = '%s', arrears = '%s', transport_id = %d WHERE id = '%s'",
+                        supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), supplier.getArrears(),transportId, supplier.getId()
                 );
 
                 Mysql.execute(sql); // Execute the update query
@@ -48,12 +48,10 @@ public class SuppliersService {
             // Search for transport ID using road_name and transportRate
             int transportId = findTransportId(supplier.getRoad_name(), supplier.getTransport_rate());
 
-            System.out.println(transportId);
-
             // If transport ID is found, save the supplier
             if (transportId != -1) {
                 String sql = String.format(
-                        "INSERT INTO suppliers (id,name, address, doc_rate, transport_id) VALUES ('%s', '%s', '%s', '%s', %d)",
+                        "INSERT INTO suppliers (id,name, address, doc_rate, arrears, transport_id) VALUES ('%s', '%s', '%s', '%s', '0', %d)",
                         supplier.getId() ,supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId
                 );
 
@@ -457,6 +455,7 @@ public class SuppliersService {
                 supplier.setAddress(rs.getString("address"));
                 supplier.setTransport_id(rs.getInt("transport_id"));
                 supplier.setDoc_rate(rs.getString("doc_rate"));
+                supplier.setArrears(rs.getString("arrears"));
 
                 // Fetch transport data using transport_id
                 Transport transport = transportService.getTransportById(supplier.getTransport_id());
