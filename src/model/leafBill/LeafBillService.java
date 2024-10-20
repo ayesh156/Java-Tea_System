@@ -207,7 +207,7 @@ public class LeafBillService {
 
                 double transportRateValue = Double.parseDouble(transportRate);
 
-                double transportPrice = totalPrice * (transportRateValue / 100);
+                double transportPrice = dailyLeafNetQty * transportRateValue;
 
                 // Format the transport price to two decimal places
                 DecimalFormat df = new DecimalFormat("#.00");
@@ -241,6 +241,8 @@ public class LeafBillService {
 
                 try {
                     arrearsDouble = Double.parseDouble(arrears);
+                    // Add 2.5% interest if the conversion is successful
+                    arrearsDouble += arrearsDouble * 0.025;
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
@@ -309,6 +311,14 @@ public class LeafBillService {
                     formattedFinalAmount = df.format(finalAmount);
                 }
 
+                String formattedArreas;
+                // Check if transportPrice is 0, set formattedTransportPrice accordingly
+                if (arrearsDouble == 0) {
+                    formattedArreas = "0.00";
+                } else {
+                    formattedArreas = df.format(arrearsDouble);
+                }
+
                 String billNumber = generateBillNumber(supplierId, year, month);
 
                 // Create LeafBillModel and set values
@@ -326,7 +336,7 @@ public class LeafBillService {
                 p.setDolomite(String.valueOf(totalDolomite)); // Set the dolomite revenue
                 p.setLeafRate(previousMonthLeafRate);
                 p.setTotalLeafPrice(formattedTotalPrice);
-                p.setArrears(arrears);
+                p.setArrears(formattedArreas);
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
@@ -525,7 +535,7 @@ public class LeafBillService {
 
                 double transportRateValue = Double.parseDouble(transportRate);
 
-                double transportPrice = totalPrice * (transportRateValue / 100);
+                double transportPrice = dailyLeafNetQty * transportRateValue;
 
                 // Format the transport price to two decimal places
                 DecimalFormat df = new DecimalFormat("#.00");
@@ -559,6 +569,8 @@ public class LeafBillService {
 
                 try {
                     arrearsDouble = Double.parseDouble(arrears);
+                    // Add 2.5% interest if the conversion is successful
+                    arrearsDouble += arrearsDouble * 0.025;
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
@@ -626,6 +638,14 @@ public class LeafBillService {
                     formattedFinalAmount = df.format(finalAmount);
                 }
 
+                String formattedArreas;
+                // Check if transportPrice is 0, set formattedTransportPrice accordingly
+                if (arrearsDouble == 0) {
+                    formattedArreas = "0.00";
+                } else {
+                    formattedArreas = df.format(arrearsDouble);
+                }
+
                 String billNumber = generateBillNumber(supplierId, year, month);
 
                 // Create LeafBillModel and set values
@@ -643,7 +663,7 @@ public class LeafBillService {
                 p.setDolomite(String.valueOf(totalDolomite)); // Set the dolomite revenue
                 p.setLeafRate(previousMonthLeafRate);
                 p.setTotalLeafPrice(formattedTotalPrice);
-                p.setArrears(arrears);
+                p.setArrears(formattedArreas);
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
@@ -866,7 +886,7 @@ public class LeafBillService {
 
                 double transportRateValue = Double.parseDouble(transportRate);
 
-                double transportPrice = totalPrice * (transportRateValue / 100);
+                double transportPrice = dailyLeafNetQty * transportRateValue;
 
                 // Format the transport price to two decimal places
                 DecimalFormat df = new DecimalFormat("#.00");
@@ -900,6 +920,8 @@ public class LeafBillService {
 
                 try {
                     arrearsDouble = Double.parseDouble(arrears);
+                    // Add 2.5% interest if the conversion is successful
+                    arrearsDouble += arrearsDouble * 0.025;
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     // Handle the case where the string is not a valid double, possibly assign a default value
@@ -965,6 +987,14 @@ public class LeafBillService {
                     formattedFinalAmount = df.format(finalAmount);
                 }
 
+                String formattedArreas;
+                // Check if transportPrice is 0, set formattedTransportPrice accordingly
+                if (arrearsDouble == 0) {
+                    formattedArreas = "0.00";
+                } else {
+                    formattedArreas = df.format(arrearsDouble);
+                }
+
                 String billNumber = generateBillNumber(supplierId, year, month);
 
                 // Create LeafBillModel and set values
@@ -982,7 +1012,7 @@ public class LeafBillService {
                 p.setDolomite(String.valueOf(totalDolomite)); // Set the dolomite revenue
                 p.setLeafRate(previousMonthLeafRate);
                 p.setTotalLeafPrice(formattedTotalPrice);
-                p.setArrears(arrears);
+                p.setArrears(formattedArreas);
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
