@@ -1256,13 +1256,19 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         // Create an instance of the service class if necessary
-        LeafBillService leafBillService = new LeafBillService(); // Ensure this is your actual service class name
-
+        LeafBillService leafBillService = new LeafBillService();
         int totalSuppliers = suppliersService.count();
-
-        // Call the findAll method with desired page and pageSize
         int page = 1; // Example page number
-        List<LeafBillModel> leafBillList = leafBillService.findAll(page, totalSuppliers);
+
+        // Conditional service call based on combo box selections
+        List<LeafBillModel> leafBillList;
+        if ("අවුරුද්ද".equals(searchYear) && "මාසය".equals(searchMonth)) {
+            // No specific year or month selected, use findAll
+            leafBillList = leafBillService.findAll(page, totalSuppliers);
+        } else {
+            // Specific year or month selected, use findByYearMonth
+            leafBillList = leafBillService.findByYearMonth(jTextField5.getText(), searchYear, searchMonth, page, totalSuppliers);
+        }
 
         // Print the details of each LeafBillModel in the console
         for (LeafBillModel leafBill : leafBillList) {
@@ -1300,7 +1306,7 @@ public class LeafBill extends javax.swing.JPanel {
             
             String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
 
-            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
+           String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();

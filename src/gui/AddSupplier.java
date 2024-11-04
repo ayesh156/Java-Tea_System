@@ -682,6 +682,7 @@ public class AddSupplier extends javax.swing.JDialog {
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         // TODO add your handling code here:
         instance = null;
+        System.out.println(supplierNo);
         if (!supplierNo.isEmpty()) {
             loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
         } else {

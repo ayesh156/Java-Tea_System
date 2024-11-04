@@ -945,39 +945,9 @@ public class LeafBillService {
                 double formattedTotalPriceValue = Double.parseDouble(formattedTotalPrice);
 
 
-                // Fetch supplier's current arrears from the suppliers table using supplierId
-                double supplierArrears = Double.parseDouble(arrears);
-
                 double finalAmount = formattedTotalPriceValue - totalDeductions;
 
                 boolean arrearsSetZero = false;
-                double newArrears = 0.0;
-
-                if (finalAmount < 0) {
-                    // If finalAmount is negative, insert its absolute value as arrears into suppliers table
-                    if (formattedTotalPriceValue != 0) {
-//                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
-                        newArrears = Math.abs(finalAmount);
-                    }
-
-                } else {
-                    // If finalAmount is positive, deduct the supplier's arrears from it
-                    if (supplierArrears > 0) {
-                        if (finalAmount >= supplierArrears) {
-                            arrearsSetZero = true;
-                            // Reset supplier's arrears to 0
-//                            suppliersService.updateSupplierArrears(supplierId, "0");
-                        } else {
-                            // Deduct partial arrears, and remaining arrears stay in supplier's record
-                            double remainingArrears = supplierArrears - finalAmount;
-                            if (formattedTotalPriceValue != 0) {
-                                // Update the remaining arrears in the suppliers table
-                                suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
-                            }
-
-                        }
-                    }
-                }
 
                 String formattedFinalAmount;
                 // Check if transportPrice is 0, set formattedTransportPrice accordingly
@@ -987,13 +957,6 @@ public class LeafBillService {
                     formattedFinalAmount = df.format(finalAmount);
                 }
 
-                String formattedArreas;
-                // Check if transportPrice is 0, set formattedTransportPrice accordingly
-                if (arrearsDouble == 0) {
-                    formattedArreas = "0.00";
-                } else {
-                    formattedArreas = df.format(arrearsDouble);
-                }
 
                 String billNumber = generateBillNumber(supplierId, year, month);
 
@@ -1012,11 +975,11 @@ public class LeafBillService {
                 p.setDolomite(String.valueOf(totalDolomite)); // Set the dolomite revenue
                 p.setLeafRate(previousMonthLeafRate);
                 p.setTotalLeafPrice(formattedTotalPrice);
-                p.setArrears(formattedArreas);
+                p.setArrears(String.valueOf(arrearsDouble));
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
-                p.setNewArrears(String.valueOf(newArrears));
+                p.setNewArrears(String.valueOf(arrears));
                 p.setBillNumber(billNumber);
 
                 listLeafBill.add(p);
