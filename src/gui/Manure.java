@@ -37,8 +37,8 @@ import static gui.Home.logger;
  */
 public class Manure extends javax.swing.JPanel {
 
-    private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
-    private HashMap<String, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
+    private HashMap<Integer, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
+    private HashMap<Integer, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
 
     ManureTableModel manureTableModel;
 
@@ -130,6 +130,57 @@ public class Manure extends javax.swing.JPanel {
 
         loadYearsCombobox();
         loadMonthsCombobox();
+        
+        jDateChooser2.setDate(lastDayOfPreviousMonth());
+        
+    }
+    
+    public Date lastDayOfPreviousMonth() {
+        // Calculate the last day of the previous month
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime(); // Return the Date object directly
+    }
+    
+    public JTextField getJTextField4() {
+        return jTextField4;
+    }
+    
+    private void mannualTab(KeyEvent evt, int order) {
+//        System.out.println(evt.getKeyCode());
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            switch (order) {
+                case 1:
+                    jTextField7.grabFocus();
+                    break;
+                case 2:
+                    jTextField6.grabFocus();
+                    break;
+                case 3:
+                    jButton15.grabFocus();
+                    break;
+
+            }
+        }
+        
+         if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            switch (order) {
+                case 1:
+                    jTextField5.grabFocus();
+                    break;
+                case 2:
+                    jTextField4.grabFocus();
+                    break;
+                case 3:
+                    jTextField7.grabFocus();
+                    break;
+                case 4:
+                    jTextField6.grabFocus();
+                    break;
+                
+            }
+        }
     }
 
     private void loadMonthsCombobox() {
@@ -324,6 +375,9 @@ public class Manure extends javax.swing.JPanel {
         jTextField4.setMinimumSize(new java.awt.Dimension(296, 52));
         jTextField4.setPreferredSize(new java.awt.Dimension(296, 52));
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField4KeyReleased(evt);
             }
@@ -354,6 +408,9 @@ public class Manure extends javax.swing.JPanel {
         jTextField5.setMinimumSize(new java.awt.Dimension(296, 52));
         jTextField5.setPreferredSize(new java.awt.Dimension(296, 52));
         jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField5KeyReleased(evt);
             }
@@ -532,6 +589,11 @@ public class Manure extends javax.swing.JPanel {
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
+            }
+        });
+        jButton15.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton15KeyPressed(evt);
             }
         });
         jPanel42.add(jButton15, java.awt.BorderLayout.CENTER);
@@ -886,7 +948,6 @@ public class Manure extends javax.swing.JPanel {
 
         jTextField5.setText("");
         jTextField4.setText("");
-        jDateChooser2.setDate(null);
         jTextField7.setText("");
         jTextField6.setText("");
 
@@ -957,7 +1018,7 @@ public class Manure extends javax.swing.JPanel {
 
     }
 
-    private HashMap<String, String> loadSuppliers() {
+    private HashMap<Integer, String> loadSuppliers() {
         suppliersMap.clear();
         suppliersNameMap.clear();
 
@@ -973,19 +1034,19 @@ public class Manure extends javax.swing.JPanel {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch transport data using SupplierService
-        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersName(id, limit);
+        HashMap<Integer, SuppliersModel> tMap = suppliersService.getSuppliersName(id, limit);
 
         // Populate tMap and suppliersNameMap with the fetched data
-        for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
+        for (Map.Entry<Integer, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel); // Adding the transport objects to the suppliersMap
-            suppliersNameMap.put(suppliersModel.getName(), suppliersModel.getId()); // Adding the Product names and IDs to the suppliersNameMap
+            suppliersNameMap.put(suppliersModel.getId(), suppliersModel.getName()); // Adding the Product names and IDs to the suppliersNameMap
         }
 
         return suppliersNameMap;
     }
 
-    private HashMap<String, String> loadSuppliersId() {
+    private HashMap<Integer, String> loadSuppliersId() {
         suppliersMap.clear();
         suppliersNameMap.clear();
 
@@ -1001,10 +1062,10 @@ public class Manure extends javax.swing.JPanel {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch supplier data by ID using SupplierService
-        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersId(id, limit);
+        HashMap<Integer, SuppliersModel> tMap = suppliersService.getSuppliersId(id, limit);
 
         // Populate tMap and suppliersNameMap with the fetched data
-        for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
+        for (Map.Entry<Integer, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel);  // Map supplier ID to the Supplier object
             suppliersNameMap.put(suppliersModel.getId(), suppliersModel.getName());  // Map supplier ID to supplier name
@@ -1328,6 +1389,8 @@ public class Manure extends javax.swing.JPanel {
                     }
 
                 }
+                
+                jTextField4.grabFocus();
 
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Manure", e);
@@ -1490,6 +1553,7 @@ public class Manure extends javax.swing.JPanel {
         if (value6.equals("0")) {
             jTextField6.setText(""); // Clear jTextField6 if it is "0"
         }
+        mannualTab(evt, 3);
     }//GEN-LAST:event_jTextField6KeyPressed
 
     private void jTextField7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyPressed
@@ -1499,6 +1563,7 @@ public class Manure extends javax.swing.JPanel {
         if (value7.equals("0")) {
             jTextField7.setText(""); // Clear jTextField6 if it is "0"
         }
+        mannualTab(evt, 2);
     }//GEN-LAST:event_jTextField7KeyPressed
 
     private void jTextField7KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField7KeyReleased
@@ -1523,6 +1588,21 @@ public class Manure extends javax.swing.JPanel {
 //            jTextField3.setText("");
         }
     }//GEN-LAST:event_jTextField7KeyReleased
+
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 1);
+    }//GEN-LAST:event_jTextField4KeyPressed
+
+    private void jButton15KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton15KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 4);
+    }//GEN-LAST:event_jButton15KeyPressed
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 1);
+    }//GEN-LAST:event_jTextField5KeyPressed
 
     private void setSaveButton() {
         jButton15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/save.png")));

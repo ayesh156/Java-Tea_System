@@ -7,7 +7,7 @@ import java.util.Date;
 public class LeafBillModel {
     private int id;
 
-    private String supplier_id;
+    private int supplier_id;
     private String supplier_name;
     private String doc_rate;
     private String advance_price;
@@ -22,18 +22,12 @@ public class LeafBillModel {
     private String totalLeafPrice;
     private String totalDeductions;
     private String arrears;
+    private String lastArrears;
     private String finalAmount;
     private boolean arrearsSetZero;
     private String newArrears;
     private String billNumber;
-
-    public String getBillNumber() {
-        return billNumber;
-    }
-
-    public void setBillNumber(String billNumber) {
-        this.billNumber = billNumber;
-    }
+    private String lastModify;
 
     public int getId() {
         return id;
@@ -43,12 +37,28 @@ public class LeafBillModel {
         this.id = id;
     }
 
-    public String getSupplier_id() {
+    public int getSupplier_id() {
         return supplier_id;
     }
 
-    public void setSupplier_id(String supplier_id) {
+    public void setSupplier_id(int supplier_id) {
         this.supplier_id = supplier_id;
+    }
+
+    public String getSupplier_name() {
+        return supplier_name;
+    }
+
+    public void setSupplier_name(String supplier_name) {
+        this.supplier_name = supplier_name;
+    }
+
+    public String getDoc_rate() {
+        return doc_rate;
+    }
+
+    public void setDoc_rate(String doc_rate) {
+        this.doc_rate = doc_rate;
     }
 
     public String getAdvance_price() {
@@ -89,22 +99,6 @@ public class LeafBillModel {
 
     public void setTransport_rate(String transport_rate) {
         this.transport_rate = transport_rate;
-    }
-
-    public String getSupplier_name() {
-        return supplier_name;
-    }
-
-    public void setSupplier_name(String supplier_name) {
-        this.supplier_name = supplier_name;
-    }
-
-    public String getDoc_rate() {
-        return doc_rate;
-    }
-
-    public void setDoc_rate(String doc_rate) {
-        this.doc_rate = doc_rate;
     }
 
     public String getTea() {
@@ -187,11 +181,35 @@ public class LeafBillModel {
         this.newArrears = newArrears;
     }
 
+    public String getBillNumber() {
+        return billNumber;
+    }
+
+    public void setBillNumber(String billNumber) {
+        this.billNumber = billNumber;
+    }
+
+    public String getLastModify() {
+        return lastModify;
+    }
+
+    public void setLastModify(String lastModify) {
+        this.lastModify = lastModify;
+    }
+
+    public String getLastArrears() {
+        return lastArrears;
+    }
+
+    public void setLastArrears(String lastArrears) {
+        this.lastArrears = lastArrears;
+    }
+
     @Override
     public String toString() {
         return "LeafBillModel{" +
                 "id=" + id +
-                ", supplier_id='" + supplier_id + '\'' +
+                ", supplier_id=" + supplier_id +
                 ", supplier_name='" + supplier_name + '\'' +
                 ", doc_rate='" + doc_rate + '\'' +
                 ", advance_price='" + advance_price + '\'' +
@@ -206,10 +224,12 @@ public class LeafBillModel {
                 ", totalLeafPrice='" + totalLeafPrice + '\'' +
                 ", totalDeductions='" + totalDeductions + '\'' +
                 ", arrears='" + arrears + '\'' +
+                ", lastArrears='" + lastArrears + '\'' +
                 ", finalAmount='" + finalAmount + '\'' +
                 ", arrearsSetZero=" + arrearsSetZero +
                 ", newArrears='" + newArrears + '\'' +
                 ", billNumber='" + billNumber + '\'' +
+                ", lastModify='" + lastModify + '\'' +
                 '}';
     }
 }

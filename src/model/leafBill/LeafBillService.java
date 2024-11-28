@@ -5,17 +5,15 @@ import model.Mysql;
 import model.suppliers.SupplierDetails;
 import model.suppliers.SuppliersService;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 import static gui.Home.logger;
@@ -27,7 +25,7 @@ public class LeafBillService {
 
     public List<LeafBillModel> findAll(int page, int pageSize) {
         // Use getAllSuppliers to get a map of supplier details (name and doc_rate)
-        Map<String, SupplierDetails> suppliersMap = suppliersService.getAllSuppliers(page, pageSize);
+        Map<Integer, SupplierDetails> suppliersMap = suppliersService.getAllSuppliers(page, pageSize);
         List<LeafBillModel> listLeafBill = new ArrayList<>();
 
         // Get the current date
@@ -72,13 +70,21 @@ public class LeafBillService {
         // Create a DateTimeFormatter for the desired format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        for (Map.Entry<String, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
-            String supplierId = supplierEntry.getKey();
+        for (Map.Entry<Integer, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
+            int supplierId = supplierEntry.getKey();
             SupplierDetails supplierDetails = supplierEntry.getValue();
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
-            String arrears = supplierDetails.getArrears(); // Get doc_rate
+            String arrears = supplierDetails.getArrears();
+            String lastArrears = supplierDetails.getLastArrears();
+            Date lastModify = supplierDetails.getLastModify();
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            // Initialize dateFormatter here
+            String lastModifyString = dateFormatter.format(lastModify);
+
 
             try {
                 int offset = pageSize * (page - 1);
@@ -275,33 +281,31 @@ public class LeafBillService {
                 double newArrears = 0.0;
 
                 if (finalAmount < 0) {
-                    // If finalAmount is negative, insert its absolute value as arrears into suppliers table
+                    // If finalAmount is negative, calculate new arrears as the absolute value of finalAmount
 
+                    // Update supplier arrears only if there is a meaningful change
                     if (formattedTotalPriceValue != 0) {
-//                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
-                        newArrears = Math.abs(finalAmount);
+
+                    newArrears = Math.abs(finalAmount);
+//                   suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
+//                    System.out.println(supplierId + " newArrears " + newArrears);
+
                     }
 
-                } else {
-                    // If finalAmount is positive, deduct the supplier's arrears from it
-                    if (supplierArrears > 0) {
-                        if (finalAmount >= supplierArrears) {
-
+                } else if (finalAmount > 0 && supplierArrears  > 0) {
+                        if (formattedTotalPriceValue != 0) {
                             arrearsSetZero = true;
-                            // Reset supplier's arrears to 0
-//                            suppliersService.updateSupplierArrears(supplierId, "0");
-                        } else {
-                            // Deduct partial arrears, and remaining arrears stay in supplier's record
-                            double remainingArrears = supplierArrears - finalAmount;
-
-                            if (formattedTotalPriceValue != 0) {
-                                // Update the remaining arrears in the suppliers table
-                                suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
-                            }
-
+//                            System.out.println(supplierId + " finalAmount > 0, arrearsSetZero is true.");
                         }
+                }else if(formattedTotalPriceValue > supplierArrears && supplierArrears  > 0){
+                    if (formattedTotalPriceValue != 0) {
+
+                    arrearsSetZero = true;
+//                    System.out.println(supplierId + " arrearsSetZero true ");
                     }
+
                 }
+
 
                 String formattedFinalAmount;
                 // Check if transportPrice is 0, set formattedTransportPrice accordingly
@@ -320,6 +324,9 @@ public class LeafBillService {
                 }
 
                 String billNumber = generateBillNumber(supplierId, year, month);
+
+                // Proceed if the quantity is greater than zero
+                if (dailyLeafNetQty > 0) {
 
                 // Create LeafBillModel and set values
                 LeafBillModel p = new LeafBillModel();
@@ -340,10 +347,14 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
+                p.setLastArrears(lastArrears);
                 p.setNewArrears(String.valueOf(newArrears));
                 p.setBillNumber(billNumber);
+                p.setLastModify(lastModifyString);
 
                 listLeafBill.add(p);
+
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -355,7 +366,7 @@ public class LeafBillService {
 
     public List<LeafBillModel> find(String searchText, int page, int pageSize) {
         // Use getAllSuppliers to get a map of supplier details (name and doc_rate)
-        Map<String, SupplierDetails> suppliersMap = suppliersService.searchLeafBillSuppliers(searchText, page, pageSize);
+        Map<Integer, SupplierDetails> suppliersMap = suppliersService.searchLeafBillSuppliers(searchText, page, pageSize);
         List<LeafBillModel> listLeafBill = new ArrayList<>();
 
         // Get the current date
@@ -400,13 +411,20 @@ public class LeafBillService {
         // Create a DateTimeFormatter for the desired format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        for (Map.Entry<String, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
-            String supplierId = supplierEntry.getKey();
+        for (Map.Entry<Integer, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
+            int supplierId = supplierEntry.getKey();
             SupplierDetails supplierDetails = supplierEntry.getValue();
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
-            String arrears = supplierDetails.getArrears(); // Get doc_rate
+            String arrears = supplierDetails.getArrears();
+            String lastArrears = supplierDetails.getLastArrears();
+            Date lastModify = supplierDetails.getLastModify();
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            // Initialize dateFormatter here
+            String lastModifyString = dateFormatter.format(lastModify);
 
             try {
                 int offset = pageSize * (page - 1);
@@ -603,32 +621,31 @@ public class LeafBillService {
                 double newArrears = 0.0;
 
                 if (finalAmount < 0) {
-                    // If finalAmount is negative, insert its absolute value as arrears into suppliers table
+                    // If finalAmount is negative, calculate new arrears as the absolute value of finalAmount
 
+                    // Update supplier arrears only if there is a meaningful change
                     if (formattedTotalPriceValue != 0) {
-//                        suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
+
                         newArrears = Math.abs(finalAmount);
+//                   suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
+//                    System.out.println(supplierId + " newArrears " + newArrears);
+
                     }
 
-                } else {
-                    // If finalAmount is positive, deduct the supplier's arrears from it
-                    if (supplierArrears > 0) {
-                        if (finalAmount >= supplierArrears) {
-                            arrearsSetZero = true;
-                            // Reset supplier's arrears to 0
-//                            suppliersService.updateSupplierArrears(supplierId, "0");
-                        } else {
-                            // Deduct partial arrears, and remaining arrears stay in supplier's record
-                            double remainingArrears = supplierArrears - finalAmount;
-
-                            if (formattedTotalPriceValue != 0) {
-                                // Update the remaining arrears in the suppliers table
-                                suppliersService.updateSupplierArrears(supplierId, String.valueOf(remainingArrears));
-                            }
-
-                        }
+                } else if (finalAmount > 0 && supplierArrears  > 0) {
+                    if (formattedTotalPriceValue != 0) {
+                        arrearsSetZero = true;
+//                            System.out.println(supplierId + " finalAmount > 0, arrearsSetZero is true.");
                     }
+                }else if(formattedTotalPriceValue > supplierArrears && supplierArrears  > 0){
+                    if (formattedTotalPriceValue != 0) {
+
+                        arrearsSetZero = true;
+//                    System.out.println(supplierId + " arrearsSetZero true ");
+                    }
+
                 }
+
 
                 String formattedFinalAmount;
                 // Check if transportPrice is 0, set formattedTransportPrice accordingly
@@ -647,6 +664,9 @@ public class LeafBillService {
                 }
 
                 String billNumber = generateBillNumber(supplierId, year, month);
+
+                // Proceed if the quantity is greater than zero
+                if (dailyLeafNetQty > 0) {
 
                 // Create LeafBillModel and set values
                 LeafBillModel p = new LeafBillModel();
@@ -667,10 +687,14 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
+                p.setLastArrears(lastArrears);
                 p.setNewArrears(String.valueOf(newArrears));
                 p.setBillNumber(billNumber);
+                p.setLastModify(lastModifyString);
 
                 listLeafBill.add(p);
+
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -683,7 +707,7 @@ public class LeafBillService {
     public List<LeafBillModel> findByYearMonth(String searchText, Object searchYear, Object searchMonth, int page, int pageSize) {
 
         // Use getAllSuppliers to get a map of supplier details (name and doc_rate)
-        Map<String, SupplierDetails> suppliersMap = suppliersService.searchLeafBillSuppliers(searchText, page, pageSize);
+        Map<Integer, SupplierDetails> suppliersMap = suppliersService.searchLeafBillSuppliers(searchText, page, pageSize);
         List<LeafBillModel> listLeafBill = new ArrayList<>();
 
         // Get the current date
@@ -751,13 +775,20 @@ public class LeafBillService {
         // Create a DateTimeFormatter for the desired format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        for (Map.Entry<String, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
-            String supplierId = supplierEntry.getKey();
+        for (Map.Entry<Integer, SupplierDetails> supplierEntry : suppliersMap.entrySet()) {
+            int supplierId = supplierEntry.getKey();
             SupplierDetails supplierDetails = supplierEntry.getValue();
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
+            String lastArrears = supplierDetails.getLastArrears();
             String arrears = supplierDetails.getArrears();
+            Date lastModify = supplierDetails.getLastModify();
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            // Initialize dateFormatter here
+            String lastModifyString = dateFormatter.format(lastModify);
 
             try {
                 int offset = pageSize * (page - 1);
@@ -960,6 +991,9 @@ public class LeafBillService {
 
                 String billNumber = generateBillNumber(supplierId, year, month);
 
+                // Proceed if the quantity is greater than zero
+                if (dailyLeafNetQty > 0) {
+
                 // Create LeafBillModel and set values
                 LeafBillModel p = new LeafBillModel();
                 p.setSupplier_id(supplierId);
@@ -979,10 +1013,14 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
+                p.setLastArrears(lastArrears);
                 p.setNewArrears(String.valueOf(arrears));
                 p.setBillNumber(billNumber);
+                p.setLastModify(lastModifyString);
 
                 listLeafBill.add(p);
+
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -992,9 +1030,9 @@ public class LeafBillService {
         return listLeafBill;
     }
 
-    private String generateBillNumber(String billNo, String year, String month) {
+    private String generateBillNumber(Integer billNo, String year, String month) {
         // Ensure billNo, year, and month are formatted to have at least 2 digits
-        String formattedBillNo = String.format("%02d", Integer.parseInt(billNo));
+        String formattedBillNo = String.format("%02d", billNo);
         String formattedMonth = String.format("%02d", Integer.parseInt(month));
 
         // Concatenate bill number, year, and month to create the bill number

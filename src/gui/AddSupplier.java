@@ -34,8 +34,8 @@ public class AddSupplier extends javax.swing.JDialog {
     private HashMap<String, Transport> transportMap = new HashMap<>(); //to keep all products
     private HashMap<String, String> transportNameMap = new HashMap<>(); //to keep product names with IDss
 
-    private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep all products
-    private HashMap<String, String> suppliersDocMap = new HashMap<>(); //to keep product names with IDss
+    private HashMap<Integer, SuppliersModel> suppliersMap = new HashMap<>(); //to keep all products
+    private HashMap<String, Integer> suppliersDocMap = new HashMap<>(); //to keep product names with IDss
     private static AddSupplier instance; // Static instance to ensure only one instance is created
     private String supplierNo; // Use instance variable instead of static
 
@@ -555,6 +555,8 @@ public class AddSupplier extends javax.swing.JDialog {
 
         if (sNo.isEmpty()) {
             JOptionPane.showMessageDialog(this, "iemhqïlref.a wxlh we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
+        }else if (!isNumeric(sNo)) {
+            JOptionPane.showMessageDialog(this, "iemhqïlref.a wxlh wxlhla f,i we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (supplierName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "iemhqïlref.a ku we;=,;a lrkak'", "Warning", JOptionPane.WARNING_MESSAGE);
         } else if (!isNumeric(arrears)) {
@@ -589,6 +591,8 @@ public class AddSupplier extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(this, "oekgu;a mj;sk ,sms øjH .dia;=jla we;=,;a lrkak'", "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
 
+                        int sNoInt = Integer.parseInt(sNo);
+
                         // First check if the ID already exists
                         if ("iqrlskak".equals(jButton15.getText())) {
 
@@ -604,7 +608,7 @@ public class AddSupplier extends javax.swing.JDialog {
 
                                     // Create a Transport object and set the values
                                     SuppliersModel supplier = new SuppliersModel();
-                                    supplier.setId(sNo);
+                                    supplier.setId(sNoInt);
                                     supplier.setName(supplierName);
                                     supplier.setAddress(supplierAddress);
                                     supplier.setRoad_name(rodeName);
@@ -625,9 +629,12 @@ public class AddSupplier extends javax.swing.JDialog {
                         } else {
 
                             try {
+
+                                int supplierNoInt = Integer.parseInt(supplierNo);
+
                                 // Create a Transport object and set the values
                                 SuppliersModel supplier = new SuppliersModel();
-                                supplier.setId(supplierNo);
+                                supplier.setId(supplierNoInt);
                                 supplier.setName(supplierName);
                                 supplier.setArrears(arrears);
                                 supplier.setAddress(supplierAddress);
@@ -718,7 +725,7 @@ public class AddSupplier extends javax.swing.JDialog {
         return transportNameMap;
     }
 
-    private HashMap<String, String> loadDoc() {
+    private HashMap<String, Integer> loadDoc() {
         suppliersMap.clear();
         suppliersDocMap.clear();
 
@@ -729,10 +736,10 @@ public class AddSupplier extends javax.swing.JDialog {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch transport data using SupplierService
-        HashMap<String, SuppliersModel> suMap = suppliersService.getSuppliersByDocRate(doc, limit);
+        HashMap<Integer, SuppliersModel> suMap = suppliersService.getSuppliersByDocRate(doc, limit);
 
         // Populate suMap and transportNameMap with the fetched data
-        for (Map.Entry<String, SuppliersModel> entry : suMap.entrySet()) {
+        for (Map.Entry<Integer, SuppliersModel> entry : suMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel); // Adding the transport objects to the suppliersMap
             suppliersDocMap.put(suppliersModel.getDoc_rate(), suppliersModel.getId()); // Adding the Product names and IDs to the transportNameMap

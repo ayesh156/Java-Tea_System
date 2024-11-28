@@ -61,7 +61,7 @@ public class LeafBillTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                return listLeaf.getSupplier_id();
+                return String.valueOf(listLeaf.getSupplier_id());
             case 1:
                 return listLeaf.getBillNumber();
             case 2:

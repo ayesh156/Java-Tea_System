@@ -28,6 +28,7 @@ import model.month.MonthService;
 import model.year.YearModal;
 import model.year.YearService;
 import static gui.Home.logger;
+import java.awt.event.KeyEvent;
 
 /**
  * @author ECOTEC
@@ -127,6 +128,46 @@ public class LeafRate extends javax.swing.JPanel {
 
         loadYearsCombobox();
         loadMonthsCombobox();
+    }
+    
+    
+     public JComboBox getJComboBox2() {
+        return jComboBox2;
+    }
+     
+     private void mannualTab(KeyEvent evt, int order) {
+//        System.out.println(evt.getKeyCode());
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            switch (order) {
+                case 1:
+                    jComboBox1.grabFocus();
+                    break;
+                case 2:
+                    jTextField1.grabFocus();
+                    break;
+                case 3:
+                    jButton15.grabFocus();
+                    break;
+
+            }
+        }
+        
+         if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            switch (order) {
+                case 2:
+                    jComboBox2.grabFocus();
+                    break;
+                case 3:
+                    jComboBox1.grabFocus();
+                    break;
+                case 4:
+                    jTextField1.grabFocus();
+                    break;
+                
+            }
+        }
+         
+        
     }
 
     private void loadMonthsCombobox() {
@@ -307,6 +348,11 @@ public class LeafRate extends javax.swing.JPanel {
                 jButton15ActionPerformed(evt);
             }
         });
+        jButton15.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton15KeyPressed(evt);
+            }
+        });
         jPanel32.add(jButton15, java.awt.BorderLayout.CENTER);
 
         jButton16.setBackground(new java.awt.Color(213, 60, 60));
@@ -380,6 +426,11 @@ public class LeafRate extends javax.swing.JPanel {
         jComboBox2.setMaximumSize(new java.awt.Dimension(32767, 52));
         jComboBox2.setMinimumSize(new java.awt.Dimension(296, 52));
         jComboBox2.setPreferredSize(new java.awt.Dimension(296, 52));
+        jComboBox2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jComboBox2KeyPressed(evt);
+            }
+        });
         jPanel30.add(jComboBox2, java.awt.BorderLayout.PAGE_END);
 
         jPanel29.add(jPanel30, java.awt.BorderLayout.LINE_START);
@@ -407,6 +458,11 @@ public class LeafRate extends javax.swing.JPanel {
         jComboBox1.setMaximumSize(new java.awt.Dimension(32767, 52));
         jComboBox1.setMinimumSize(new java.awt.Dimension(296, 52));
         jComboBox1.setPreferredSize(new java.awt.Dimension(296, 52));
+        jComboBox1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jComboBox1KeyPressed(evt);
+            }
+        });
         jPanel31.add(jComboBox1, java.awt.BorderLayout.PAGE_END);
 
         jPanel29.add(jPanel31, java.awt.BorderLayout.CENTER);
@@ -432,6 +488,11 @@ public class LeafRate extends javax.swing.JPanel {
         jTextField1.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField1.setMinimumSize(new java.awt.Dimension(296, 52));
         jTextField1.setPreferredSize(new java.awt.Dimension(296, 52));
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
         jPanel23.add(jTextField1, java.awt.BorderLayout.PAGE_END);
 
         jPanel29.add(jPanel23, java.awt.BorderLayout.LINE_END);
@@ -1096,6 +1157,8 @@ public class LeafRate extends javax.swing.JPanel {
                         setSaveButton();
                     }
                 }
+                
+                jComboBox2.grabFocus();
 
             } catch (NumberFormatException e) {
                 // If the rate is not a valid number, show an error message
@@ -1116,6 +1179,26 @@ public class LeafRate extends javax.swing.JPanel {
         jTextField2.setText("ටයිප් කරන්න...");
         setSaveButton();
     }//GEN-LAST:event_jButton18ActionPerformed
+
+    private void jComboBox2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox2KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 1);
+    }//GEN-LAST:event_jComboBox2KeyPressed
+
+    private void jComboBox1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jComboBox1KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 2);
+    }//GEN-LAST:event_jComboBox1KeyPressed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 3);
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jButton15KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton15KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 4);
+    }//GEN-LAST:event_jButton15KeyPressed
 
     private void autoResizeColumn(JTable jTable1) {
 

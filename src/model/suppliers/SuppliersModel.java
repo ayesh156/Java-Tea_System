@@ -13,7 +13,7 @@ package model.suppliers;
  * @author Cover Star
  */
 public class SuppliersModel {
-    private String id;
+    private int id;
     private String name;
 
     private String address;
@@ -25,11 +25,11 @@ public class SuppliersModel {
     private String transport_rate;
     private String arrears;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -92,7 +92,7 @@ public class SuppliersModel {
     @Override
     public String toString() {
         return "SuppliersModel{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", doc_rate='" + doc_rate + '\'' +

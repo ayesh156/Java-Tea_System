@@ -47,7 +47,7 @@ public class Popups {
         
     }
 
-    public static void loadPopupTextField8(JPopupMenu popupMenu, JTextField textField, HashMap<String, String> list) {
+    public static void loadPopupTextField8(JPopupMenu popupMenu, JTextField textField, HashMap<String, Integer> list) {
         popupMenu.setVisible(false);
         popupMenu.removeAll();
 

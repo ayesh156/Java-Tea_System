@@ -1,18 +1,24 @@
 package model.suppliers;
 
+import java.util.Date;
+
 public class SupplierDetails {
     private String name;
     private String docRate;
 
     private String transportRate;
+    private String lastArrears;
     private String arrears;
+    private Date lastModify;
 
 
-    public SupplierDetails(String name, String docRate, String transportRate, String arrears) {
+    public SupplierDetails(String name, String docRate, String transportRate, String lastArrears, String arrears, Date lastModify) {
         this.name = name;
         this.docRate = docRate;
         this.transportRate = transportRate;
+        this.lastArrears = lastArrears;
         this.arrears = arrears;
+        this.lastModify = lastModify;
     }
 
     public String getName() {
@@ -46,4 +52,21 @@ public class SupplierDetails {
     public void setArrears(String arrears) {
         this.arrears = arrears;
     }
+
+    public Date getLastModify() {
+        return lastModify;
+    }
+
+    public void setLastModify(Date lastModify) {
+        this.lastModify = lastModify;
+    }
+
+    public String getLastArrears() {
+        return lastArrears;
+    }
+
+    public void setLastArrears(String lastArrears) {
+        this.lastArrears = lastArrears;
+    }
+
 }

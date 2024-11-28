@@ -8,6 +8,7 @@ import model.suppliers.SuppliersModel;
 
 import javax.swing.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,54 +16,61 @@ import java.util.HashMap;
  */
 public class SupNameIdPopups {
 
-    // loadpopupmenu on road_name
-    public static void loadPopupTextField5(JPopupMenu popupMenu, JTextField jTextField5, JTextField jTextField4, HashMap<String, String> list,HashMap<String, SuppliersModel> suppliersMap) {
+//     loadpopupmenu on road_name
+    public static void loadPopupTextField5(JPopupMenu popupMenu, JTextField jTextField5, JTextField jTextField4, HashMap<Integer, String> list,HashMap<Integer, SuppliersModel> suppliersMap) {
         popupMenu.setVisible(false);
         popupMenu.removeAll();
 
-        for (String name : list.keySet()) {
+        for (Map.Entry<Integer, String> entry : list.entrySet()) {
+            int id = entry.getKey();
+            String name = entry.getValue();
+
             JMenuItem jMenuItem = new JMenuItem();
             jMenuItem.setFont(new java.awt.Font("Iskoola Pota", 0, 20));
-            jMenuItem.setBorder(BorderFactory.createEmptyBorder(2, 0, 4, 0));  // Increase top, left, bottom, right padding
-            jMenuItem.setText(name);
+            jMenuItem.setBorder(BorderFactory.createEmptyBorder(2, 0, 4, 0)); // Padding
+            jMenuItem.setText(name); // Set the name as the menu item text
 
+            // Add action listener to handle menu item selection
             jMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jTextField5.setText(jMenuItem.getText());
-                    // Fetch the transportId (value) associated with the selected road_name (key)
-                    String suppliersId = list.get(name);
+                    // Set the selected name in jTextField5
+                    jTextField5.setText(name);
 
-                    // Fetch the corresponding Transport object from transportMap using the transportId
-                    SuppliersModel selectedSuppliers = suppliersMap.get(suppliersId);
+                    // Use the ID to fetch the corresponding SuppliersModel
+                    SuppliersModel selectedSuppliers = suppliersMap.get(id);
 
+                    // If found, set the supplier's ID in jTextField4
                     if (selectedSuppliers != null) {
-                        jTextField4.setText(selectedSuppliers.getId());
+                        jTextField4.setText(String.valueOf(selectedSuppliers.getId()));
                     }
                 }
             });
 
+            // Add the menu item to the popup menu
             popupMenu.add(jMenuItem);
         }
+
+        // Show the popup menu relative to jTextField5
         popupMenu.show(jTextField5, 0, jTextField5.getHeight());
 
     }
 
-    public static void loadPopupTextField4(JPopupMenu popupMenu, JTextField jTextField5, JTextField jTextField4, HashMap<String, String> list,HashMap<String, SuppliersModel> suppliersMap) {
+    public static void loadPopupTextField4(JPopupMenu popupMenu, JTextField jTextField5, JTextField jTextField4, HashMap<Integer, String> list,HashMap<Integer, SuppliersModel> suppliersMap) {
         popupMenu.setVisible(false);
         popupMenu.removeAll();
 
-        for (String id : list.keySet()) {
+        for (int id : list.keySet()) {
             JMenuItem jMenuItem = new JMenuItem();
             jMenuItem.setFont(new java.awt.Font("Iskoola Pota", 0, 20));
             jMenuItem.setBorder(BorderFactory.createEmptyBorder(2, 0, 4, 0));  // Increase top, left, bottom, right padding
-            jMenuItem.setText(id);
+            jMenuItem.setText(String.valueOf(id));
 
             jMenuItem.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jTextField4.setText(jMenuItem.getText());  // Set the selected ID in jTextField4
 
                     // Fetch the corresponding Supplier object using the ID
-                    SuppliersModel selectedSuppliers = suppliersMap.get(jMenuItem.getText());
+                    SuppliersModel selectedSuppliers = suppliersMap.get(Integer.parseInt(jMenuItem.getText()));
 
                     // Set the name of the supplier in jTextField5
                     if (selectedSuppliers != null) {

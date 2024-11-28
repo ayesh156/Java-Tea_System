@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package gui;
+
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -34,8 +35,11 @@ import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
 import model.year.YearModal;
 import model.year.YearService;
+
 import static gui.Home.logger;
+
 import java.nio.file.FileSystems;
+
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
@@ -46,10 +50,10 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public class LeafBill extends javax.swing.JPanel {
 
-    private HashMap<String, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
+    private HashMap<Integer, SuppliersModel> suppliersMap = new HashMap<>(); //to keep suppliers with IDss
 
-    private HashMap<String, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
-    
+    private HashMap<Integer, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
+
 
     LeafBillTableModel leafBillTableModel;
 
@@ -148,6 +152,11 @@ public class LeafBill extends javax.swing.JPanel {
         loadYearsCombobox();
         loadMonthsCombobox();
     }
+    
+    
+    public JButton getJButton19() {
+        return jButton19;
+    }
 
     private void loadMonthsCombobox() {
         // Instantiate the monthService
@@ -230,6 +239,10 @@ public class LeafBill extends javax.swing.JPanel {
         jButton17 = new javax.swing.JButton();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
@@ -441,7 +454,7 @@ public class LeafBill extends javax.swing.JPanel {
         jPanel49.setLayout(jPanel49Layout);
         jPanel49Layout.setHorizontalGroup(
             jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 96, Short.MAX_VALUE)
+            .addGap(0, 77, Short.MAX_VALUE)
         );
         jPanel49Layout.setVerticalGroup(
             jPanel49Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,6 +525,44 @@ public class LeafBill extends javax.swing.JPanel {
         jPanel48.add(jPanel50, java.awt.BorderLayout.LINE_END);
 
         jPanel46.add(jPanel48, java.awt.BorderLayout.PAGE_END);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setFont(new java.awt.Font("FMMalithi", 0, 26)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel1.setText("f.úh hq;= uqo, ( ");
+        jLabel1.setMaximumSize(new java.awt.Dimension(0, 36));
+        jLabel1.setMinimumSize(new java.awt.Dimension(0, 36));
+        jLabel1.setPreferredSize(new java.awt.Dimension(0, 36));
+        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("0.00");
+        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel2.setPreferredSize(new java.awt.Dimension(200, 36));
+        jPanel1.add(jLabel2, java.awt.BorderLayout.LINE_END);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setMinimumSize(new java.awt.Dimension(150, 0));
+        jPanel2.setPreferredSize(new java.awt.Dimension(120, 77));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 150, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 77, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_START);
+
+        jPanel46.add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jPanel43.add(jPanel46, java.awt.BorderLayout.CENTER);
 
@@ -874,6 +925,34 @@ public class LeafBill extends javax.swing.JPanel {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
 
+    // Method to create a manual date based on the provided year, month, and day
+    public String manualDate(int year, int month, int day) {
+        try {
+            // Create a LocalDate object with the provided year, month, and day
+            LocalDate manualDate = LocalDate.of(year, month, day);
+
+            // Format the date as 'yyyy-MM-dd'
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            return manualDate.format(formatter);
+        } catch (Exception e) {
+            // Handle invalid dates (e.g., February 30)
+            return "Invalid date: " + e.getMessage();
+        }
+    }
+
+    // Function to compare months
+    public boolean isManualDateAfterPreviousMonth(String manualDateString, String lastDayOfPreviousMonthString) {
+        // Parse the year and month from the formatted date strings
+        int manualYear = Integer.parseInt(manualDateString.substring(0, 4));
+        int manualMonth = Integer.parseInt(manualDateString.substring(5, 7));
+
+        int previousYear = Integer.parseInt(lastDayOfPreviousMonthString.substring(0, 4));
+        int previousMonth = Integer.parseInt(lastDayOfPreviousMonthString.substring(5, 7));
+
+        // Compare year and month
+        return manualYear > previousYear || (manualYear == previousYear && manualMonth > previousMonth);
+    }
+
     private void loadTable() {
 
         totalData = suppliersService.count();
@@ -906,8 +985,51 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         leafBillTableModel = new LeafBillTableModel();
-        leafBillTableModel.setList(leafBillService.findAll(page, rowCountPerPage));
+        List<LeafBillModel> leafBillList = leafBillService.findAll(page, rowCountPerPage);
+
+        leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
+
+        double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+
+        System.out.println(lastDayOfPreviousMonth());;
+        System.out.println("last day"+middleDayOfPreviousMonth());;
+
+        for (LeafBillModel leafBill : leafBillList) {
+
+            // Parse the FinalAmount
+            double finalAmount = Double.parseDouble(leafBill.getFinalAmount());
+
+            // Add to totalFinalAmount only if FinalAmount is non-negative
+            if (finalAmount >= 0) {
+                totalFinalAmount += finalAmount;
+            }
+
+
+            // Get the last day of the previous month
+            String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
+
+            if (leafBill.getLastModify().equals(middleDayOfPreviousMonth())){
+
+                System.out.println(leafBill.getLastArrears());
+                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
+                suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+
+                // Update lastModify date to the formatted last day of the previous month
+                suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
+
+            }
+
+
+        }
+
+        // Format the totalFinalAmount to two decimal places
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedTotal = df.format(totalFinalAmount);
+
+        // Set the totalFinalAmount to JTextField4
+        jLabel2.setText(formattedTotal);
+
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -954,7 +1076,7 @@ public class LeafBill extends javax.swing.JPanel {
         columnModel.getColumn(0).setMaxWidth(70);
     }
 
-    private HashMap<String, String> loadSuppliers() {
+    private HashMap<Integer, String> loadSuppliers() {
         suppliersMap.clear();
         suppliersNameMap.clear();
 
@@ -970,19 +1092,19 @@ public class LeafBill extends javax.swing.JPanel {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch transport data using SupplierService
-        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersName(id, limit);
+        HashMap<Integer, SuppliersModel> tMap = suppliersService.getSuppliersName(id, limit);
 
         // Populate tMap and suppliersNameMap with the fetched data
-        for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
+        for (Map.Entry<Integer, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel); // Adding the transport objects to the suppliersMap
-            suppliersNameMap.put(suppliersModel.getName(), suppliersModel.getId()); // Adding the Product names and IDs to the suppliersNameMap
+            suppliersNameMap.put(suppliersModel.getId(), suppliersModel.getName()); // Adding the Product names and IDs to the suppliersNameMap
         }
 
         return suppliersNameMap;
     }
 
-    private HashMap<String, String> loadSuppliersId() {
+    private HashMap<Integer, String> loadSuppliersId() {
         suppliersMap.clear();
         suppliersNameMap.clear();
 
@@ -998,10 +1120,10 @@ public class LeafBill extends javax.swing.JPanel {
         SuppliersService suppliersService = new SuppliersService();
 
         // Fetch supplier data by ID using SupplierService
-        HashMap<String, SuppliersModel> tMap = suppliersService.getSuppliersId(id, limit);
+        HashMap<Integer, SuppliersModel> tMap = suppliersService.getSuppliersId(id, limit);
 
         // Populate tMap and suppliersNameMap with the fetched data
-        for (Map.Entry<String, SuppliersModel> entry : tMap.entrySet()) {
+        for (Map.Entry<Integer, SuppliersModel> entry : tMap.entrySet()) {
             SuppliersModel suppliersModel = entry.getValue();
             suppliersMap.put(suppliersModel.getId(), suppliersModel);  // Map supplier ID to the Supplier object
             suppliersNameMap.put(suppliersModel.getId(), suppliersModel.getName());  // Map supplier ID to supplier name
@@ -1203,8 +1325,43 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         leafBillTableModel = new LeafBillTableModel();
-        leafBillTableModel.setList(leafBillService.findByYearMonth(jTextField5.getText(), jComboBox2.getSelectedItem(), jComboBox1.getSelectedItem(), page, rowCountPerPage));
+        List<LeafBillModel> leafBillList = leafBillService.findByYearMonth(jTextField5.getText(), jComboBox2.getSelectedItem(), jComboBox1.getSelectedItem(), page, rowCountPerPage);
+        leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
+
+        double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+
+        for (LeafBillModel leafBill : leafBillList) {
+
+            // Parse the FinalAmount
+            double finalAmount = Double.parseDouble(leafBill.getFinalAmount());
+
+            // Add to totalFinalAmount only if FinalAmount is non-negative
+            if (finalAmount >= 0) {
+                totalFinalAmount += finalAmount;
+            }
+
+            // Get the last day of the previous month
+            String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
+
+            if (leafBill.getLastModify().equals(middleDayOfPreviousMonth())){
+
+                System.out.println(leafBill.getLastArrears());
+                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
+                suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+
+                // Update lastModify date to the formatted last day of the previous month
+                suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
+
+            }
+        }
+
+        // Format the totalFinalAmount to two decimal places
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedTotal = df.format(totalFinalAmount);
+
+        // Set the totalFinalAmount to JTextField4
+        jLabel2.setText(formattedTotal);
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1221,15 +1378,43 @@ public class LeafBill extends javax.swing.JPanel {
         jButtonNum.setText(page.toString());
     }//GEN-LAST:event_jButton17ActionPerformed
 
+    public String lastDayOfPreviousMonth (){
+        // Calculate the last day of the previous month
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        Date lastDayOfPreviousMonth = calendar.getTime();
+        // Format the date as "yyyy-MM-dd"
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormatter.format(lastDayOfPreviousMonth);
+    }
 
-    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        // TODO add your handling code here:
-        // Get the current date
+    public String middleDayOfPreviousMonth() {
+        // Calculate the middle day of the previous month
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1); // Move to the previous month
+        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH); // Get total days in the previous month
+        int middleDay = daysInMonth / 2 + (daysInMonth % 2 == 0 ? 0 : 1); // Calculate middle day (rounded up if odd days)
+        calendar.set(Calendar.DAY_OF_MONTH, middleDay); // Set the middle day
+        Date middleDate = calendar.getTime();
+
+        // Format the date as "yyyy-MM-dd"
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormatter.format(middleDate);
+    }
+
+    public String currentDate (){
         LocalDate now = LocalDate.now();
 
         // Format the current date as 'yyyy-MM-dd' (e.g., 2024-10-18)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedCurrentDate = now.format(formatter);
+        return now.format(formatter);
+    }
+
+
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        // TODO add your handling code here:
+        LocalDate now = LocalDate.now();
 
         // Calculate the first and last day of the previous month
         LocalDate firstDayOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
@@ -1240,8 +1425,8 @@ public class LeafBill extends javax.swing.JPanel {
 
         String monthName = monthService.findMonthById(monthId);
 
-        Object searchYear =  jComboBox2.getSelectedItem();
-        Object searchMonth =  jComboBox1.getSelectedItem();
+        Object searchYear = jComboBox2.getSelectedItem();
+        Object searchMonth = jComboBox1.getSelectedItem();
 
         // If searchYear is provided, override the year
         if (!"අවුරුද්ද".equals(searchYear)) {
@@ -1272,55 +1457,66 @@ public class LeafBill extends javax.swing.JPanel {
 
         // Print the details of each LeafBillModel in the console
         for (LeafBillModel leafBill : leafBillList) {
-
-            if(leafBill.isArrearsSetZero()){
-                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), "0");
-            }
+            // Reset arrears if the flag is set
 
             double newArrearsDouble = Double.parseDouble(leafBill.getNewArrears());
 
-            if(newArrearsDouble > 0){
-                // Assuming this is part of your method
-                DecimalFormat df = new DecimalFormat("#.00");
-                String formattedNewArrears = df.format(newArrearsDouble);
+            // Check if the new arrears value is greater than zero and if lastModify does not equal the formatted last day of the previous month
+            if (!leafBill.getLastModify().equals(middleDayOfPreviousMonth()) && !leafBill.getLastModify().equals(lastDayOfPreviousMonth())){
+                if (leafBill.isArrearsSetZero()) {
+                    suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+//                    System.out.println("0");
+                }
 
-                // Update supplier's arrears with the formatted value
-                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), formattedNewArrears);
+                if (newArrearsDouble > 0) {
+                    // Format new arrears with two decimal places
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    String formattedNewArrears = df.format(newArrearsDouble);
+
+                    // Update supplier's arrears with the formatted value
+                    suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), formattedNewArrears);
+//                    System.out.println(formattedNewArrears);
+
+                }
+
+                // Update lastModify date to the formatted last day of the previous month
+                suppliersService.updateLastModify(leafBill.getSupplier_id(), middleDayOfPreviousMonth());
+
             }
 
-            // Optional: Display it in a GUI component, e.g., JTextArea or JTable
+
         }
-        
+
         try {
-            
+
             String userDirectory = FileSystems.getDefault()
                     .getPath("")
                     .toAbsolutePath()
                     .toString();
-            
-            //            WE CAN USE ONLY NEDBEANS IDE
-            
-//            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
-            
-            //             WE CAN USE AFTER BUILD
-            
-            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
 
-           String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
+            //            WE CAN USE ONLY NEDBEANS IDE
+
+            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+
+            //             WE CAN USE AFTER BUILD
+
+//            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
+////
+//            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("year_param", year); // Pass the year parameter
             parameters.put("monthName_param", monthName); // Pass the month name parameter
-            parameters.put("currentDate_param", formattedCurrentDate); // Pass the formatted current date as a parameter
-  
+            parameters.put("currentDate_param", currentDate()); // Pass the formatted current date as a parameter
+
             JRTableModelDataSource datasource = new JRTableModelDataSource(jTable.getModel());
 
             JasperPrint report = JasperFillManager.fillReport(url, parameters, datasource);
             //JasperPrintManager.printReport(report, false); //prirent report dirrectly
             JasperViewer.viewReport(report, false); //for testing
-            
-            } catch (Exception e) {
+
+        } catch (Exception e) {
             logger.log(Level.WARNING, "Print_Leaf_Bill", e);
             e.printStackTrace();
         }
@@ -1382,6 +1578,7 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox jComboBoxPage;
     private javax.swing.JLabel jEntriesLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1390,14 +1587,17 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabelStatusHalaman;
     private javax.swing.JLabel jLabelTotalData;
     private javax.swing.JLabel jLabelTotalData2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
