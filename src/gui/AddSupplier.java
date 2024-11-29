@@ -49,10 +49,59 @@ public class AddSupplier extends javax.swing.JDialog {
 
             setUpdateButton();
             loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is valid
+            jTextField6.grabFocus();
 
         } else {
+            
             setSaveButton();
             newSupplier(); // Clear fields if `supplierNo` is empty or null
+            jTextField4.grabFocus();
+            
+        }
+    }
+    
+    private void mannualTab(KeyEvent evt, int order) {
+//        System.out.println(evt.getKeyCode());
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            switch (order) {
+                case 1:
+                    jTextField6.grabFocus();
+                    break;
+                case 2:
+                    jTextArea1.grabFocus();
+                    break;
+                case 3:
+                    jTextField5.grabFocus();
+                    break;
+                case 4:
+                    jTextField8.grabFocus();
+                    break;
+                case 5:
+                    jButton15.grabFocus();
+                    break;
+
+            }
+        }
+        
+         if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            switch (order) {
+                case 2:
+                    jTextField4.grabFocus();
+                    break;
+                case 3:
+                    jTextField6.grabFocus();
+                    break;
+                case 4:
+                    jTextArea1.grabFocus();
+                    break;
+                case 5:
+                    jTextField5.grabFocus();
+                    break;
+                case 6:
+                    jTextField8.grabFocus();
+                    break;
+                
+            }
         }
     }
 
@@ -213,6 +262,11 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField4.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField4.setMinimumSize(new java.awt.Dimension(882, 55));
         jTextField4.setPreferredSize(new java.awt.Dimension(882, 55));
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
+        });
         jPanel10.add(jTextField4, java.awt.BorderLayout.PAGE_END);
 
         jLabel19.setBackground(new java.awt.Color(255, 255, 255));
@@ -287,6 +341,11 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField6.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField6.setMinimumSize(new java.awt.Dimension(882, 55));
         jTextField6.setPreferredSize(new java.awt.Dimension(882, 55));
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField6KeyPressed(evt);
+            }
+        });
         jPanel5.add(jTextField6, java.awt.BorderLayout.PAGE_END);
 
         jPanel2.add(jPanel5);
@@ -321,6 +380,11 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextArea1.setRows(5);
         jTextArea1.setMinimumSize(new java.awt.Dimension(875, 135));
         jTextArea1.setPreferredSize(new java.awt.Dimension(875, 135));
+        jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextArea1KeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTextArea1);
 
         jPanel4.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -359,6 +423,9 @@ public class AddSupplier extends javax.swing.JDialog {
             }
         });
         jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField5KeyReleased(evt);
             }
@@ -428,6 +495,9 @@ public class AddSupplier extends javax.swing.JDialog {
             }
         });
         jTextField8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField8KeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField8KeyReleased(evt);
             }
@@ -464,6 +534,11 @@ public class AddSupplier extends javax.swing.JDialog {
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
+            }
+        });
+        jButton15.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton15KeyPressed(evt);
             }
         });
         jPanel32.add(jButton15, java.awt.BorderLayout.CENTER);
@@ -816,6 +891,36 @@ public class AddSupplier extends javax.swing.JDialog {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_jTextField9KeyReleased
+
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 1);
+    }//GEN-LAST:event_jTextField4KeyPressed
+
+    private void jTextField6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 2);
+    }//GEN-LAST:event_jTextField6KeyPressed
+
+    private void jTextArea1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 3);
+    }//GEN-LAST:event_jTextArea1KeyPressed
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 4);
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private void jTextField8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField8KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 5);
+    }//GEN-LAST:event_jTextField8KeyPressed
+
+    private void jButton15KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton15KeyPressed
+        // TODO add your handling code here:
+        mannualTab(evt, 6);
+    }//GEN-LAST:event_jButton15KeyPressed
 
     /**
      * @param args the command line arguments

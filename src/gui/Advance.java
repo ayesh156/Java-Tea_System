@@ -163,9 +163,6 @@ public class Advance extends javax.swing.JPanel {
         
          if (evt.getKeyCode() == KeyEvent.VK_UP) {
             switch (order) {
-                case 1:
-                    jTextField5.grabFocus();
-                    break;
                 case 2:
                     jTextField4.grabFocus();
                     break;
@@ -173,6 +170,15 @@ public class Advance extends javax.swing.JPanel {
                     jTextField7.grabFocus();
                     break;
                 
+            }
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            switch (order) {
+                case 1:
+                    jTextField5.grabFocus();
+                    break;
+
             }
         }
     }

@@ -1009,7 +1009,7 @@ public class LeafBill extends javax.swing.JPanel {
             // Get the last day of the previous month
             String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
 
-            if (leafBill.getLastModify().equals(middleDayOfPreviousMonth())){
+            if (is30DaysLaterEqualToToday(leafBill.getLastModify())) {
 
                 System.out.println(leafBill.getLastArrears());
                 suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
@@ -1046,6 +1046,22 @@ public class LeafBill extends javax.swing.JPanel {
 
         jButtonNum.setText(page.toString());
 
+    }
+
+    private boolean is30DaysLaterEqualToToday(String lastModifyDateStr) {
+        LocalDate currentDate = LocalDate.now(); // Get today's date
+
+        // Define the format of the date string (e.g., "yyyy-MM-dd")
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Parse the string to a LocalDate
+        LocalDate lastModifyDate = LocalDate.parse(lastModifyDateStr, formatter);
+
+        // Add 30 days to the last modified date
+        LocalDate datePlus30Days = lastModifyDate.plusDays(30);
+
+        // Check if datePlus30Days is equal to the current date
+        return currentDate.isAfter(datePlus30Days);
     }
 
     // Method to set custom column widths
