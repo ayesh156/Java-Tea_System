@@ -987,13 +987,7 @@ public class LeafBill extends javax.swing.JPanel {
         leafBillTableModel = new LeafBillTableModel();
         List<LeafBillModel> leafBillList = leafBillService.findAll(page, rowCountPerPage);
 
-        leafBillTableModel.setList(leafBillList);
-        jTable.setModel(leafBillTableModel);
-
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
-
-        System.out.println(lastDayOfPreviousMonth());;
-        System.out.println("last day"+middleDayOfPreviousMonth());;
 
         for (LeafBillModel leafBill : leafBillList) {
 
@@ -1008,10 +1002,12 @@ public class LeafBill extends javax.swing.JPanel {
 
             // Get the last day of the previous month
             String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
+            LocalDate middleOfLastMonth = parseDate(middleDayOfPreviousMonth());
+            LocalDate lastModify = parseDate(leafBill.getLastModify());
 
-            if (is30DaysLaterEqualToToday(leafBill.getLastModify())) {
+            if (is30DaysLaterEqualToToday(leafBill.getLastModify())
+                    && lastModify.equals(middleOfLastMonth)) {
 
-                System.out.println(leafBill.getLastArrears());
                 suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
                 suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
 
@@ -1023,13 +1019,25 @@ public class LeafBill extends javax.swing.JPanel {
 
         }
 
-        // Format the totalFinalAmount to two decimal places
-        DecimalFormat df = new DecimalFormat("#.00");
-        String formattedTotal = df.format(totalFinalAmount);
+        String formattedTotal = "";
+
+        List<LeafBillModel> afterLeafBillList = leafBillService.findAll(page, rowCountPerPage);
+
+        leafBillTableModel.setList(afterLeafBillList);
+        jTable.setModel(leafBillTableModel);
+
+        // Ensure totalFinalAmount is non-negative
+        if (totalFinalAmount <= 0) {
+            formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            // Format the totalFinalAmount to two decimal places
+            DecimalFormat df = new DecimalFormat("#.00");
+            formattedTotal = df.format(totalFinalAmount);
+        }
+
 
         // Set the totalFinalAmount to JTextField4
         jLabel2.setText(formattedTotal);
-
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1048,6 +1056,11 @@ public class LeafBill extends javax.swing.JPanel {
 
     }
 
+    public static LocalDate parseDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(dateStr, formatter);
+    }
+
     private boolean is30DaysLaterEqualToToday(String lastModifyDateStr) {
         LocalDate currentDate = LocalDate.now(); // Get today's date
 
@@ -1058,7 +1071,7 @@ public class LeafBill extends javax.swing.JPanel {
         LocalDate lastModifyDate = LocalDate.parse(lastModifyDateStr, formatter);
 
         // Add 30 days to the last modified date
-        LocalDate datePlus30Days = lastModifyDate.plusDays(30);
+        LocalDate datePlus30Days = lastModifyDate.plusDays(14);
 
         // Check if datePlus30Days is equal to the current date
         return currentDate.isAfter(datePlus30Days);
@@ -1177,8 +1190,56 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         leafBillTableModel = new LeafBillTableModel();
-        leafBillTableModel.setList(leafBillService.find(searchText, page, rowCountPerPage));
+        List<LeafBillModel> leafBillList = leafBillService.find(searchText, page, rowCountPerPage);
+
+        double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+
+        for (LeafBillModel leafBill : leafBillList) {
+
+            // Parse the FinalAmount
+            double finalAmount = Double.parseDouble(leafBill.getFinalAmount());
+
+            // Add to totalFinalAmount only if FinalAmount is non-negative
+            if (finalAmount >= 0) {
+                totalFinalAmount += finalAmount;
+            }
+
+
+            // Get the last day of the previous month
+            String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
+            LocalDate middleOfLastMonth = parseDate(middleDayOfPreviousMonth());
+            LocalDate lastModify = parseDate(leafBill.getLastModify());
+
+            if (is30DaysLaterEqualToToday(leafBill.getLastModify())
+                    && lastModify.equals(middleOfLastMonth)) {
+
+                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
+                suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+
+                // Update lastModify date to the formatted last day of the previous month
+                suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
+
+            }
+
+        }
+
+        String formattedTotal = "";
+
+        leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
+
+        // Ensure totalFinalAmount is non-negative
+        if (totalFinalAmount <= 0) {
+            formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            // Format the totalFinalAmount to two decimal places
+            DecimalFormat df = new DecimalFormat("#.00");
+            formattedTotal = df.format(totalFinalAmount);
+        }
+
+
+        // Set the totalFinalAmount to JTextField4
+        jLabel2.setText(formattedTotal);
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1315,6 +1376,8 @@ public class LeafBill extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField4KeyReleased
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+//        loadTable();
+        
         totalData = suppliersService.findCountName(jTextField5.getText());
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
@@ -1342,8 +1405,6 @@ public class LeafBill extends javax.swing.JPanel {
 
         leafBillTableModel = new LeafBillTableModel();
         List<LeafBillModel> leafBillList = leafBillService.findByYearMonth(jTextField5.getText(), jComboBox2.getSelectedItem(), jComboBox1.getSelectedItem(), page, rowCountPerPage);
-        leafBillTableModel.setList(leafBillList);
-        jTable.setModel(leafBillTableModel);
 
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
 
@@ -1356,25 +1417,21 @@ public class LeafBill extends javax.swing.JPanel {
             if (finalAmount >= 0) {
                 totalFinalAmount += finalAmount;
             }
-
-            // Get the last day of the previous month
-            String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
-
-            if (leafBill.getLastModify().equals(middleDayOfPreviousMonth())){
-
-                System.out.println(leafBill.getLastArrears());
-                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
-                suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
-
-                // Update lastModify date to the formatted last day of the previous month
-                suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
-
-            }
         }
 
-        // Format the totalFinalAmount to two decimal places
-        DecimalFormat df = new DecimalFormat("#.00");
-        String formattedTotal = df.format(totalFinalAmount);
+        String formattedTotal = "";
+
+        leafBillTableModel.setList(leafBillList);
+        jTable.setModel(leafBillTableModel);
+
+        // Ensure totalFinalAmount is non-negative
+        if (totalFinalAmount <= 0) {
+            formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            // Format the totalFinalAmount to two decimal places
+            DecimalFormat df = new DecimalFormat("#.00");
+            formattedTotal = df.format(totalFinalAmount);
+        }
 
         // Set the totalFinalAmount to JTextField4
         jLabel2.setText(formattedTotal);
