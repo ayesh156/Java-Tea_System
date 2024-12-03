@@ -1071,7 +1071,7 @@ public class LeafBill extends javax.swing.JPanel {
         LocalDate lastModifyDate = LocalDate.parse(lastModifyDateStr, formatter);
 
         // Add 30 days to the last modified date
-        LocalDate datePlus30Days = lastModifyDate.plusDays(14);
+        LocalDate datePlus30Days = lastModifyDate.plusDays(25);
 
         // Check if datePlus30Days is equal to the current date
         return currentDate.isAfter(datePlus30Days);
@@ -1569,13 +1569,13 @@ public class LeafBill extends javax.swing.JPanel {
 
             //            WE CAN USE ONLY NEDBEANS IDE
 
-            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+//            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
 
             //             WE CAN USE AFTER BUILD
 
-//            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
+            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
 ////
-//            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
+            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();

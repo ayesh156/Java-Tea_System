@@ -157,6 +157,7 @@ public class Home extends javax.swing.JFrame {
         }
         
         jTextField4.grabFocus();
+        jButton1.setIcon(new ImageIcon(getClass().getResource("/img/fill_circle.png")));
 
     }
     
