@@ -10,7 +10,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -353,6 +352,11 @@ public class LeafBill extends javax.swing.JPanel {
         jTextField4.setMaximumSize(new java.awt.Dimension(2147483647, 52));
         jTextField4.setMinimumSize(new java.awt.Dimension(296, 52));
         jTextField4.setPreferredSize(new java.awt.Dimension(296, 52));
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField4KeyReleased(evt);
@@ -1071,7 +1075,7 @@ public class LeafBill extends javax.swing.JPanel {
         LocalDate lastModifyDate = LocalDate.parse(lastModifyDateStr, formatter);
 
         // Add 30 days to the last modified date
-        LocalDate datePlus30Days = lastModifyDate.plusDays(25);
+        LocalDate datePlus30Days = lastModifyDate.plusDays(18);
 
         // Check if datePlus30Days is equal to the current date
         return currentDate.isAfter(datePlus30Days);
@@ -1358,12 +1362,10 @@ public class LeafBill extends javax.swing.JPanel {
         // TODO add your handling code here:
 
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
-            if (evt.getKeyCode() != KeyEvent.VK_ESCAPE) {
+            // Check if the text ends with a space and contains a valid number
+            String text = jTextField4.getText();
+            if (text.matches("\\d+\\s")) { // Matches one or more digits followed by a space
                 SupNameIdPopups.loadPopupTextField4(jPopupMenu2, jTextField5, jTextField4, loadSuppliersId(), suppliersMap);
-                if (jTextField4.getText().equals("")) {
-                    jPopupMenu2.setVisible(false);
-                }
-
             } else {
                 jPopupMenu2.setVisible(false);
             }
@@ -1574,7 +1576,7 @@ public class LeafBill extends javax.swing.JPanel {
             //             WE CAN USE AFTER BUILD
 
             String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
-////
+
             String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
@@ -1608,6 +1610,25 @@ public class LeafBill extends javax.swing.JPanel {
 
         jTextField4.setEditable(true);
     }//GEN-LAST:event_jButton20ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+        // Get the text from the input field
+        String inputId = jTextField4.getText();
+        SuppliersService ss = new SuppliersService();
+
+        // Fetch supplier data using the input ID
+        SuppliersModel supplier = ss.findByDataById(inputId);
+
+        if (supplier != null) {
+            // Print supplier details to the console
+            jTextField5.setText(supplier.getName());
+
+        } else {
+            JOptionPane.showMessageDialog(this, "wxlh "+inputId+" jk iemhqïlrefjl= yuq fkdùh'", "Warning", JOptionPane.ERROR_MESSAGE);
+//            System.out.println("No supplier found with ID: " + inputId);
+        }
+    }//GEN-LAST:event_jTextField4ActionPerformed
 
 
     private void autoResizeColumn(JTable jTable1) {
