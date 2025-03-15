@@ -6,9 +6,7 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -238,12 +236,16 @@ public class LeafBill extends javax.swing.JPanel {
         jButton17 = new javax.swing.JButton();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel22 = new javax.swing.JPanel();
         jPanel37 = new javax.swing.JPanel();
         jPanel38 = new javax.swing.JPanel();
@@ -530,43 +532,21 @@ public class LeafBill extends javax.swing.JPanel {
 
         jPanel46.add(jPanel48, java.awt.BorderLayout.PAGE_END);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setForeground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("FMMalithi", 0, 26)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(15, 15, 18));
-        jLabel1.setText("f.úh hq;= uqo, ( ");
-        jLabel1.setMaximumSize(new java.awt.Dimension(0, 36));
-        jLabel1.setMinimumSize(new java.awt.Dimension(0, 36));
-        jLabel1.setPreferredSize(new java.awt.Dimension(0, 36));
-        jPanel1.add(jLabel1, java.awt.BorderLayout.CENTER);
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(15, 15, 18));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("0.00");
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel2.setPreferredSize(new java.awt.Dimension(200, 36));
-        jPanel1.add(jLabel2, java.awt.BorderLayout.LINE_END);
-
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setMinimumSize(new java.awt.Dimension(150, 0));
-        jPanel2.setPreferredSize(new java.awt.Dimension(120, 77));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 556, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 77, Short.MAX_VALUE)
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 62, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_START);
-
-        jPanel46.add(jPanel1, java.awt.BorderLayout.CENTER);
+        jPanel46.add(jPanel5, java.awt.BorderLayout.PAGE_START);
 
         jPanel43.add(jPanel46, java.awt.BorderLayout.CENTER);
 
@@ -582,12 +562,67 @@ public class LeafBill extends javax.swing.JPanel {
         jPanel21.setMaximumSize(new java.awt.Dimension(32767, 64));
         jPanel21.setMinimumSize(new java.awt.Dimension(991, 64));
         jPanel21.setPreferredSize(new java.awt.Dimension(991, 64));
-        jPanel21.setLayout(new javax.swing.BoxLayout(jPanel21, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel21.setLayout(new java.awt.BorderLayout());
 
         jLabel15.setFont(new java.awt.Font("FMEmanee", 0, 30)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(73, 80, 87));
         jLabel15.setText("o¿ ì,am;a");
-        jPanel21.add(jLabel15);
+        jLabel15.setMaximumSize(new java.awt.Dimension(150, 34));
+        jLabel15.setMinimumSize(new java.awt.Dimension(150, 34));
+        jLabel15.setPreferredSize(new java.awt.Dimension(150, 34));
+        jPanel21.add(jLabel15, java.awt.BorderLayout.LINE_START);
+
+        jPanel6.setMaximumSize(new java.awt.Dimension(900, 900));
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel7.setMaximumSize(new java.awt.Dimension(100, 200));
+        jPanel7.setPreferredSize(new java.awt.Dimension(50, 36));
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        jLabel5.setFont(new java.awt.Font("FMMalithi", 0, 26)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel5.setText("f.úh hq;= uqo, ( ");
+        jLabel5.setMaximumSize(new java.awt.Dimension(0, 36));
+        jLabel5.setMinimumSize(new java.awt.Dimension(0, 36));
+        jLabel5.setPreferredSize(new java.awt.Dimension(0, 36));
+        jPanel7.add(jLabel5, java.awt.BorderLayout.CENTER);
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel6.setText("0.00");
+        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel6.setMaximumSize(new java.awt.Dimension(220, 36));
+        jLabel6.setPreferredSize(new java.awt.Dimension(220, 36));
+        jPanel7.add(jLabel6, java.awt.BorderLayout.LINE_END);
+
+        jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setMaximumSize(new java.awt.Dimension(380, 200));
+        jPanel9.setPreferredSize(new java.awt.Dimension(380, 36));
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jLabel7.setFont(new java.awt.Font("FMMalithi", 0, 26)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel7.setText("uq¿ ysÕ uqo, ( ");
+        jLabel7.setMaximumSize(new java.awt.Dimension(0, 36));
+        jLabel7.setMinimumSize(new java.awt.Dimension(0, 36));
+        jLabel7.setPreferredSize(new java.awt.Dimension(0, 36));
+        jPanel9.add(jLabel7, java.awt.BorderLayout.CENTER);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(15, 15, 18));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel8.setText("0.00");
+        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel8.setPreferredSize(new java.awt.Dimension(200, 36));
+        jPanel9.add(jLabel8, java.awt.BorderLayout.LINE_END);
+
+        jPanel6.add(jPanel9, java.awt.BorderLayout.LINE_START);
+
+        jPanel21.add(jPanel6, java.awt.BorderLayout.CENTER);
 
         jPanel17.add(jPanel21, java.awt.BorderLayout.PAGE_START);
 
@@ -992,6 +1027,7 @@ public class LeafBill extends javax.swing.JPanel {
         List<LeafBillModel> leafBillList = leafBillService.findAll(page, rowCountPerPage);
 
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+        double totalDueAAmount = 0.0; // Initialize a variable to store the total DueAmount
 
         for (LeafBillModel leafBill : leafBillList) {
 
@@ -1001,6 +1037,8 @@ public class LeafBill extends javax.swing.JPanel {
             // Add to totalFinalAmount only if FinalAmount is non-negative
             if (finalAmount >= 0) {
                 totalFinalAmount += finalAmount;
+            } else {
+                totalDueAAmount += finalAmount;
             }
 
 
@@ -1024,6 +1062,8 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         String formattedTotal = "";
+        String formattedDue = "";
+        DecimalFormat df = new DecimalFormat("#.00");
 
         List<LeafBillModel> afterLeafBillList = leafBillService.findAll(page, rowCountPerPage);
 
@@ -1034,14 +1074,19 @@ public class LeafBill extends javax.swing.JPanel {
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
         }else {
-            // Format the totalFinalAmount to two decimal places
-            DecimalFormat df = new DecimalFormat("#.00");
             formattedTotal = df.format(totalFinalAmount);
         }
 
+        if (totalDueAAmount >= 0) {
+            formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            formattedDue = df.format(totalDueAAmount);
+        }
 
-        // Set the totalFinalAmount to JTextField4
-        jLabel2.setText(formattedTotal);
+        // Set the totalFinalAmount to jLabel6
+        jLabel6.setText(formattedTotal);
+        // Set the totalFinalAmount to jLabel8
+        jLabel8.setText(formattedDue);
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1075,7 +1120,7 @@ public class LeafBill extends javax.swing.JPanel {
         LocalDate lastModifyDate = LocalDate.parse(lastModifyDateStr, formatter);
 
         // Add 30 days to the last modified date
-        LocalDate datePlus30Days = lastModifyDate.plusDays(18);
+        LocalDate datePlus30Days = lastModifyDate.plusDays(35);
 
         // Check if datePlus30Days is equal to the current date
         return currentDate.isAfter(datePlus30Days);
@@ -1197,6 +1242,7 @@ public class LeafBill extends javax.swing.JPanel {
         List<LeafBillModel> leafBillList = leafBillService.find(searchText, page, rowCountPerPage);
 
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+        double totalDueAAmount = 0.0; // Initialize a variable to store the total DueAmount
 
         for (LeafBillModel leafBill : leafBillList) {
 
@@ -1206,6 +1252,8 @@ public class LeafBill extends javax.swing.JPanel {
             // Add to totalFinalAmount only if FinalAmount is non-negative
             if (finalAmount >= 0) {
                 totalFinalAmount += finalAmount;
+            } else {
+                totalDueAAmount += finalAmount;
             }
 
 
@@ -1228,6 +1276,8 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         String formattedTotal = "";
+        String formattedDue = "";
+        DecimalFormat df = new DecimalFormat("#.00");
 
         leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
@@ -1236,14 +1286,19 @@ public class LeafBill extends javax.swing.JPanel {
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
         }else {
-            // Format the totalFinalAmount to two decimal places
-            DecimalFormat df = new DecimalFormat("#.00");
             formattedTotal = df.format(totalFinalAmount);
         }
 
+        if (totalDueAAmount >= 0) {
+            formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            formattedDue = df.format(totalDueAAmount);
+        }
 
-        // Set the totalFinalAmount to JTextField4
-        jLabel2.setText(formattedTotal);
+        // Set the totalFinalAmount to jLabel6
+        jLabel6.setText(formattedTotal);
+        // Set the totalFinalAmount to jLabel8
+        jLabel8.setText(formattedDue);
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1409,6 +1464,7 @@ public class LeafBill extends javax.swing.JPanel {
         List<LeafBillModel> leafBillList = leafBillService.findByYearMonth(jTextField5.getText(), jComboBox2.getSelectedItem(), jComboBox1.getSelectedItem(), page, rowCountPerPage);
 
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
+        double totalDueAAmount = 0.0; // Initialize a variable to store the total DueAmount
 
         for (LeafBillModel leafBill : leafBillList) {
 
@@ -1418,10 +1474,14 @@ public class LeafBill extends javax.swing.JPanel {
             // Add to totalFinalAmount only if FinalAmount is non-negative
             if (finalAmount >= 0) {
                 totalFinalAmount += finalAmount;
+            } else {
+                totalDueAAmount += finalAmount;
             }
         }
 
         String formattedTotal = "";
+        String formattedDue = "";
+        DecimalFormat df = new DecimalFormat("#.00");
 
         leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
@@ -1430,13 +1490,19 @@ public class LeafBill extends javax.swing.JPanel {
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
         }else {
-            // Format the totalFinalAmount to two decimal places
-            DecimalFormat df = new DecimalFormat("#.00");
             formattedTotal = df.format(totalFinalAmount);
         }
 
-        // Set the totalFinalAmount to JTextField4
-        jLabel2.setText(formattedTotal);
+        if (totalDueAAmount >= 0) {
+            formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
+        }else {
+            formattedDue = df.format(totalDueAAmount);
+        }
+
+        // Set the totalFinalAmount to jLabel6
+        jLabel6.setText(formattedTotal);
+        // Set the totalFinalAmount to jLabel8
+        jLabel8.setText(formattedDue);
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1490,6 +1556,8 @@ public class LeafBill extends javax.swing.JPanel {
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
         // TODO add your handling code here:
         LocalDate now = LocalDate.now();
+
+        jButton19.setEnabled(false);
 
         // Calculate the first and last day of the previous month
         LocalDate firstDayOfLastMonth = now.minusMonths(1).withDayOfMonth(1);
@@ -1576,7 +1644,7 @@ public class LeafBill extends javax.swing.JPanel {
             //             WE CAN USE AFTER BUILD
 
             String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
-
+//
             String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
@@ -1589,7 +1657,19 @@ public class LeafBill extends javax.swing.JPanel {
 
             JasperPrint report = JasperFillManager.fillReport(url, parameters, datasource);
             //JasperPrintManager.printReport(report, false); //prirent report dirrectly
-            JasperViewer.viewReport(report, false); //for testing
+//            JasperViewer.viewReport(report, false); //for testing
+
+            // Open JasperViewer and wait for it to close before enabling the button
+            JasperViewer viewer = new JasperViewer(report, false);
+            viewer.setDefaultCloseOperation(JasperViewer.DISPOSE_ON_CLOSE);
+            viewer.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    jButton19.setEnabled(true); // Re-enable button after window closes
+                }
+            });
+
+            viewer.setVisible(true);
 
         } catch (Exception e) {
             logger.log(Level.WARNING, "Print_Leaf_Bill", e);
@@ -1672,7 +1752,6 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox jComboBoxPage;
     private javax.swing.JLabel jEntriesLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1681,17 +1760,18 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelStatusHalaman;
     private javax.swing.JLabel jLabelTotalData;
     private javax.swing.JLabel jLabelTotalData2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
@@ -1712,7 +1792,11 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel46;
     private javax.swing.JPanel jPanel48;
     private javax.swing.JPanel jPanel49;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel50;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;

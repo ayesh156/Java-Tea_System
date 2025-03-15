@@ -965,6 +965,14 @@ public class Tea extends javax.swing.JPanel {
 
     }
 
+    private void clearSave() {
+
+        jTextField5.setText("");
+        jTextField4.setText("");
+        jTextField7.setText("");
+
+    }
+
     private void customizeTableHeader(JTable table) {
 
         JTableHeader header = table.getTableHeader();
@@ -1342,7 +1350,7 @@ public class Tea extends javax.swing.JPanel {
                                     } else {
                                         searchTable(searchText);
                                     }
-                                    clear();
+                                    clearSave();
 
                                 }
 
@@ -1378,7 +1386,7 @@ public class Tea extends javax.swing.JPanel {
 
                                     }
 
-                                    clear();
+                                    clearSave();
                                     jTextField4.setEditable(true);
 
                                     // Unselect the row if any was selected
@@ -1462,7 +1470,7 @@ public class Tea extends javax.swing.JPanel {
 
                 }
 
-                clear();
+                clearSave();
                 if (row != -1) {
                     // Unselect the row
                     jTable.clearSelection();
