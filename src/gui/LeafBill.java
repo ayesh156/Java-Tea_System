@@ -51,7 +51,6 @@ public class LeafBill extends javax.swing.JPanel {
 
     private HashMap<Integer, String> suppliersNameMap = new HashMap<>(); //to keep suppliers names with IDss
 
-
     LeafBillTableModel leafBillTableModel;
 
     Integer page = 1;
@@ -64,7 +63,6 @@ public class LeafBill extends javax.swing.JPanel {
     private static SuppliersService suppliersService;
 
     private static MonthService monthService;
-
 
     /**
      * Creates new form Suppliers
@@ -149,8 +147,7 @@ public class LeafBill extends javax.swing.JPanel {
         loadYearsCombobox();
         loadMonthsCombobox();
     }
-    
-    
+
     public JButton getJButton19() {
         return jButton19;
     }
@@ -198,7 +195,6 @@ public class LeafBill extends javax.swing.JPanel {
 
     }
 
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -236,7 +232,9 @@ public class LeafBill extends javax.swing.JPanel {
         jButton17 = new javax.swing.JButton();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
+        jPanel51 = new javax.swing.JPanel();
+        jPanel53 = new javax.swing.JPanel();
+        jButton21 = new javax.swing.JButton();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -532,21 +530,38 @@ public class LeafBill extends javax.swing.JPanel {
 
         jPanel46.add(jPanel48, java.awt.BorderLayout.PAGE_END);
 
-        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel5.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel51.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel51.setMinimumSize(new java.awt.Dimension(50, 52));
+        jPanel51.setPreferredSize(new java.awt.Dimension(50, 52));
+        jPanel51.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 556, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 62, Short.MAX_VALUE)
-        );
+        jPanel53.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel53.setMaximumSize(new java.awt.Dimension(460, 52));
+        jPanel53.setMinimumSize(new java.awt.Dimension(460, 52));
+        jPanel53.setPreferredSize(new java.awt.Dimension(460, 52));
+        jPanel53.setLayout(new java.awt.BorderLayout(15, 0));
 
-        jPanel46.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+        jButton21.setBackground(new java.awt.Color(192, 57, 43));
+        jButton21.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
+        jButton21.setForeground(new java.awt.Color(255, 255, 255));
+        jButton21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/print.png"))); // NOI18N
+        jButton21.setIconTextGap(8);
+        jButton21.setLabel("ysÕ uqo,a");
+        jButton21.setMargin(new java.awt.Insets(2, 9, 2, 9));
+        jButton21.setMaximumSize(new java.awt.Dimension(220, 52));
+        jButton21.setMinimumSize(new java.awt.Dimension(220, 52));
+        jButton21.setOpaque(true);
+        jButton21.setPreferredSize(new java.awt.Dimension(220, 52));
+        jButton21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton21ActionPerformed(evt);
+            }
+        });
+        jPanel53.add(jButton21, java.awt.BorderLayout.LINE_END);
+
+        jPanel51.add(jPanel53, java.awt.BorderLayout.LINE_END);
+
+        jPanel46.add(jPanel51, java.awt.BorderLayout.PAGE_START);
 
         jPanel43.add(jPanel46, java.awt.BorderLayout.CENTER);
 
@@ -1029,6 +1044,9 @@ public class LeafBill extends javax.swing.JPanel {
         double totalFinalAmount = 0.0; // Initialize a variable to store the total FinalAmount
         double totalDueAAmount = 0.0; // Initialize a variable to store the total DueAmount
 
+        boolean disableArrearsButton = false;
+        String prevMonthLastDay = lastDayOfPreviousMonth();
+
         for (LeafBillModel leafBill : leafBillList) {
 
             // Parse the FinalAmount
@@ -1041,23 +1059,23 @@ public class LeafBill extends javax.swing.JPanel {
                 totalDueAAmount += finalAmount;
             }
 
-
             // Get the last day of the previous month
             String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
             LocalDate middleOfLastMonth = parseDate(middleDayOfPreviousMonth());
             LocalDate lastModify = parseDate(leafBill.getLastModify());
 
-            if (is30DaysLaterEqualToToday(leafBill.getLastModify())
-                    && lastModify.equals(middleOfLastMonth)) {
+            // if (is30DaysLaterEqualToToday(leafBill.getLastModify())
+            //         && lastModify.equals(middleOfLastMonth)) {
+            //     suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
+            //     suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+            //     // Update lastModify date to the formatted last day of the previous month
+            //     suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
+            // }
 
-                suppliersService.updateSupplierArrears(leafBill.getSupplier_id(), leafBill.getLastArrears());
-                suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
-
-                // Update lastModify date to the formatted last day of the previous month
-                suppliersService.updateLastModify(leafBill.getSupplier_id(), lastDayOfPreviousMonth);
-
+            // Check if last_modify equals last day of previous month
+            if (leafBill.getLastModify() != null && leafBill.getLastModify().equals(prevMonthLastDay)) {
+                disableArrearsButton = true;
             }
-
 
         }
 
@@ -1073,13 +1091,13 @@ public class LeafBill extends javax.swing.JPanel {
         // Ensure totalFinalAmount is non-negative
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedTotal = df.format(totalFinalAmount);
         }
 
         if (totalDueAAmount >= 0) {
             formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedDue = df.format(totalDueAAmount);
         }
 
@@ -1088,12 +1106,17 @@ public class LeafBill extends javax.swing.JPanel {
         // Set the totalFinalAmount to jLabel8
         jLabel8.setText(formattedDue);
 
+        leafBillTableModel.setList(leafBillList);
+        jTable.setModel(leafBillTableModel);
+
+        // Disable or enable jButton21 based on the check
+        jButton21.setEnabled(!disableArrearsButton);
+
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
 
 //        // Set up custom column widths
 //        setupCustomColumnWidths(jTable);
-
         // Setup table scroll (pass jTable and JScrollPane)
         setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
 
@@ -1210,7 +1233,6 @@ public class LeafBill extends javax.swing.JPanel {
         return suppliersNameMap;  // Return the map with supplier ID and name
     }
 
-
     private void searchTable(String searchText) {
 
         totalData = suppliersService.findCountName(searchText);
@@ -1256,7 +1278,6 @@ public class LeafBill extends javax.swing.JPanel {
                 totalDueAAmount += finalAmount;
             }
 
-
             // Get the last day of the previous month
             String lastDayOfPreviousMonth = lastDayOfPreviousMonth();
             LocalDate middleOfLastMonth = parseDate(middleDayOfPreviousMonth());
@@ -1285,13 +1306,13 @@ public class LeafBill extends javax.swing.JPanel {
         // Ensure totalFinalAmount is non-negative
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedTotal = df.format(totalFinalAmount);
         }
 
         if (totalDueAAmount >= 0) {
             formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedDue = df.format(totalDueAAmount);
         }
 
@@ -1305,7 +1326,6 @@ public class LeafBill extends javax.swing.JPanel {
 
 //        // Set up custom column widths
 //        setupCustomColumnWidths(jTable);
-
         // Setup table scroll (pass jTable and JScrollPane)
         setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
 
@@ -1434,7 +1454,7 @@ public class LeafBill extends javax.swing.JPanel {
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
 //        loadTable();
-        
+
         totalData = suppliersService.findCountName(jTextField5.getText());
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
@@ -1489,13 +1509,13 @@ public class LeafBill extends javax.swing.JPanel {
         // Ensure totalFinalAmount is non-negative
         if (totalFinalAmount <= 0) {
             formattedTotal = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedTotal = df.format(totalFinalAmount);
         }
 
         if (totalDueAAmount >= 0) {
             formattedDue = "0.0"; // Set to 0 if the value is 0 or negative
-        }else {
+        } else {
             formattedDue = df.format(totalDueAAmount);
         }
 
@@ -1509,7 +1529,6 @@ public class LeafBill extends javax.swing.JPanel {
 
 //        // Set up custom column widths
 //        setupCustomColumnWidths(jTable);
-
         // Setup table scroll (pass jTable and JScrollPane)
         setupTableWithHorizontalScroll(jTable, jScrollPane1); // Ensure jScrollPaneTable is your JScrollPane
 
@@ -1519,7 +1538,7 @@ public class LeafBill extends javax.swing.JPanel {
         jButtonNum.setText(page.toString());
     }//GEN-LAST:event_jButton17ActionPerformed
 
-    public String lastDayOfPreviousMonth (){
+    public String lastDayOfPreviousMonth() {
         // Calculate the last day of the previous month
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, -1);
@@ -1544,7 +1563,7 @@ public class LeafBill extends javax.swing.JPanel {
         return dateFormatter.format(middleDate);
     }
 
-    public String currentDate (){
+    public String currentDate() {
         LocalDate now = LocalDate.now();
 
         // Format the current date as 'yyyy-MM-dd' (e.g., 2024-10-18)
@@ -1599,36 +1618,35 @@ public class LeafBill extends javax.swing.JPanel {
         }
 
         // Print the details of each LeafBillModel in the console
-        for (LeafBillModel leafBill : leafBillList) {
-            // Reset arrears if the flag is set
+//         for (LeafBillModel leafBill : leafBillList) {
+//             // Reset arrears if the flag is set
 
-            double newArrearsDouble = Double.parseDouble(leafBill.getNewArrears());
+//             double newArrearsDouble = Double.parseDouble(leafBill.getNewArrears());
 
-            // Check if the new arrears value is greater than zero and if lastModify does not equal the formatted last day of the previous month
-            if (!leafBill.getLastModify().equals(middleDayOfPreviousMonth()) && !leafBill.getLastModify().equals(lastDayOfPreviousMonth())){
-                if (leafBill.isArrearsSetZero()) {
-                    suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
-//                    System.out.println("0");
-                }
+//             // Check if the new arrears value is greater than zero and if lastModify does not equal the formatted last day of the previous month
+//             if (!leafBill.getLastModify().equals(middleDayOfPreviousMonth()) && !leafBill.getLastModify().equals(lastDayOfPreviousMonth())) {
+//                 if (leafBill.isArrearsSetZero()) {
+//                     suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), "0");
+// //                    System.out.println("0");
+//                 }
 
-                if (newArrearsDouble > 0) {
-                    // Format new arrears with two decimal places
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    String formattedNewArrears = df.format(newArrearsDouble);
+//                 if (newArrearsDouble > 0) {
+//                     // Format new arrears with two decimal places
+//                     DecimalFormat df = new DecimalFormat("#.00");
+//                     String formattedNewArrears = df.format(newArrearsDouble);
 
-                    // Update supplier's arrears with the formatted value
-                    suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), formattedNewArrears);
-//                    System.out.println(formattedNewArrears);
+//                     // Update supplier's arrears with the formatted value
+//                     suppliersService.updateSupplierNewArrears(leafBill.getSupplier_id(), formattedNewArrears);
+// //                    System.out.println(formattedNewArrears);
 
-                }
+//                 }
 
-                // Update lastModify date to the formatted last day of the previous month
-                suppliersService.updateLastModify(leafBill.getSupplier_id(), middleDayOfPreviousMonth());
+//                 // Update lastModify date to the formatted last day of the previous month
+//                 suppliersService.updateLastModify(leafBill.getSupplier_id(), middleDayOfPreviousMonth());
 
-            }
+//             }
 
-
-        }
+//         }
 
         try {
 
@@ -1638,13 +1656,10 @@ public class LeafBill extends javax.swing.JPanel {
                     .toString();
 
             //            WE CAN USE ONLY NEDBEANS IDE
-
-//            String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
-
+        //    String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
             //             WE CAN USE AFTER BUILD
-
             String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
-//
+
             String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
@@ -1705,11 +1720,56 @@ public class LeafBill extends javax.swing.JPanel {
             jTextField5.setText(supplier.getName());
 
         } else {
-            JOptionPane.showMessageDialog(this, "wxlh "+inputId+" jk iemhqïlrefjl= yuq fkdùh'", "Warning", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "wxlh " + inputId + " jk iemhqïlrefjl= yuq fkdùh'", "Warning", JOptionPane.ERROR_MESSAGE);
 //            System.out.println("No supplier found with ID: " + inputId);
         }
     }//GEN-LAST:event_jTextField4ActionPerformed
 
+    private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
+        // Update arrears for every supplier in the table manually with a single confirmation
+        int lastPriceCol = 16; // <-- Change this to your actual arrears column index
+        int supplierIdCol = 0;
+        int rowCount = jTable.getRowCount();
+
+        if (rowCount == 0) {
+            JOptionPane.showMessageDialog(this, "hdj;ald,Sk lsÍug iemhqïlrejka ke;'", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "j.=fõ we;s ish¨‍u iemhqïlrejka i|yd ysÕ uqo,a hdj;ald,Sk lrkako@",
+                "Confirm",
+                JOptionPane.YES_NO_OPTION
+        );
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Use previous month's last date instead of current date
+        String now = lastDayOfPreviousMonth();
+
+        for (int i = 0; i < rowCount; i++) {
+            int supplierId = Integer.parseInt(jTable.getValueAt(i, supplierIdCol).toString());
+            String currentArrears = jTable.getValueAt(i, lastPriceCol).toString();
+
+            try {
+                double arrearsValue = Double.parseDouble(currentArrears); // Validate input is a number
+                if (arrearsValue < 0) {
+                    // If negative, update arrears with the positive value
+                    suppliersService.updateSupplierArrears(supplierId, String.valueOf(Math.abs(arrearsValue)));
+                } else {
+                    // If positive or zero, update arrears as 0
+                    suppliersService.updateSupplierArrears(supplierId, "0");
+                }
+                suppliersService.updateLastModify(supplierId, now); // Update last_modify with previous month's last date
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid number format for Supplier ID " + supplierId, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        loadTable();
+        JOptionPane.showMessageDialog(this, "ish¨‍u iemhqïlrejka i|yd ysÕ uqo,a hdj;ald,Sk lrk ,§'", "Success", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton21ActionPerformed
 
     private void autoResizeColumn(JTable jTable1) {
 
@@ -1743,6 +1803,7 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton20;
+    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButtonFirst;
     private javax.swing.JButton jButtonLast;
     private javax.swing.JButton jButtonNext;
@@ -1792,8 +1853,9 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel46;
     private javax.swing.JPanel jPanel48;
     private javax.swing.JPanel jPanel49;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel50;
+    private javax.swing.JPanel jPanel51;
+    private javax.swing.JPanel jPanel53;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
