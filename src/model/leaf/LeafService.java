@@ -224,16 +224,33 @@ public class LeafService {
         List<Leaf> listLeaf = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
-            String sql = String.format(
-                    "SELECT * " +
-                            "FROM leaf_rate lr " +
-                            "INNER JOIN month m ON lr.month_id = m.id " +    // Assuming 'month_id' links the two tables
-                            "INNER JOIN year y ON lr.year_id = y.id " +      // Assuming 'year_id' links the two tables
-                            "WHERE lr.leaf_rate LIKE '%%%s%%' " +          // Search in leaf_rate table
-                            "OR m.month LIKE '%%%s%%' " +               // Search in month table
-                            "OR y.year LIKE '%%%s%%' LIMIT %d, %d", // Search in year table
-                    searchText, searchText, searchText, offset, pageSize
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT * " +
+                                "FROM leaf_rate lr " +
+                                "INNER JOIN month m ON lr.month_id = m.id " +
+                                "INNER JOIN year y ON lr.year_id = y.id " +
+                                "WHERE lr.id = '%s' " +          // Exact match for ID
+                                "OR lr.leaf_rate LIKE '%%%s%%' " +
+                                "OR m.month LIKE '%%%s%%' " +
+                                "OR y.year LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, searchText, searchText, offset, pageSize
+                );
+            } else {
+                sql = String.format(
+                        "SELECT * " +
+                                "FROM leaf_rate lr " +
+                                "INNER JOIN month m ON lr.month_id = m.id " +
+                                "INNER JOIN year y ON lr.year_id = y.id " +
+                                "WHERE lr.leaf_rate LIKE '%%%s%%' " +
+                                "OR m.month LIKE '%%%s%%' " +
+                                "OR y.year LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, searchText, offset, pageSize
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             while (rs != null && rs.next()) {
@@ -254,16 +271,33 @@ public class LeafService {
     public int findCount(String searchText) {
         int total = 0;
         try {
-            String sql = String.format(
-                    "SELECT COUNT(*) AS total " +
-                            "FROM leaf_rate lr " +
-                            "INNER JOIN month m ON lr.month_id = m.id " +    // Assuming 'month_id' links the two tables
-                            "INNER JOIN year y ON lr.year_id = y.id " +      // Assuming 'year_id' links the two tables
-                            "WHERE lr.leaf_rate LIKE '%%%s%%' " +          // Search in leaf_rate table
-                            "OR m.month LIKE '%%%s%%' " +               // Search in month table
-                            "OR y.year LIKE '%%%s%%'",                  // Search in year table
-                    searchText, searchText, searchText
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total " +
+                                "FROM leaf_rate lr " +
+                                "INNER JOIN month m ON lr.month_id = m.id " +
+                                "INNER JOIN year y ON lr.year_id = y.id " +
+                                "WHERE lr.id = '%s' " +          // Exact match for ID
+                                "OR lr.leaf_rate LIKE '%%%s%%' " +
+                                "OR m.month LIKE '%%%s%%' " +
+                                "OR y.year LIKE '%%%s%%'",
+                        searchText, searchText, searchText, searchText
+                );
+            } else {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total " +
+                                "FROM leaf_rate lr " +
+                                "INNER JOIN month m ON lr.month_id = m.id " +
+                                "INNER JOIN year y ON lr.year_id = y.id " +
+                                "WHERE lr.leaf_rate LIKE '%%%s%%' " +
+                                "OR m.month LIKE '%%%s%%' " +
+                                "OR y.year LIKE '%%%s%%'",
+                        searchText, searchText, searchText
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             if (rs != null && rs.next()) {

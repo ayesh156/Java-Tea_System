@@ -37,6 +37,8 @@ import model.year.YearService;
 import static gui.Home.logger;
 
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -153,9 +155,9 @@ public class LeafBill extends javax.swing.JPanel {
             MonthlyArrearsProcessor arrearsProcessor = new MonthlyArrearsProcessor();
             boolean processed = arrearsProcessor.checkAndProcessMonthlyArrears();
             if (processed) {
-                logger.log(Level.INFO, "Monthly arrears processed successfully on startup");
+                logger.log(Level.FINE, "Monthly arrears processed successfully on startup");
             } else {
-                logger.log(Level.INFO, "No monthly arrears processing needed (already processed or not yet time)");
+                logger.log(Level.FINE, "No monthly arrears processing needed (already processed or not yet time)");
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error processing monthly arrears on startup", e);
@@ -1694,12 +1696,46 @@ public class LeafBill extends javax.swing.JPanel {
                     .toAbsolutePath()
                     .toString();
 
-            //            WE CAN USE ONLY NEDBEANS IDE
-           String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
-            //             WE CAN USE AFTER BUILD
-            // String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
-
-            // String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
+            // Determine report path based on environment (NetBeans IDE vs Built JAR)
+            String url;
+            
+            // Check if running from NetBeans (src folder exists) or from built JAR
+            java.io.File srcFolder = new java.io.File(userDirectory, "src");
+            if (srcFolder.exists()) {
+                // Running in NetBeans IDE - use src path
+                url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+            } else {
+                // Running from built JAR - use parent directory
+                String parentPath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
+                url = parentPath + "\\src\\reports\\new_invoice_report.jasper";
+            }
+            
+            // Optional: Try to read from JSON config if path doesn't exist
+            java.io.File reportFile = new java.io.File(url);
+            if (!reportFile.exists()) {
+                try {
+                    String jsonPath = userDirectory + "\\lib\\databs.JSON";
+                    java.io.File jsonFile = new java.io.File(jsonPath);
+                    if (jsonFile.exists()) {
+                        String jsonContent = new String(Files.readAllBytes(Paths.get(jsonPath)));
+                        // Simple JSON parsing without external library
+                        if (jsonContent.contains("\"reportPath\"")) {
+                            int startIdx = jsonContent.indexOf("\"reportPath\"");
+                            int colonIdx = jsonContent.indexOf(":", startIdx);
+                            int quoteStart = jsonContent.indexOf("\"", colonIdx) + 1;
+                            int quoteEnd = jsonContent.indexOf("\"", quoteStart);
+                            if (quoteStart > 0 && quoteEnd > quoteStart) {
+                                String customPath = jsonContent.substring(quoteStart, quoteEnd);
+                                if (!customPath.isEmpty()) {
+                                    url = customPath;
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    logger.log(Level.WARNING, "Failed to read report path from JSON", ex);
+                }
+            }
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();

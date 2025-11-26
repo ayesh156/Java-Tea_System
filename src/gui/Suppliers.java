@@ -36,7 +36,6 @@ public class Suppliers extends javax.swing.JPanel {
 
     private static SuppliersService suppliersService;
 
-
     /**
      * Creates new form Suppliers
      */
@@ -114,7 +113,6 @@ public class Suppliers extends javax.swing.JPanel {
 
         jTextField2.setText("ටයිප් කරන්න...");
         jTextField2.setForeground(Color.GRAY);
-
 
     }
 
@@ -567,7 +565,6 @@ public class Suppliers extends javax.swing.JPanel {
 
     private void clear() {
 
-
     }
 
     private void customizeTableHeader(JTable table) {
@@ -638,8 +635,27 @@ public class Suppliers extends javax.swing.JPanel {
     }
 
     private void searchTable(String searchText) {
-
-        totalData = suppliersService.findCount(searchText);
+        // Reset to page 1 when user types new search
+        page = 1;
+        refreshTable();
+    }
+    
+    /**
+     * Helper method to refresh table based on current search state.
+     * Checks if search field has active search text and uses appropriate method.
+     */
+    private void refreshTable() {
+        String searchText = jTextField2.getText().trim();
+        boolean isSearching = !searchText.isEmpty() && !searchText.equals("ටයිප් කරන්න...");
+        
+        if (isSearching) {
+            // Use search method
+            totalData = suppliersService.findCount(searchText);
+        } else {
+            // Use normal count
+            totalData = suppliersService.count();
+        }
+        
         rowCountPerPage = Integer.valueOf(jComboBoxPage.getSelectedItem().toString());
         Double totalPageD = Math.ceil(totalData.doubleValue() / rowCountPerPage.doubleValue());
         totalPage = totalPageD.intValue();
@@ -660,19 +676,25 @@ public class Suppliers extends javax.swing.JPanel {
             jButtonNext.setEnabled(true);
         }
 
-        if (page > totalPage) {
+        if (page > totalPage && totalPage > 0) {
+            page = totalPage;
+        } else if (totalPage == 0) {
             page = 1;
         }
 
         suppliersTableModel = new SuppliersTableModel();
-        suppliersTableModel.setList(suppliersService.find(searchText, page, rowCountPerPage));
+        if (isSearching) {
+            suppliersTableModel.setList(suppliersService.find(searchText, page, rowCountPerPage));
+        } else {
+            suppliersTableModel.setList(suppliersService.findAll(page, rowCountPerPage));
+        }
         jTable.setModel(suppliersTableModel);
 
         jLabelStatusHalaman.setText("msgq " + page + " isg " + totalPage + " olajd");
         jLabelTotalData.setText(("uq¿ jd¾;d .Kk " + totalData));
         autoResizeColumn(jTable);
+        jTable.getColumnModel().getColumn(0).setPreferredWidth(20);
         jButtonNum.setText(page.toString());
-
     }
 
     private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained
@@ -702,13 +724,13 @@ public class Suppliers extends javax.swing.JPanel {
 
     private void jButtonFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFirstActionPerformed
         page = 1;
-        loadTable();
+        refreshTable();
     }//GEN-LAST:event_jButtonFirstActionPerformed
 
     private void jButtonPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPreviousActionPerformed
         if (page > 1) {
             page--;
-            loadTable();
+            refreshTable();
         }
     }//GEN-LAST:event_jButtonPreviousActionPerformed
 
@@ -719,14 +741,13 @@ public class Suppliers extends javax.swing.JPanel {
     private void jButtonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNextActionPerformed
         if (page < totalPage) {
             page++;
-            loadTable();
-            ;
+            refreshTable();
         }
     }//GEN-LAST:event_jButtonNextActionPerformed
 
     private void jButtonLastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLastActionPerformed
         page = totalPage;
-        loadTable();
+        refreshTable();
     }//GEN-LAST:event_jButtonLastActionPerformed
 
     private void jTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMouseClicked
@@ -739,10 +760,10 @@ public class Suppliers extends javax.swing.JPanel {
             String supplierNo = jTable.getValueAt(selectedRow, 0).toString();
 
             // Open AddSupplier dialog with the selected supplier's data
-            AddSupplier addSupplierDialog = AddSupplier.getInstance(supplierNo);
+            AddSupplier addSupplierDialog = new AddSupplier(supplierNo);
             addSupplierDialog.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_jTableMouseClicked
 
     private void setUpdateButton() {
@@ -760,7 +781,7 @@ public class Suppliers extends javax.swing.JPanel {
 
     private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_jButton15ActionPerformed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -810,17 +831,17 @@ public class Suppliers extends javax.swing.JPanel {
 
     private void jButton15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton15MouseClicked
         // TODO add your handling code here:
-         if (evt.getClickCount() == 2) {
-         int row = jTable.getSelectedRow();
+
+        int row = jTable.getSelectedRow();
 
         if (row != -1) { // If a row is selected
             jTable.clearSelection();
         }
 
         // Open the AddSupplier form for a new supplier
-        AddSupplier sf = AddSupplier.getInstance("");
+        AddSupplier sf = new AddSupplier("");
         sf.setVisible(true);
-         }
+
     }//GEN-LAST:event_jButton15MouseClicked
 
     private void autoResizeColumn(JTable jTable1) {

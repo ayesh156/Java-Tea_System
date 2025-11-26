@@ -19,6 +19,8 @@ import static gui.Home.logger;
 import javax.swing.*;
 
 import model.suppliers.Popups;
+import model.suppliers.SupplierArrearsModel;
+import model.suppliers.SupplierArrearsService;
 import model.transport.Transport;
 import model.transport.TransportService;
 
@@ -36,11 +38,10 @@ public class AddSupplier extends javax.swing.JDialog {
 
     private HashMap<Integer, SuppliersModel> suppliersMap = new HashMap<>(); //to keep all products
     private HashMap<String, Integer> suppliersDocMap = new HashMap<>(); //to keep product names with IDss
-    private static AddSupplier instance; // Static instance to ensure only one instance is created
     private String supplierNo; // Use instance variable instead of static
 
     // Constructor
-    private AddSupplier(String sNo) {
+    public AddSupplier(String sNo) {
         initComponents();
 
         supplierNo = sNo;
@@ -118,21 +119,7 @@ public class AddSupplier extends javax.swing.JDialog {
         jButton15.setBackground(new Color(57, 117, 104));
     }
 
-    // Method to get the single instance of AddSupplier
-    public static AddSupplier getInstance(String supplierNo) {
-        if (instance == null) {
-            instance = new AddSupplier(supplierNo);
-        } else {
-            if (supplierNo.isEmpty()) {
-                instance.newSupplier(); // Clear fields if `supplierNo` is empty
-            } else {
-                instance.loadSupplierData(supplierNo); // Load data if supplier number is provided
-            }
-            instance.toFront(); // Bring the existing instance to the front if it exists
-            instance.requestFocus();
-        }
-        return instance;
-    }
+    // Method removed - now using direct constructor calls for clean state each time
 
     // Method to clear all fields
     private void newSupplier() {
@@ -705,6 +692,25 @@ public class AddSupplier extends javax.swing.JDialog {
 
                                     // Call the save method in transportService
                                     supplierService.save(supplier);
+                                    
+                                    // Save arrears if user entered a value > 0
+                                    double arrearsValue = Double.parseDouble(arrears);
+                                    if (arrearsValue > 0) {
+                                        // Get current year and month
+                                        java.time.LocalDate today = java.time.LocalDate.now();
+                                        int currentYear = today.getYear();
+                                        int currentMonth = today.getMonthValue();
+                                        
+                                        // Save arrears for current month
+                                        SupplierArrearsService arrearsService = new SupplierArrearsService();
+                                        arrearsService.saveOrUpdateArrears(sNoInt, currentYear, currentMonth, arrearsValue);
+                                        
+                                        logger.log(Level.INFO, String.format(
+                                            "Saved arrears %.2f for new supplier %d (%d-%02d)",
+                                            arrearsValue, sNoInt, currentYear, currentMonth
+                                        ));
+                                    }
+                                    
                                     clear();
 
                                 }
@@ -734,6 +740,38 @@ public class AddSupplier extends javax.swing.JDialog {
                                 // Call the save method in transportService
                                 SuppliersService supplierService = new SuppliersService();
                                 supplierService.update(supplier);
+                                
+                                // Handle arrears update
+                                double arrearsValue = Double.parseDouble(arrears);
+                                SupplierArrearsService arrearsService = new SupplierArrearsService();
+                                SupplierArrearsModel latestArrears = arrearsService.getLatestArrears(supplierNoInt);
+                                
+                                if (latestArrears != null) {
+                                    // Update existing arrears record (last month)
+                                    arrearsService.saveOrUpdateArrears(
+                                        supplierNoInt,
+                                        latestArrears.getYear(),
+                                        latestArrears.getMonth(),
+                                        arrearsValue
+                                    );
+                                    
+                                    logger.log(Level.INFO, String.format(
+                                        "Updated arrears %.2f for supplier %d (%d-%02d)",
+                                        arrearsValue, supplierNoInt, latestArrears.getYear(), latestArrears.getMonth()
+                                    ));
+                                } else if (arrearsValue > 0) {
+                                    // No existing arrears, create new record for current month
+                                    java.time.LocalDate today = java.time.LocalDate.now();
+                                    int currentYear = today.getYear();
+                                    int currentMonth = today.getMonthValue();
+                                    
+                                    arrearsService.saveOrUpdateArrears(supplierNoInt, currentYear, currentMonth, arrearsValue);
+                                    
+                                    logger.log(Level.INFO, String.format(
+                                        "Created new arrears %.2f for supplier %d (%d-%02d)",
+                                        arrearsValue, supplierNoInt, currentYear, currentMonth
+                                    ));
+                                }
 
 
                             } catch (Exception e) {
@@ -777,8 +815,7 @@ public class AddSupplier extends javax.swing.JDialog {
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
         // TODO add your handling code here:
-        instance = null;
-        System.out.println(supplierNo);
+        // Refresh/reload the form data
         if (!supplierNo.isEmpty()) {
             loadSupplierData(supplierNo); // Load supplier data if `supplierNo` is provided
         } else {

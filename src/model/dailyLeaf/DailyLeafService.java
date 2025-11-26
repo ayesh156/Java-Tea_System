@@ -123,10 +123,27 @@ public class DailyLeafService {
         List<DailyLeafModel> listDailyLeaf = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
-            String sql = String.format(
-                    "SELECT * FROM daily_leaf WHERE supplier_name LIKE '%%%s%%' OR supplier_id LIKE '%%%s%%' OR date LIKE '%%%s%%' LIMIT %d, %d",
-                    searchText, searchText, searchText, offset, pageSize
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            // Check if searchText is a valid date format (YYYY-MM-DD)
+            boolean isDate = searchText.matches("\\d{4}-\\d{2}-\\d{2}");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT * FROM daily_leaf WHERE supplier_id = '%s' OR supplier_name LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, offset, pageSize
+                );
+            } else if (isDate) {
+                sql = String.format(
+                        "SELECT * FROM daily_leaf WHERE date = '%s' OR supplier_name LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, offset, pageSize
+                );
+            } else {
+                sql = String.format(
+                        "SELECT * FROM daily_leaf WHERE supplier_name LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, offset, pageSize
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             while (rs != null && rs.next()) {
@@ -150,10 +167,27 @@ public class DailyLeafService {
     public int findCount(String searchText) {
         int total = 0;
         try {
-            String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM daily_leaf WHERE supplier_name LIKE '%%%s%%' OR supplier_id LIKE '%%%s%%' OR date LIKE '%%%s%%'",
-                    searchText, searchText, searchText
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            // Check if searchText is a valid date format (YYYY-MM-DD)
+            boolean isDate = searchText.matches("\\d{4}-\\d{2}-\\d{2}");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM daily_leaf WHERE supplier_id = '%s' OR supplier_name LIKE '%%%s%%'",
+                        searchText, searchText
+                );
+            } else if (isDate) {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM daily_leaf WHERE date = '%s' OR supplier_name LIKE '%%%s%%'",
+                        searchText, searchText
+                );
+            } else {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM daily_leaf WHERE supplier_name LIKE '%%%s%%'",
+                        searchText
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             if (rs != null && rs.next()) {

@@ -172,10 +172,20 @@ public class TransportService {
         List<Transport> listTransport = new ArrayList<>();
         try {
             int offset = pageSize * (page - 1);
-            String sql = String.format(
-                    "SELECT * FROM transport WHERE road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%' LIMIT %d, %d",
-                    searchText, searchText, offset, pageSize
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT * FROM transport WHERE id = '%s' OR road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, searchText, offset, pageSize
+                );
+            } else {
+                sql = String.format(
+                        "SELECT * FROM transport WHERE road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%' LIMIT %d, %d",
+                        searchText, searchText, offset, pageSize
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             while (rs != null && rs.next()) {
@@ -214,10 +224,20 @@ public class TransportService {
     public int findCount(String searchText) {
         int total = 0;
         try {
-            String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM transport WHERE road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%'",
-                    searchText, searchText
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM transport WHERE id = '%s' OR road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%'",
+                        searchText, searchText, searchText
+                );
+            } else {
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM transport WHERE road_name LIKE '%%%s%%' OR transport_rate LIKE '%%%s%%'",
+                        searchText, searchText
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             if (rs != null && rs.next()) {

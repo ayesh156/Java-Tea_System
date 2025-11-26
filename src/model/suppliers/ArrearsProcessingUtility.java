@@ -139,6 +139,6 @@ public class ArrearsProcessingUtility {
     }
     
     private static void showStatus(MonthlyArrearsProcessor processor) {
-        System.out.println("\n" + processor.getProcessingStatus());
+        // System.out.println("\n" + processor.getProcessingStatus());
     }
 }

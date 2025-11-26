@@ -180,9 +180,10 @@ public class SuppliersService {
         try {
             int offset = pageSize * (page - 1);
             String sql = String.format(
-                    "SELECT * FROM suppliers s INNER JOIN transport t ON s.transport_id = t.id  " +
-                            "WHERE s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%' LIMIT %d, %d",
-                    searchText, searchText, searchText, offset, pageSize
+                    "SELECT s.* FROM suppliers s INNER JOIN transport t ON s.transport_id = t.id  " +
+                            "WHERE s.id = '%s' OR s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%' " +
+                            "ORDER BY s.id ASC LIMIT %d, %d",
+                    searchText, searchText, searchText, searchText, offset, pageSize
             );
             ResultSet rs = Mysql.execute(sql);
 
@@ -258,13 +259,26 @@ public class SuppliersService {
 
         // Use try-with-resources for ResultSet to ensure it is closed
         try {
-            // SQL query to fetch suppliers ordered by id ASC and apply pagination
-            String sql = String.format(
-                    "SELECT id, name, doc_rate, transport_id, last_modify FROM suppliers WHERE name LIKE '%%%s%%' ORDER BY id ASC LIMIT %d, %d",
-                    searchText,
-                    offset,
-                    pageSize
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                // Exact match for supplier ID
+                sql = String.format(
+                        "SELECT id, name, doc_rate, transport_id, last_modify FROM suppliers WHERE id = '%s' ORDER BY id ASC LIMIT %d, %d",
+                        searchText,
+                        offset,
+                        pageSize
+                );
+            } else {
+                // LIKE search for supplier name
+                sql = String.format(
+                        "SELECT id, name, doc_rate, transport_id, last_modify FROM suppliers WHERE name LIKE '%%%s%%' ORDER BY id ASC LIMIT %d, %d",
+                        searchText,
+                        offset,
+                        pageSize
+                );
+            }
 
             try (ResultSet rs = Mysql.execute(sql)) {  // Automatically closes ResultSet
                 while (rs != null && rs.next()) {
@@ -319,8 +333,8 @@ public class SuppliersService {
         try {
             String sql = String.format(
                     "SELECT COUNT(*) AS total FROM suppliers s INNER JOIN transport t ON s.transport_id = t.id  " +
-                            "WHERE s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%'",
-                    searchText, searchText, searchText
+                            "WHERE s.id = '%s' OR s.name LIKE '%%%s%%' OR s.address LIKE '%%%s%%' OR t.road_name LIKE '%%%s%%'",
+                    searchText, searchText, searchText, searchText
                     );
             ResultSet rs = Mysql.execute(sql);
 
@@ -513,10 +527,22 @@ public class SuppliersService {
     public int findCountName(String searchText) {
         int total = 0;
         try {
-            String sql = String.format(
-                    "SELECT COUNT(*) AS total FROM suppliers WHERE name LIKE '%%%s%%'",
-                    searchText
-            );
+            // Check if searchText is numeric for exact ID match
+            boolean isNumeric = searchText.matches("\\d+");
+            String sql;
+            if (isNumeric) {
+                // Exact match for supplier ID
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM suppliers WHERE id = '%s'",
+                        searchText
+                );
+            } else {
+                // LIKE search for supplier name
+                sql = String.format(
+                        "SELECT COUNT(*) AS total FROM suppliers WHERE name LIKE '%%%s%%'",
+                        searchText
+                );
+            }
             ResultSet rs = Mysql.execute(sql);
 
             if (rs != null && rs.next()) {

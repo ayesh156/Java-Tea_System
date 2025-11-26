@@ -52,7 +52,7 @@ public class MonthlyArrearsProcessor {
 
             // Check if arrears have already been saved for the previous month
             if (arrearsAlreadyProcessed(prevYear, prevMonth)) {
-                logger.log(Level.INFO, String.format(
+                logger.log(Level.FINE, String.format(
                     "Arrears for %d-%02d already processed. Skipping.",
                     prevYear, prevMonth
                 ));
@@ -61,7 +61,7 @@ public class MonthlyArrearsProcessor {
 
             // Check if we should process (on or after the 1st of current month)
             if (shouldProcessArrears(today, previousMonth)) {
-                logger.log(Level.INFO, String.format(
+                logger.log(Level.FINE, String.format(
                     "Processing arrears for %d-%02d...",
                     prevYear, prevMonth
                 ));
@@ -138,10 +138,8 @@ public class MonthlyArrearsProcessor {
                 "FROM suppliers s " +
                 "WHERE EXISTS (" +
                 "  SELECT 1 FROM daily_leaf dl " +
-                "  JOIN year y ON dl.year_id = y.id " +
-                "  JOIN month m ON dl.month_id = m.id " +
                 "  WHERE dl.supplier_id = s.id " +
-                "  AND y.year = %d AND m.id = %d" +
+                "  AND YEAR(dl.date) = %d AND MONTH(dl.date) = %d" +
                 ")",
                 year, month
             );
@@ -154,7 +152,7 @@ public class MonthlyArrearsProcessor {
             
             // If no suppliers have data for this month, don't process
             if (totalSuppliersWithData == 0) {
-                logger.log(Level.INFO, String.format(
+                logger.log(Level.FINE, String.format(
                     "No suppliers with data found for %d-%02d. Skipping.",
                     year, month
                 ));
@@ -178,7 +176,7 @@ public class MonthlyArrearsProcessor {
             boolean isComplete = arrearsRecordCount >= totalSuppliersWithData;
             
             if (arrearsRecordCount > 0) {
-                logger.log(Level.INFO, String.format(
+                logger.log(Level.FINE, String.format(
                     "Arrears status for %d-%02d: %d records exist, %d suppliers with data. %s",
                     year, month, arrearsRecordCount, totalSuppliersWithData,
                     isComplete ? "Processing complete." : "Incomplete - will reprocess."
@@ -264,7 +262,7 @@ public class MonthlyArrearsProcessor {
                 }
             }
 
-            logger.log(Level.INFO, String.format(
+            logger.log(Level.FINE, String.format(
                 "Arrears processing complete for %d-%02d: %d with arrears saved, %d with zero arrears skipped, %d errors",
                 year, month, processedCount, zeroArrearsSkipped, skippedCount
             ));

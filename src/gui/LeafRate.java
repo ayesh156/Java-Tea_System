@@ -1060,11 +1060,28 @@ public class LeafRate extends javax.swing.JPanel {
         String month = String.valueOf(jComboBox1.getSelectedItem());
         String rate = jTextField1.getText().trim();
 
-        if (yearString.equals("අවුරුද්ද") || yearString.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "wjqreoao f;darkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (month.equals("මාසය") || month.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "udih f;darkak", "Warning", JOptionPane.WARNING_MESSAGE);
-        } else if (rate.isEmpty()) {
+        // Apply default values if year or month not selected
+        boolean useDefaultYear = yearString.equals("අවුරුද්ද") || yearString.isEmpty();
+        boolean useDefaultMonth = month.equals("මාසය") || month.isEmpty();
+        
+        if (useDefaultYear) {
+            // Use current year as default
+            yearString = String.valueOf(java.time.Year.now().getValue());
+        }
+        
+        if (useDefaultMonth) {
+            // Use current month as default (1-12)
+            int currentMonth = java.time.LocalDate.now().getMonthValue();
+            
+            // Map month number to Sinhala month name based on jComboBox1 items
+            MonthService monthService = new MonthService();
+            List<MonthModal> monthList = monthService.findAll();
+            if (currentMonth >= 1 && currentMonth <= monthList.size()) {
+                month = monthList.get(currentMonth - 1).getMonth();
+            }
+        }
+        
+        if (rate.isEmpty()) {
             JOptionPane.showMessageDialog(this, "o¿ ñ< we;=,;a lrkak", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
