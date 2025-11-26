@@ -2,6 +2,8 @@ package model.leafBill;
 
 
 import model.Mysql;
+import model.suppliers.SupplierArrearsModel;
+import model.suppliers.SupplierArrearsService;
 import model.suppliers.SupplierDetails;
 import model.suppliers.SuppliersService;
 
@@ -21,6 +23,7 @@ import static gui.Home.logger;
 public class LeafBillService {
 
     SuppliersService suppliersService = new SuppliersService();
+    SupplierArrearsService arrearsService = new SupplierArrearsService();
 
 
     public List<LeafBillModel> findAll(int page, int pageSize) {
@@ -76,8 +79,6 @@ public class LeafBillService {
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
-            String arrears = supplierDetails.getArrears();
-            String lastArrears = supplierDetails.getLastArrears();
             Date lastModify = supplierDetails.getLastModify();
 
             SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -85,6 +86,10 @@ public class LeafBillService {
             // Initialize dateFormatter here
             String lastModifyString = dateFormatter.format(lastModify);
 
+            // Fetch arrears from supplier_arrears table for the previous month
+            int prevYear = Integer.parseInt(year);
+            int prevMonth = Integer.parseInt(month);
+            double previousMonthArrears = arrearsService.getPreviousMonthArrears(supplierId, prevYear, prevMonth);
 
             try {
                 int offset = pageSize * (page - 1);
@@ -243,18 +248,8 @@ public class LeafBillService {
                 double totalManureValue = Double.parseDouble(String.valueOf(totalManure));
                 double totalDolomiteValue = Double.parseDouble(String.valueOf(totalDolomite));
 
-                Double arrearsDouble = null;
-
-                try {
-                    arrearsDouble = Double.parseDouble(arrears);
-                    // Add 2.5% interest if the conversion is successful
-                    arrearsDouble += arrearsDouble * 0.025;
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    // Handle the case where the string is not a valid double, possibly assign a default value
-                    arrearsDouble = 0.0; // Default value if conversion fails
-                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
-                }
+                // Calculate arrears with 2.5% interest from previous month
+                double arrearsDouble = arrearsService.calculateArrearsWithInterest(previousMonthArrears);
 
                 // Sum the values
                 double totalDeductions = docRateValue + advancePriceValue + debitPriceValue +
@@ -271,39 +266,39 @@ public class LeafBillService {
                 // Calculate finalAmount as formattedTotalPrice - totalDeductions
                 double formattedTotalPriceValue = Double.parseDouble(formattedTotalPrice);
 
-
-                // Fetch supplier's current arrears from the suppliers table using supplierId
-                double supplierArrears = Double.parseDouble(arrears);
-
                 double finalAmount = formattedTotalPriceValue - totalDeductions;
 
                 boolean arrearsSetZero = false;
                 double newArrears = 0.0;
 
+                /**
+                 * ARREARS CALCULATION LOGIC:
+                 * 1. If finalAmount is negative: Supplier owes money (arrears)
+                 *    - newArrears = absolute value of finalAmount
+                 * 2. If finalAmount is positive and there were previous arrears:
+                 *    - Payment made, check if it covers all arrears
+                 *    - If payment >= arrears: Clear arrears (set to 0)
+                 *    - If payment < arrears: Reduce arrears by payment amount
+                 * 3. If finalAmount is positive and no arrears: No arrears needed
+                 */
                 if (finalAmount < 0) {
-                    // If finalAmount is negative, calculate new arrears as the absolute value of finalAmount
-
-                    // Update supplier arrears only if there is a meaningful change
+                    // Supplier owes money - new arrears
                     if (formattedTotalPriceValue != 0) {
-
-                    newArrears = Math.abs(finalAmount);
-//                   suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
-//                    System.out.println(supplierId + " newArrears " + newArrears);
-
+                        newArrears = Math.abs(finalAmount);
                     }
-
-                } else if (finalAmount > 0 && supplierArrears  > 0) {
-                        if (formattedTotalPriceValue != 0) {
-                            arrearsSetZero = true;
-//                            System.out.println(supplierId + " finalAmount > 0, arrearsSetZero is true.");
-                        }
-                }else if(formattedTotalPriceValue > supplierArrears && supplierArrears  > 0){
-                    if (formattedTotalPriceValue != 0) {
-
-                    arrearsSetZero = true;
-//                    System.out.println(supplierId + " arrearsSetZero true ");
+                } else if (finalAmount > 0 && previousMonthArrears > 0) {
+                    // Supplier is paying - check if payment covers arrears
+                    if (finalAmount >= previousMonthArrears) {
+                        // Payment covers all arrears
+                        arrearsSetZero = true;
+                        newArrears = 0.0;
+                    } else {
+                        // Partial payment - reduce arrears
+                        newArrears = previousMonthArrears - finalAmount;
                     }
-
+                } else {
+                    // No arrears situation
+                    newArrears = 0.0;
                 }
 
 
@@ -347,7 +342,7 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
-                p.setLastArrears(lastArrears);
+                p.setLastArrears(String.valueOf(previousMonthArrears));
                 p.setNewArrears(String.valueOf(newArrears));
                 p.setBillNumber(billNumber);
                 p.setLastModify(lastModifyString);
@@ -417,14 +412,17 @@ public class LeafBillService {
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
-            String arrears = supplierDetails.getArrears();
-            String lastArrears = supplierDetails.getLastArrears();
             Date lastModify = supplierDetails.getLastModify();
 
             SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
             // Initialize dateFormatter here
             String lastModifyString = dateFormatter.format(lastModify);
+
+            // Fetch arrears from supplier_arrears table for the previous month
+            int prevYear = Integer.parseInt(year);
+            int prevMonth = Integer.parseInt(month);
+            double previousMonthArrears = arrearsService.getPreviousMonthArrears(supplierId, prevYear, prevMonth);
 
             try {
                 int offset = pageSize * (page - 1);
@@ -583,18 +581,8 @@ public class LeafBillService {
                 double totalManureValue = Double.parseDouble(String.valueOf(totalManure));
                 double totalDolomiteValue = Double.parseDouble(String.valueOf(totalDolomite));
 
-                Double arrearsDouble = null;
-
-                try {
-                    arrearsDouble = Double.parseDouble(arrears);
-                    // Add 2.5% interest if the conversion is successful
-                    arrearsDouble += arrearsDouble * 0.025;
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    // Handle the case where the string is not a valid double, possibly assign a default value
-                    arrearsDouble = 0.0; // Default value if conversion fails
-                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
-                }
+                // Calculate arrears with 2.5% interest from previous month
+                double arrearsDouble = arrearsService.calculateArrearsWithInterest(previousMonthArrears);
 
                 // Sum the values
                 double totalDeductions = docRateValue + advancePriceValue + debitPriceValue +
@@ -611,39 +599,39 @@ public class LeafBillService {
                 // Calculate finalAmount as formattedTotalPrice - totalDeductions
                 double formattedTotalPriceValue = Double.parseDouble(formattedTotalPrice);
 
-
-                // Fetch supplier's current arrears from the suppliers table using supplierId
-                double supplierArrears = Double.parseDouble(arrears);
-
                 double finalAmount = formattedTotalPriceValue - totalDeductions;
 
                 boolean arrearsSetZero = false;
                 double newArrears = 0.0;
 
+                /**
+                 * ARREARS CALCULATION LOGIC:
+                 * 1. If finalAmount is negative: Supplier owes money (arrears)
+                 *    - newArrears = absolute value of finalAmount
+                 * 2. If finalAmount is positive and there were previous arrears:
+                 *    - Payment made, check if it covers all arrears
+                 *    - If payment >= arrears: Clear arrears (set to 0)
+                 *    - If payment < arrears: Reduce arrears by payment amount
+                 * 3. If finalAmount is positive and no arrears: No arrears needed
+                 */
                 if (finalAmount < 0) {
-                    // If finalAmount is negative, calculate new arrears as the absolute value of finalAmount
-
-                    // Update supplier arrears only if there is a meaningful change
+                    // Supplier owes money - new arrears
                     if (formattedTotalPriceValue != 0) {
-
                         newArrears = Math.abs(finalAmount);
-//                   suppliersService.updateSupplierArrears(supplierId, String.valueOf(newArrears));
-//                    System.out.println(supplierId + " newArrears " + newArrears);
-
                     }
-
-                } else if (finalAmount > 0 && supplierArrears  > 0) {
-                    if (formattedTotalPriceValue != 0) {
+                } else if (finalAmount > 0 && previousMonthArrears > 0) {
+                    // Supplier is paying - check if payment covers arrears
+                    if (finalAmount >= previousMonthArrears) {
+                        // Payment covers all arrears
                         arrearsSetZero = true;
-//                            System.out.println(supplierId + " finalAmount > 0, arrearsSetZero is true.");
+                        newArrears = 0.0;
+                    } else {
+                        // Partial payment - reduce arrears
+                        newArrears = previousMonthArrears - finalAmount;
                     }
-                }else if(formattedTotalPriceValue > supplierArrears && supplierArrears  > 0){
-                    if (formattedTotalPriceValue != 0) {
-
-                        arrearsSetZero = true;
-//                    System.out.println(supplierId + " arrearsSetZero true ");
-                    }
-
+                } else {
+                    // No arrears situation
+                    newArrears = 0.0;
                 }
 
 
@@ -687,7 +675,7 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
-                p.setLastArrears(lastArrears);
+                p.setLastArrears(String.valueOf(previousMonthArrears));
                 p.setNewArrears(String.valueOf(newArrears));
                 p.setBillNumber(billNumber);
                 p.setLastModify(lastModifyString);
@@ -781,14 +769,15 @@ public class LeafBillService {
             String supplierName = supplierDetails.getName(); // Get supplier name
             String transportRate = supplierDetails.getTransportRate();
             String docRate = supplierDetails.getDocRate(); // Get doc_rate
-            String lastArrears = supplierDetails.getLastArrears();
-            String arrears = supplierDetails.getArrears();
             Date lastModify = supplierDetails.getLastModify();
 
             SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
             // Initialize dateFormatter here
             String lastModifyString = dateFormatter.format(lastModify);
+
+            // Fetch arrears from supplier_arrears table for the specified month
+            double previousMonthArrears = arrearsService.getPreviousMonthArrears(supplierId, parsedYear, parsedMonth);
 
             try {
                 int offset = pageSize * (page - 1);
@@ -947,18 +936,8 @@ public class LeafBillService {
                 double totalManureValue = Double.parseDouble(String.valueOf(totalManure));
                 double totalDolomiteValue = Double.parseDouble(String.valueOf(totalDolomite));
 
-                Double arrearsDouble = null;
-
-                try {
-                    arrearsDouble = Double.parseDouble(arrears);
-                    // Add 2.5% interest if the conversion is successful
-                    arrearsDouble += arrearsDouble * 0.025;
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    // Handle the case where the string is not a valid double, possibly assign a default value
-                    arrearsDouble = 0.0; // Default value if conversion fails
-                    logger.log(Level.WARNING, "Leaf_Bill_Service", e);
-                }
+                // Calculate arrears with 2.5% interest from previous month
+                double arrearsDouble = arrearsService.calculateArrearsWithInterest(previousMonthArrears);
 
                 // Sum the values
                 double totalDeductions = docRateValue + advancePriceValue + debitPriceValue +
@@ -975,7 +954,6 @@ public class LeafBillService {
                 // Calculate finalAmount as formattedTotalPrice - totalDeductions
                 double formattedTotalPriceValue = Double.parseDouble(formattedTotalPrice);
 
-
                 double finalAmount = formattedTotalPriceValue - totalDeductions;
 
                 boolean arrearsSetZero = false;
@@ -988,6 +966,9 @@ public class LeafBillService {
                     formattedFinalAmount = df.format(finalAmount);
                 }
 
+                // For historical view: fetch the actual stored arrears for this month
+                SupplierArrearsModel storedArrears = arrearsService.getArrearsByMonth(supplierId, parsedYear, parsedMonth);
+                double displayArrears = (storedArrears != null) ? storedArrears.getArrears() : 0.0;
 
                 String billNumber = generateBillNumber(supplierId, year, month);
 
@@ -1013,8 +994,8 @@ public class LeafBillService {
                 p.setTotalDeductions(String.valueOf(formattedTotalDeductionse));
                 p.setFinalAmount(formattedFinalAmount);
                 p.setArrearsSetZero(arrearsSetZero);
-                p.setLastArrears(lastArrears);
-                p.setNewArrears(String.valueOf(arrears));
+                p.setLastArrears(String.valueOf(previousMonthArrears));
+                p.setNewArrears(String.valueOf(displayArrears));
                 p.setBillNumber(billNumber);
                 p.setLastModify(lastModifyString);
 

@@ -26,8 +26,8 @@ public class SuppliersService {
             // If transport ID is found, update the supplier
             if (transportId != -1) {
                 String sql = String.format(
-                        "UPDATE suppliers SET name = '%s', address = '%s', doc_rate = '%s', arrears = '%s', transport_id = %d WHERE id = '%s'",
-                        supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), supplier.getArrears(),transportId, supplier.getId()
+                        "UPDATE suppliers SET name = '%s', address = '%s', doc_rate = '%s', transport_id = %d WHERE id = '%s'",
+                        supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId, supplier.getId()
                 );
 
                 Mysql.execute(sql); // Execute the update query
@@ -70,8 +70,8 @@ public class SuppliersService {
             // If transport ID is found, save the supplier
             if (transportId != -1) {
                 String sql = String.format(
-                        "INSERT INTO suppliers (id,name, address, doc_rate, new_arrears, arrears, transport_id, last_modify) VALUES ('%s', '%s', '%s', '%s', '0', '0', %d, '2020-01-30')",
-                        supplier.getId() ,supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId
+                        "INSERT INTO suppliers (id, name, address, doc_rate, transport_id, last_modify) VALUES ('%s', '%s', '%s', '%s', %d, '2020-01-30')",
+                        supplier.getId(), supplier.getName(), supplier.getAddress(), supplier.getDoc_rate(), transportId
                 );
 
                 Mysql.execute(sql); // Execute the insert query
@@ -217,7 +217,7 @@ public class SuppliersService {
         try {
             // SQL query to fetch suppliers ordered by id ASC and apply pagination
             String sql = String.format(
-                    "SELECT id, name, doc_rate, transport_id, new_arrears, arrears, last_modify FROM suppliers ORDER BY id ASC LIMIT %d, %d",
+                    "SELECT id, name, doc_rate, transport_id, last_modify FROM suppliers ORDER BY id ASC LIMIT %d, %d",
                     offset,
                     pageSize
             );
@@ -228,8 +228,6 @@ public class SuppliersService {
                     String supplierName = rs.getString("name");
                     String docRate = rs.getString("doc_rate");
                     int transportId = rs.getInt("transport_id"); // Fetch transport_id
-                    String lastArrears = rs.getString("new_arrears");
-                    String arrears = rs.getString("arrears");
                     Date lastModify = rs.getDate("last_modify");
 
                     // Fetch transport data using transport_id
@@ -237,7 +235,8 @@ public class SuppliersService {
                     String transportRate = (transport != null) ? transport.getTransport_rate() : null;
 
                     // Create SupplierDetails instance with name, docRate, and transportRate
-                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, lastArrears,arrears, lastModify);
+                    // Note: arrears are now fetched from supplier_arrears table when needed
+                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, "0", "0", lastModify);
                     suppliersMap.put(supplierId, supplierDetails);
                 }
             }
@@ -261,7 +260,7 @@ public class SuppliersService {
         try {
             // SQL query to fetch suppliers ordered by id ASC and apply pagination
             String sql = String.format(
-                    "SELECT id, name, doc_rate, transport_id, new_arrears, arrears, last_modify FROM suppliers WHERE name LIKE '%%%s%%' ORDER BY id ASC LIMIT %d, %d",
+                    "SELECT id, name, doc_rate, transport_id, last_modify FROM suppliers WHERE name LIKE '%%%s%%' ORDER BY id ASC LIMIT %d, %d",
                     searchText,
                     offset,
                     pageSize
@@ -273,8 +272,6 @@ public class SuppliersService {
                     String supplierName = rs.getString("name");
                     String docRate = rs.getString("doc_rate");
                     int transportId = rs.getInt("transport_id"); // Fetch transport_id
-                    String lastArrears = rs.getString("new_arrears");
-                    String arrears = rs.getString("arrears");
                     Date lastModify = rs.getDate("last_modify");
 
                     // Fetch transport data using transport_id
@@ -282,7 +279,8 @@ public class SuppliersService {
                     String transportRate = (transport != null) ? transport.getTransport_rate() : null;
 
                     // Create SupplierDetails instance with name, docRate, and transportRate
-                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, lastArrears, arrears, lastModify);
+                    // Note: arrears are now fetched from supplier_arrears table when needed
+                    SupplierDetails supplierDetails = new SupplierDetails(supplierName, docRate, transportRate, "0", "0", lastModify);
                     suppliersMap.put(supplierId, supplierDetails);
                 }
             }
@@ -444,36 +442,21 @@ public class SuppliersService {
         return total;
     }
 
+    /**
+     * These methods are deprecated and replaced by SupplierArrearsService.
+     * Arrears are now stored in the supplier_arrears table.
+     * Use SupplierArrearsService.saveOrUpdateArrears() instead.
+     */
+    @Deprecated
     public void updateSupplierNewArrears(int supplierId, String newArrears) {
-        try {
-            // SQL query to update arrears for the supplier using supplierId
-            String sql = String.format(
-                    "UPDATE suppliers SET new_arrears = '%s' WHERE id = '%s'",
-                    newArrears,
-                    supplierId
-            );
-            Mysql.execute(sql);  // Assuming executeUpdate() for running update queries
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.log(Level.WARNING, "Suppliers_Service", ex);
-        }
+        // This method is deprecated - use SupplierArrearsService instead
+        logger.log(Level.WARNING, "updateSupplierNewArrears is deprecated. Use SupplierArrearsService.saveOrUpdateArrears()");
     }
 
+    @Deprecated
     public void updateSupplierArrears(int supplierId, String newArrears) {
-        try {
-            // SQL query to update arrears for the supplier using supplierId
-            String sql = String.format(
-                    "UPDATE suppliers SET arrears = '%s' WHERE id = '%s'",
-                    newArrears,
-                    supplierId
-            );
-            Mysql.execute(sql);  // Assuming executeUpdate() for running update queries
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.log(Level.WARNING, "Suppliers_Service", ex);
-        }
+        // This method is deprecated - use SupplierArrearsService instead
+        logger.log(Level.WARNING, "updateSupplierArrears is deprecated. Use SupplierArrearsService.saveOrUpdateArrears()");
     }
 
 
@@ -494,7 +477,8 @@ public class SuppliersService {
                 supplier.setAddress(rs.getString("address"));
                 supplier.setTransport_id(rs.getInt("transport_id"));
                 supplier.setDoc_rate(rs.getString("doc_rate"));
-                supplier.setArrears(rs.getString("arrears"));
+                // Note: arrears are now in supplier_arrears table
+                // Use SupplierArrearsService.getLatestArrears() to fetch arrears
 
                 // Fetch transport data using transport_id
                 Transport transport = transportService.getTransportById(supplier.getTransport_id());

@@ -23,7 +23,8 @@ public class SuppliersModel {
 
     private String road_name;
     private String transport_rate;
-    private String arrears;
+    // Note: arrears field removed - arrears data is now stored in supplier_arrears table
+    // Use SupplierArrearsService to fetch arrears data
 
     public int getId() {
         return id;
@@ -81,13 +82,9 @@ public class SuppliersModel {
         this.transport_rate = transport_rate;
     }
 
-    public String getArrears() {
-        return arrears;
-    }
-
-    public void setArrears(String arrears) {
-        this.arrears = arrears;
-    }
+    // Note: getArrears() and setArrears() removed
+    // Arrears data is now in supplier_arrears table
+    // Use: SupplierArrearsService.getLatestArrears(supplierId) to fetch current arrears
 
     @Override
     public String toString() {
@@ -99,7 +96,7 @@ public class SuppliersModel {
                 ", transport_id=" + transport_id +
                 ", road_name='" + road_name + '\'' +
                 ", transport_rate='" + transport_rate + '\'' +
-                ", arrears='" + arrears + '\'' +
+                // arrears field removed - fetch from supplier_arrears table
                 '}';
     }
 }

@@ -30,6 +30,7 @@ import model.month.MonthService;
 import model.SupNameIdPopups;
 import model.suppliers.SuppliersModel;
 import model.suppliers.SuppliersService;
+import model.suppliers.MonthlyArrearsProcessor;
 import model.year.YearModal;
 import model.year.YearService;
 
@@ -146,10 +147,59 @@ public class LeafBill extends javax.swing.JPanel {
 
         loadYearsCombobox();
         loadMonthsCombobox();
+
+        // Automatically check and process monthly arrears on startup
+        try {
+            MonthlyArrearsProcessor arrearsProcessor = new MonthlyArrearsProcessor();
+            boolean processed = arrearsProcessor.checkAndProcessMonthlyArrears();
+            if (processed) {
+                logger.log(Level.INFO, "Monthly arrears processed successfully on startup");
+            } else {
+                logger.log(Level.INFO, "No monthly arrears processing needed (already processed or not yet time)");
+            }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error processing monthly arrears on startup", e);
+            e.printStackTrace();
+        }
     }
 
     public JButton getJButton19() {
         return jButton19;
+    }
+
+    /**
+     * Check if leaf rate exists for the previous month.
+     * This prevents arrears calculation when leaf rate is not set.
+     * 
+     * @return true if leaf rate exists, false otherwise
+     */
+    private boolean hasLeafRateForPreviousMonth() {
+        try {
+            // Get current date to determine previous month
+            LocalDate today = LocalDate.now();
+            LocalDate previousMonth = today.minusMonths(1);
+            int prevYear = previousMonth.getYear();
+            int prevMonthNum = previousMonth.getMonthValue();
+
+            // Query to check if leaf_rate exists for previous month
+            String sql = String.format(
+                "SELECT COUNT(*) as count FROM leaf_rate lr " +
+                "JOIN year y ON lr.year_id = y.id " +
+                "JOIN month m ON lr.month_id = m.id " +
+                "WHERE y.year = %d AND m.id = %d",
+                prevYear, prevMonthNum
+            );
+
+            java.sql.ResultSet rs = model.Mysql.execute(sql);
+            if (rs != null && rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0;
+            }
+            return false;
+        } catch (Exception ex) {
+            logger.log(Level.WARNING, "Error checking leaf rate existence", ex);
+            return false; // Assume no leaf rate on error
+        }
     }
 
     private void loadMonthsCombobox() {
@@ -234,7 +284,6 @@ public class LeafBill extends javax.swing.JPanel {
         jButton20 = new javax.swing.JButton();
         jPanel51 = new javax.swing.JPanel();
         jPanel53 = new javax.swing.JPanel();
-        jButton21 = new javax.swing.JButton();
         jPanel21 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -540,25 +589,6 @@ public class LeafBill extends javax.swing.JPanel {
         jPanel53.setMinimumSize(new java.awt.Dimension(460, 52));
         jPanel53.setPreferredSize(new java.awt.Dimension(460, 52));
         jPanel53.setLayout(new java.awt.BorderLayout(15, 0));
-
-        jButton21.setBackground(new java.awt.Color(192, 57, 43));
-        jButton21.setFont(new java.awt.Font("FMMalithi", 0, 22)); // NOI18N
-        jButton21.setForeground(new java.awt.Color(255, 255, 255));
-        jButton21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/print.png"))); // NOI18N
-        jButton21.setIconTextGap(8);
-        jButton21.setLabel("ysÕ uqo,a");
-        jButton21.setMargin(new java.awt.Insets(2, 9, 2, 9));
-        jButton21.setMaximumSize(new java.awt.Dimension(220, 52));
-        jButton21.setMinimumSize(new java.awt.Dimension(220, 52));
-        jButton21.setOpaque(true);
-        jButton21.setPreferredSize(new java.awt.Dimension(220, 52));
-        jButton21.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton21ActionPerformed(evt);
-            }
-        });
-        jPanel53.add(jButton21, java.awt.BorderLayout.LINE_END);
-
         jPanel51.add(jPanel53, java.awt.BorderLayout.LINE_END);
 
         jPanel46.add(jPanel51, java.awt.BorderLayout.PAGE_START);
@@ -1109,8 +1139,17 @@ public class LeafBill extends javax.swing.JPanel {
         leafBillTableModel.setList(leafBillList);
         jTable.setModel(leafBillTableModel);
 
-        // Disable or enable jButton21 based on the check
-        jButton21.setEnabled(!disableArrearsButton);
+        // Check if leaf rate exists for previous month
+        boolean hasLeafRate = hasLeafRateForPreviousMonth();
+
+        // Disable jButton19 (print button) if no leaf rate
+        // This prevents printing incomplete bills without proper rates
+        jButton19.setEnabled(hasLeafRate);
+
+        // Log warning if leaf rate is missing
+        if (!hasLeafRate) {
+            logger.log(Level.WARNING, "Leaf rate not found for previous month. Arrears processing disabled.");
+        }
 
         // Set the same width for all columns
         setSameColumnWidth(jTable, 200);  // Set all columns to a width of 100 pixels
@@ -1656,11 +1695,11 @@ public class LeafBill extends javax.swing.JPanel {
                     .toString();
 
             //            WE CAN USE ONLY NEDBEANS IDE
-        //    String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
+           String url = userDirectory + "\\src\\reports\\new_invoice_report.jasper";
             //             WE CAN USE AFTER BUILD
-            String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
+            // String newpath = userDirectory.substring(0, userDirectory.lastIndexOf("\\"));
 
-            String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
+            // String url = newpath + "\\src\\reports\\new_invoice_report.jasper";
 
             // Create a Map to store parameters
             Map<String, Object> parameters = new HashMap<>();
@@ -1725,52 +1764,6 @@ public class LeafBill extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTextField4ActionPerformed
 
-    private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton21ActionPerformed
-        // Update arrears for every supplier in the table manually with a single confirmation
-        int lastPriceCol = 16; // <-- Change this to your actual arrears column index
-        int supplierIdCol = 0;
-        int rowCount = jTable.getRowCount();
-
-        if (rowCount == 0) {
-            JOptionPane.showMessageDialog(this, "hdj;ald,Sk lsÍug iemhqïlrejka ke;'", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "j.=fõ we;s ish¨‍u iemhqïlrejka i|yd ysÕ uqo,a hdj;ald,Sk lrkako@",
-                "Confirm",
-                JOptionPane.YES_NO_OPTION
-        );
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        // Use previous month's last date instead of current date
-        String now = lastDayOfPreviousMonth();
-
-        for (int i = 0; i < rowCount; i++) {
-            int supplierId = Integer.parseInt(jTable.getValueAt(i, supplierIdCol).toString());
-            String currentArrears = jTable.getValueAt(i, lastPriceCol).toString();
-
-            try {
-                double arrearsValue = Double.parseDouble(currentArrears); // Validate input is a number
-                if (arrearsValue < 0) {
-                    // If negative, update arrears with the positive value
-                    suppliersService.updateSupplierArrears(supplierId, String.valueOf(Math.abs(arrearsValue)));
-                } else {
-                    // If positive or zero, update arrears as 0
-                    suppliersService.updateSupplierArrears(supplierId, "0");
-                }
-                suppliersService.updateLastModify(supplierId, now); // Update last_modify with previous month's last date
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid number format for Supplier ID " + supplierId, "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        loadTable();
-        JOptionPane.showMessageDialog(this, "ish¨‍u iemhqïlrejka i|yd ysÕ uqo,a hdj;ald,Sk lrk ,§'", "Success", JOptionPane.INFORMATION_MESSAGE);
-    }//GEN-LAST:event_jButton21ActionPerformed
-
     private void autoResizeColumn(JTable jTable1) {
 
         JTableHeader header = jTable1.getTableHeader();
@@ -1803,7 +1796,6 @@ public class LeafBill extends javax.swing.JPanel {
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButtonFirst;
     private javax.swing.JButton jButtonLast;
     private javax.swing.JButton jButtonNext;

@@ -162,7 +162,20 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField5.setText(s.getRoad_name());
         jTextField7.setText(s.getTransport_rate());
         jTextField8.setText(s.getDoc_rate());
-        jTextField9.setText(s.getArrears());
+        
+        // Fetch current arrears from supplier_arrears table
+        try {
+            model.suppliers.SupplierArrearsService arrearsService = new model.suppliers.SupplierArrearsService();
+            model.suppliers.SupplierArrearsModel latestArrears = arrearsService.getLatestArrears(s.getId());
+            if (latestArrears != null) {
+                jTextField9.setText(String.valueOf(latestArrears.getArrears()));
+            } else {
+                jTextField9.setText("0");
+            }
+        } catch (Exception ex) {
+            jTextField9.setText("0");
+            logger.log(java.util.logging.Level.WARNING, "Error fetching arrears for supplier", ex);
+        }
 
         jLabel15.setText("iemhqïlrejka fjkia lsÍu");
     }
@@ -711,7 +724,8 @@ public class AddSupplier extends javax.swing.JDialog {
                                 SuppliersModel supplier = new SuppliersModel();
                                 supplier.setId(supplierNoInt);
                                 supplier.setName(supplierName);
-                                supplier.setArrears(arrears);
+                                // Note: arrears removed - stored in supplier_arrears table
+                                // Arrears are managed separately via SupplierArrearsService
                                 supplier.setAddress(supplierAddress);
                                 supplier.setRoad_name(rodeName);
                                 supplier.setTransport_rate(transportRate);

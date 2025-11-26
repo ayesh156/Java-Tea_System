@@ -1,0 +1,592 @@
+Nov 26, 2025 11:26:52 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 11:26:55 AM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 142 processed, 0 skipped
+Nov 26, 2025 11:26:55 AM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 26, 2025 11:28:18 AM model.leaf.LeafService save
+WARNING: Leaf_Service
+java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`tea_system`.`leaf_rate`, CONSTRAINT `fk_leaf_rate_month` FOREIGN KEY (`month_id`) REFERENCES `tea_system2`.`month` (`id`))
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:117)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeUpdateInternal(StatementImpl.java:1333)
+	at com.mysql.cj.jdbc.StatementImpl.executeLargeUpdate(StatementImpl.java:2106)
+	at com.mysql.cj.jdbc.StatementImpl.executeUpdate(StatementImpl.java:1243)
+	at model.Mysql.execute(Mysql.java:57)
+	at model.leaf.LeafService.save(LeafService.java:89)
+	at gui.LeafRate.jButton15ActionPerformed(LeafRate.java:1097)
+	at gui.LeafRate$3.actionPerformed(LeafRate.java:348)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 26, 2025 11:31:23 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 11:31:25 AM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 142 processed, 0 skipped
+Nov 26, 2025 11:31:25 AM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 26, 2025 11:39:34 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 11:39:35 AM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 2 with arrears saved, 140 with zero arrears skipped, 0 errors
+Nov 26, 2025 11:39:35 AM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Dec 02, 2025 11:41:50 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-11...
+Dec 02, 2025 11:41:51 AM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-11: 0 with arrears saved, 0 with zero arrears skipped, 0 errors
+Dec 02, 2025 11:41:51 AM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Dec 01, 2025 11:54:45 AM gui.LeafBill loadTable
+WARNING: Leaf rate not found for previous month. Arrears processing disabled.
+Dec 01, 2025 11:54:45 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+WARNING: Leaf rate not found for 2025-11. Cannot process arrears without leaf rate. Skipping.
+Dec 01, 2025 11:54:45 AM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Dec 01, 2025 11:55:44 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-11...
+Dec 01, 2025 11:55:44 AM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-11: 2 with arrears saved, 2 with zero arrears skipped, 0 errors
+Dec 01, 2025 11:55:44 AM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Dec 01, 2025 11:56:24 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-11 already processed. Skipping.
+Dec 01, 2025 11:56:24 AM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 11:57:42 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 11:57:42 AM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 11:58:45 AM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 11:58:45 AM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:00:26 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:00:26 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:15:40 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:15:40 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:16:59 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:16:59 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:18:45 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:18:45 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:18:58 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:18:58 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:19:44 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:19:44 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:22:26 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:22:26 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:22:43 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:22:43 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:23:31 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:23:31 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:24:46 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:24:46 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:26:11 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:26:11 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:26:34 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:26:34 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Oct 01, 2025 12:27:23 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-09 already processed. Skipping.
+Oct 01, 2025 12:27:23 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 01, 2025 12:28:01 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-10 already processed. Skipping.
+Nov 01, 2025 12:28:01 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Sep 01, 2025 12:30:08 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-08 already processed. Skipping.
+Sep 01, 2025 12:30:08 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Sep 01, 2025 12:30:53 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Arrears for 2025-08 already processed. Skipping.
+Sep 01, 2025 12:30:53 PM gui.LeafBill <init>
+INFO: No monthly arrears processing needed (already processed or not yet time)
+Nov 26, 2025 12:41:06 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 26, 2025 12:41:06 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 12:41:07 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 11 with arrears saved, 119 with zero arrears skipped, 0 errors
+Nov 26, 2025 12:41:07 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Sep 01, 2025 12:41:30 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Sep 01, 2025 12:41:30 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-08...
+Sep 01, 2025 12:41:31 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-08: 2 with arrears saved, 0 with zero arrears skipped, 0 errors
+Sep 01, 2025 12:41:31 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Oct 01, 2025 12:42:14 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Oct 01, 2025 12:42:14 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-09...
+Oct 01, 2025 12:42:14 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-09: 0 with arrears saved, 4 with zero arrears skipped, 0 errors
+Oct 01, 2025 12:42:14 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Oct 01, 2025 12:43:07 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Oct 01, 2025 12:43:07 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-09...
+Oct 01, 2025 12:43:08 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-09: 2 with arrears saved, 2 with zero arrears skipped, 0 errors
+Oct 01, 2025 12:43:08 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 01, 2025 12:43:46 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 01, 2025 12:43:46 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 01, 2025 12:43:46 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 11 with arrears saved, 119 with zero arrears skipped, 0 errors
+Nov 01, 2025 12:43:46 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 26, 2025 1:05:50 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 26, 2025 1:05:50 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 1:05:51 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 11 with arrears saved, 119 with zero arrears skipped, 0 errors
+Nov 26, 2025 1:05:51 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 26, 2025 1:19:52 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 26, 2025 1:19:52 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 1:19:53 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 11 with arrears saved, 119 with zero arrears skipped, 0 errors
+Nov 26, 2025 1:19:53 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
+Nov 26, 2025 1:21:30 PM model.suppliers.MonthlyArrearsProcessor arrearsAlreadyProcessed
+WARNING: Error checking if arrears processed
+java.sql.SQLSyntaxErrorException: Unknown column 'dl.month_id' in 'on clause'
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
+	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
+	at com.mysql.cj.jdbc.StatementImpl.executeQuery(StatementImpl.java:1198)
+	at model.Mysql.execute(Mysql.java:54)
+	at model.suppliers.MonthlyArrearsProcessor.arrearsAlreadyProcessed(MonthlyArrearsProcessor.java:149)
+	at model.suppliers.MonthlyArrearsProcessor.checkAndProcessMonthlyArrears(MonthlyArrearsProcessor.java:54)
+	at gui.LeafBill.<init>(LeafBill.java:154)
+	at gui.Home.jButton10ActionPerformed(Home.java:1560)
+	at gui.Home$22.actionPerformed(Home.java:909)
+	at java.desktop/javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1967)
+	at java.desktop/javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2308)
+	at java.desktop/javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:405)
+	at java.desktop/javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:262)
+	at java.desktop/javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:279)
+	at java.desktop/java.awt.Component.processMouseEvent(Component.java:6635)
+	at java.desktop/javax.swing.JComponent.processMouseEvent(JComponent.java:3342)
+	at java.desktop/java.awt.Component.processEvent(Component.java:6400)
+	at java.desktop/java.awt.Container.processEvent(Container.java:2263)
+	at java.desktop/java.awt.Component.dispatchEventImpl(Component.java:5011)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2321)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4918)
+	at java.desktop/java.awt.LightweightDispatcher.processMouseEvent(Container.java:4547)
+	at java.desktop/java.awt.LightweightDispatcher.dispatchEvent(Container.java:4488)
+	at java.desktop/java.awt.Container.dispatchEventImpl(Container.java:2307)
+	at java.desktop/java.awt.Window.dispatchEventImpl(Window.java:2772)
+	at java.desktop/java.awt.Component.dispatchEvent(Component.java:4843)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:772)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:715)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:95)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:745)
+	at java.desktop/java.awt.EventQueue$5.run(EventQueue.java:743)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:742)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+
+Nov 26, 2025 1:21:30 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+INFO: Processing arrears for 2025-10...
+Nov 26, 2025 1:21:30 PM model.suppliers.MonthlyArrearsProcessor processArrearsForMonth
+INFO: Arrears processing complete for 2025-10: 11 with arrears saved, 119 with zero arrears skipped, 0 errors
+Nov 26, 2025 1:21:30 PM gui.LeafBill <init>
+INFO: Monthly arrears processed successfully on startup
