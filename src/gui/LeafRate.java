@@ -1061,23 +1061,32 @@ public class LeafRate extends javax.swing.JPanel {
         String rate = jTextField1.getText().trim();
 
         // Apply default values if year or month not selected
+        // Default to PREVIOUS month, not current month
         boolean useDefaultYear = yearString.equals("අවුරුද්ද") || yearString.isEmpty();
         boolean useDefaultMonth = month.equals("මාසය") || month.isEmpty();
         
+        // Calculate previous month and year
+        java.time.LocalDate today = java.time.LocalDate.now();
+        int prevMonth = today.getMonthValue() - 1;
+        int prevYear = today.getYear();
+        
+        if (prevMonth < 1) {
+            prevMonth = 12;
+            prevYear = today.getYear() - 1;
+        }
+        
         if (useDefaultYear) {
-            // Use current year as default
-            yearString = String.valueOf(java.time.Year.now().getValue());
+            // Use previous month's year as default
+            yearString = String.valueOf(prevYear);
         }
         
         if (useDefaultMonth) {
-            // Use current month as default (1-12)
-            int currentMonth = java.time.LocalDate.now().getMonthValue();
-            
+            // Use previous month as default (1-12)
             // Map month number to Sinhala month name based on jComboBox1 items
             MonthService monthService = new MonthService();
             List<MonthModal> monthList = monthService.findAll();
-            if (currentMonth >= 1 && currentMonth <= monthList.size()) {
-                month = monthList.get(currentMonth - 1).getMonth();
+            if (prevMonth >= 1 && prevMonth <= monthList.size()) {
+                month = monthList.get(prevMonth - 1).getMonth();
             }
         }
         

@@ -3478,3 +3478,21 @@ java.sql.SQLException: Incorrect DATE value: '2'
 	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
 	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
 
+Nov 29, 2025 9:16:21 PM gui.LeafBill loadTable
+WARNING: Leaf rate not found for previous month. Arrears processing disabled.
+Nov 29, 2025 9:16:21 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+WARNING: Leaf rate not found for 2025-10. Cannot process arrears without leaf rate. Skipping.
+Nov 29, 2025 9:17:04 PM gui.LeafBill loadTable
+WARNING: Leaf rate not found for previous month. Arrears processing disabled.
+Nov 29, 2025 9:17:04 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+WARNING: Leaf rate not found for 2025-10. Cannot process arrears without leaf rate. Skipping.
+Nov 29, 2025 9:19:29 PM gui.LeafBill loadTable
+WARNING: Leaf rate not found for previous month. Arrears processing disabled.
+Nov 29, 2025 9:19:29 PM model.suppliers.MonthlyArrearsProcessor checkAndProcessMonthlyArrears
+WARNING: Leaf rate not found for 2025-10. Cannot process arrears without leaf rate. Skipping.
+Nov 29, 2025 9:24:23 PM gui.AddSupplier jButton15ActionPerformed
+INFO: Updated arrears 780.00 for supplier 11 for previous month (2025-10)
+Dec 02, 2025 9:25:45 PM gui.AddSupplier jButton15ActionPerformed
+INFO: Updated arrears 800.00 for supplier 11 for previous month (2025-11)
+Nov 29, 2025 9:29:20 PM gui.AddSupplier jButton15ActionPerformed
+INFO: Updated arrears 755.00 for supplier 11 for 2nd previous month (2025-09)

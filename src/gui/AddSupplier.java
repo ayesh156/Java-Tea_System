@@ -150,15 +150,21 @@ public class AddSupplier extends javax.swing.JDialog {
         jTextField7.setText(s.getTransport_rate());
         jTextField8.setText(s.getDoc_rate());
         
-        // Fetch current arrears from supplier_arrears table
+        // Fetch arrears from supplier_arrears table for the 2nd previous month
+        // (since custom arrears are applied to 2 months ago for current month's calculation)
         try {
             model.suppliers.SupplierArrearsService arrearsService = new model.suppliers.SupplierArrearsService();
-            model.suppliers.SupplierArrearsModel latestArrears = arrearsService.getLatestArrears(s.getId());
-            if (latestArrears != null) {
-                jTextField9.setText(String.valueOf(latestArrears.getArrears()));
-            } else {
-                jTextField9.setText("0");
-            }
+            
+            // Calculate 2nd previous month and year (2 months ago)
+            java.time.LocalDate today = java.time.LocalDate.now();
+            java.time.LocalDate twoMonthsAgo = today.minusMonths(2);
+            int secondPrevYear = twoMonthsAgo.getYear();
+            int secondPrevMonth = twoMonthsAgo.getMonthValue();
+            
+            // Get 2nd previous month's arrears (this is what affects current month's bill)
+            model.suppliers.SupplierArrearsModel arrearsModel = arrearsService.getArrearsByMonth(s.getId(), secondPrevYear, secondPrevMonth);
+            double secondPrevMonthArrears = (arrearsModel != null) ? arrearsModel.getArrears() : 0.0;
+            jTextField9.setText(String.valueOf(secondPrevMonthArrears));
         } catch (Exception ex) {
             jTextField9.setText("0");
             logger.log(java.util.logging.Level.WARNING, "Error fetching arrears for supplier", ex);
@@ -694,20 +700,22 @@ public class AddSupplier extends javax.swing.JDialog {
                                     supplierService.save(supplier);
                                     
                                     // Save arrears if user entered a value > 0
+                                    // Arrears are saved for the 2ND PREVIOUS month so they affect current month's calculation
                                     double arrearsValue = Double.parseDouble(arrears);
                                     if (arrearsValue > 0) {
-                                        // Get current year and month
+                                        // Calculate 2nd previous month and year (2 months ago)
                                         java.time.LocalDate today = java.time.LocalDate.now();
-                                        int currentYear = today.getYear();
-                                        int currentMonth = today.getMonthValue();
+                                        java.time.LocalDate twoMonthsAgo = today.minusMonths(2);
+                                        int secondPrevYear = twoMonthsAgo.getYear();
+                                        int secondPrevMonth = twoMonthsAgo.getMonthValue();
                                         
-                                        // Save arrears for current month
+                                        // Save arrears for 2nd previous month
                                         SupplierArrearsService arrearsService = new SupplierArrearsService();
-                                        arrearsService.saveOrUpdateArrears(sNoInt, currentYear, currentMonth, arrearsValue);
+                                        arrearsService.saveOrUpdateArrears(sNoInt, secondPrevYear, secondPrevMonth, arrearsValue);
                                         
                                         logger.log(Level.INFO, String.format(
-                                            "Saved arrears %.2f for new supplier %d (%d-%02d)",
-                                            arrearsValue, sNoInt, currentYear, currentMonth
+                                            "Saved arrears %.2f for new supplier %d for 2nd previous month (%d-%02d)",
+                                            arrearsValue, sNoInt, secondPrevYear, secondPrevMonth
                                         ));
                                     }
                                     
@@ -742,36 +750,25 @@ public class AddSupplier extends javax.swing.JDialog {
                                 supplierService.update(supplier);
                                 
                                 // Handle arrears update
+                                // Custom arrears should be applied as an update to the 2ND PREVIOUS month's arrear,
+                                // so it is reflected in the current month's calculation
                                 double arrearsValue = Double.parseDouble(arrears);
                                 SupplierArrearsService arrearsService = new SupplierArrearsService();
-                                SupplierArrearsModel latestArrears = arrearsService.getLatestArrears(supplierNoInt);
                                 
-                                if (latestArrears != null) {
-                                    // Update existing arrears record (last month)
-                                    arrearsService.saveOrUpdateArrears(
-                                        supplierNoInt,
-                                        latestArrears.getYear(),
-                                        latestArrears.getMonth(),
-                                        arrearsValue
-                                    );
-                                    
-                                    logger.log(Level.INFO, String.format(
-                                        "Updated arrears %.2f for supplier %d (%d-%02d)",
-                                        arrearsValue, supplierNoInt, latestArrears.getYear(), latestArrears.getMonth()
-                                    ));
-                                } else if (arrearsValue > 0) {
-                                    // No existing arrears, create new record for current month
-                                    java.time.LocalDate today = java.time.LocalDate.now();
-                                    int currentYear = today.getYear();
-                                    int currentMonth = today.getMonthValue();
-                                    
-                                    arrearsService.saveOrUpdateArrears(supplierNoInt, currentYear, currentMonth, arrearsValue);
-                                    
-                                    logger.log(Level.INFO, String.format(
-                                        "Created new arrears %.2f for supplier %d (%d-%02d)",
-                                        arrearsValue, supplierNoInt, currentYear, currentMonth
-                                    ));
-                                }
+                                // Calculate 2nd previous month and year (2 months ago)
+                                java.time.LocalDate today = java.time.LocalDate.now();
+                                java.time.LocalDate twoMonthsAgo = today.minusMonths(2);
+                                int secondPrevYear = twoMonthsAgo.getYear();
+                                int secondPrevMonth = twoMonthsAgo.getMonthValue();
+                                
+                                // Save/update arrears for the 2nd previous month
+                                // This ensures the arrears are picked up in current month's calculation
+                                arrearsService.saveOrUpdateArrears(supplierNoInt, secondPrevYear, secondPrevMonth, arrearsValue);
+                                
+                                logger.log(Level.INFO, String.format(
+                                    "Updated arrears %.2f for supplier %d for 2nd previous month (%d-%02d)",
+                                    arrearsValue, supplierNoInt, secondPrevYear, secondPrevMonth
+                                ));
 
 
                             } catch (Exception e) {
