@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>G:\Project\POS System\Tea_System\dist\Tea_System.jar</jar>
+  <outfile>G:\Project\POS System\Tea_POS_System\dist\Tea System.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>G:\Project\POS System\Tea_POS_System\dist\logo.ico</icon>
+  <singleInstance>
+    <mutexName>Tea_system</mutexName>
+    <windowTitle>Tea_system</windowTitle>
+  </singleInstance>
+  <jre>
+    <path>G:\Project\POS System\Tea_POS_System\dist\jdk-11</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>

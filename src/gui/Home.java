@@ -156,8 +156,13 @@ public class Home extends javax.swing.JFrame {
             logger.log(Level.WARNING, "Logger", e);
         }
         
-        jTextField4.grabFocus();
-        jButton1.setIcon(new ImageIcon(getClass().getResource("/img/fill_circle.png")));
+        // Set default startup page to Daily Leaf (jButton4)
+        DailyLeaf defaultDailyLeaf = new DailyLeaf();
+        cardPanel.removeAll();
+        cardPanel.add(defaultDailyLeaf);
+        cardPanel.revalidate();
+        cardPanel.repaint();
+        jButton4.setIcon(new ImageIcon(getClass().getResource("/img/fill_circle.png")));
 
     }
     
@@ -330,33 +335,8 @@ public class Home extends javax.swing.JFrame {
     }
 
     private void updatePanelsForButton(int button) {
-        if (button <= 3) {
-            setPanelColors(jPanel6, jPanel7, new Color(236, 243, 242), new Color(57, 117, 104));
-            setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
-        } else if (button >= 4 && button <= 7) {
-            setPanelColors(jPanel11, jPanel12, new Color(236, 243, 242), new Color(57, 117, 104));
-            setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
-        } else if (button >= 8 && button <= 9) {
-            setPanelColors(jPanel13, jPanel14, new Color(236, 243, 242), new Color(57, 117, 104));
-            setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel15, jPanel16, Color.WHITE, Color.WHITE);
-        } else if (button == 10) {
-            setPanelColors(jPanel15, jPanel16, new Color(236, 243, 242), new Color(57, 117, 104));
-            setPanelColors(jPanel6, jPanel7, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel11, jPanel12, Color.WHITE, Color.WHITE);
-            setPanelColors(jPanel13, jPanel14, Color.WHITE, Color.WHITE);
-        }
-
-    }
-
-    private void setPanelColors(JPanel panel1, JPanel panel2, Color color1, Color color2) {
-        panel1.setBackground(color1);
-        panel2.setBackground(color2);
+        // Category highlighting removed after sidebar flattening.
+        // All buttons are now in a single flat panel without category headers.
     }
 
     /**
@@ -499,168 +479,15 @@ public class Home extends javax.swing.JFrame {
         jPanel4.setPreferredSize(new java.awt.Dimension(269, 887));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel5.setMinimumSize(new java.awt.Dimension(100, 252));
-        jPanel5.setPreferredSize(new java.awt.Dimension(269, 252));
-        jPanel5.setLayout(new java.awt.GridLayout(4, 1));
+        sidebarPanel = new javax.swing.JPanel();
+        sidebarPanel.setMinimumSize(new java.awt.Dimension(269, 640));
+        sidebarPanel.setPreferredSize(new java.awt.Dimension(269, 640));
+        sidebarPanel.setLayout(new java.awt.GridLayout(10, 1));
 
-        jPanel6.setBackground(new java.awt.Color(236, 243, 242));
-        jPanel6.setForeground(new java.awt.Color(236, 243, 242));
-        jPanel6.setMinimumSize(new java.awt.Dimension(100, 64));
-        jPanel6.setPreferredSize(new java.awt.Dimension(269, 64));
-        jPanel6.setVerifyInputWhenFocusTarget(false);
-        jPanel6.setLayout(new java.awt.BorderLayout());
-
-        jLabel3.setBackground(new java.awt.Color(255, 102, 204));
-        jLabel3.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/master_i.png"))); // NOI18N
-        jLabel3.setText("ieliqï");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        jLabel3.setDoubleBuffered(true);
-        jLabel3.setIconTextGap(8);
-        jLabel3.setMaximumSize(new java.awt.Dimension(170, 30));
-        jLabel3.setMinimumSize(new java.awt.Dimension(170, 30));
-        jLabel3.setPreferredSize(new java.awt.Dimension(170, 30));
-        jPanel6.add(jLabel3, java.awt.BorderLayout.CENTER);
-
-        jLabel2.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/down_ar.png"))); // NOI18N
-        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
-        jPanel6.add(jLabel2, java.awt.BorderLayout.LINE_END);
-
-        jPanel7.setBackground(new java.awt.Color(57, 117, 104));
-        jPanel7.setMinimumSize(new java.awt.Dimension(4, 26));
-        jPanel7.setPreferredSize(new java.awt.Dimension(4, 64));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 63, Short.MAX_VALUE)
-        );
-
-        jPanel6.add(jPanel7, java.awt.BorderLayout.LINE_START);
-
-        jPanel5.add(jPanel6);
-
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(147, 159, 171));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
-        jButton1.setText("m%jdyk wkqmd;h ");
-        jButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton1.setIconTextGap(10);
-        jButton1.setInheritsPopupMenu(true);
-        jButton1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jButton1FocusGained(evt);
-            }
-        });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel5.add(jButton1);
-
-        jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(147, 159, 171));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
-        jButton2.setText("iemhqïlrejka");
-        jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton2.setIconTextGap(10);
-        jButton2.setInheritsPopupMenu(true);
-        jButton2.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jButton2FocusGained(evt);
-            }
-        });
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel5.add(jButton2);
-
-        jButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jButton3.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(147, 159, 171));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
-        jButton3.setText("o¿ ñ<");
-        jButton3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton3.setIconTextGap(10);
-        jButton3.setInheritsPopupMenu(true);
-        jButton3.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jButton3FocusGained(evt);
-            }
-        });
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel5.add(jButton3);
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, -1, -1));
-
-        jPanel8.setMinimumSize(new java.awt.Dimension(100, 317));
-        jPanel8.setPreferredSize(new java.awt.Dimension(269, 317));
-        jPanel8.setLayout(new java.awt.GridLayout(5, 1));
-
-        jPanel11.setBackground(new java.awt.Color(236, 243, 242));
-        jPanel11.setForeground(new java.awt.Color(236, 243, 242));
-        jPanel11.setMinimumSize(new java.awt.Dimension(100, 64));
-        jPanel11.setPreferredSize(new java.awt.Dimension(269, 64));
-        jPanel11.setVerifyInputWhenFocusTarget(false);
-        jPanel11.setLayout(new java.awt.BorderLayout());
-
-        jLabel4.setBackground(new java.awt.Color(255, 102, 204));
-        jLabel4.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/invoice.png"))); // NOI18N
-        jLabel4.setText("ñ,§ .ekSï");
-        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        jLabel4.setDoubleBuffered(true);
-        jLabel4.setIconTextGap(8);
-        jLabel4.setMaximumSize(new java.awt.Dimension(170, 30));
-        jLabel4.setMinimumSize(new java.awt.Dimension(170, 30));
-        jLabel4.setPreferredSize(new java.awt.Dimension(170, 30));
-        jPanel11.add(jLabel4, java.awt.BorderLayout.CENTER);
-
-        jLabel5.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/down_ar.png"))); // NOI18N
-        jLabel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
-        jPanel11.add(jLabel5, java.awt.BorderLayout.LINE_END);
-
-        jPanel12.setBackground(new java.awt.Color(57, 117, 104));
-        jPanel12.setMinimumSize(new java.awt.Dimension(4, 26));
-        jPanel12.setPreferredSize(new java.awt.Dimension(4, 64));
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 63, Short.MAX_VALUE)
-        );
-
-        jPanel11.add(jPanel12, java.awt.BorderLayout.LINE_START);
-
-        jPanel8.add(jPanel11);
+        // Button order: Daily Leaf -> Leaf Rate -> Dry Tea -> Fertilizer -> Dolomite -> Advances -> Leaf Bills -> Transport Rate -> Suppliers -> Credit Cash
+        // jButton4 = Daily Leaf, jButton3 = Leaf Rate, jButton5 = Dry Tea, jButton6 = Fertilizer,
+        // jButton7 = Dolomite, jButton9 = Advances, jButton10 = Leaf Bills, jButton1 = Transport Rate,
+        // jButton2 = Suppliers, jButton8 = Credit Cash
 
         jButton4.setBackground(new java.awt.Color(255, 255, 255));
         jButton4.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -681,7 +508,28 @@ public class Home extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton4);
+        sidebarPanel.add(jButton4);
+
+        jButton3.setBackground(new java.awt.Color(255, 255, 255));
+        jButton3.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(147, 159, 171));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
+        jButton3.setText("o¿ ñ<");
+        jButton3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton3.setIconTextGap(10);
+        jButton3.setInheritsPopupMenu(true);
+        jButton3.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButton3FocusGained(evt);
+            }
+        });
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        sidebarPanel.add(jButton3);
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -702,7 +550,7 @@ public class Home extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton5);
+        sidebarPanel.add(jButton5);
 
         jButton6.setBackground(new java.awt.Color(255, 255, 255));
         jButton6.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -723,7 +571,7 @@ public class Home extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton6);
+        sidebarPanel.add(jButton6);
 
         jButton7.setBackground(new java.awt.Color(255, 255, 255));
         jButton7.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -744,79 +592,7 @@ public class Home extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton7);
-
-        jPanel4.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 254, -1, -1));
-
-        jPanel9.setMinimumSize(new java.awt.Dimension(100, 189));
-        jPanel9.setPreferredSize(new java.awt.Dimension(269, 189));
-        jPanel9.setLayout(new java.awt.GridLayout(3, 1));
-
-        jPanel13.setBackground(new java.awt.Color(236, 243, 242));
-        jPanel13.setForeground(new java.awt.Color(236, 243, 242));
-        jPanel13.setMinimumSize(new java.awt.Dimension(100, 64));
-        jPanel13.setPreferredSize(new java.awt.Dimension(269, 64));
-        jPanel13.setVerifyInputWhenFocusTarget(false);
-        jPanel13.setLayout(new java.awt.BorderLayout());
-
-        jLabel6.setBackground(new java.awt.Color(255, 102, 204));
-        jLabel6.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/transaction.png"))); // NOI18N
-        jLabel6.setText(".kqfokq");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        jLabel6.setDoubleBuffered(true);
-        jLabel6.setIconTextGap(8);
-        jLabel6.setMaximumSize(new java.awt.Dimension(170, 30));
-        jLabel6.setMinimumSize(new java.awt.Dimension(170, 30));
-        jLabel6.setPreferredSize(new java.awt.Dimension(170, 30));
-        jPanel13.add(jLabel6, java.awt.BorderLayout.CENTER);
-
-        jLabel7.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/down_ar.png"))); // NOI18N
-        jLabel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
-        jPanel13.add(jLabel7, java.awt.BorderLayout.LINE_END);
-
-        jPanel14.setBackground(new java.awt.Color(57, 117, 104));
-        jPanel14.setMinimumSize(new java.awt.Dimension(4, 26));
-        jPanel14.setPreferredSize(new java.awt.Dimension(4, 64));
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 63, Short.MAX_VALUE)
-        );
-
-        jPanel13.add(jPanel14, java.awt.BorderLayout.LINE_START);
-
-        jPanel9.add(jPanel13);
-
-        jButton8.setBackground(new java.awt.Color(255, 255, 255));
-        jButton8.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(147, 159, 171));
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
-        jButton8.setText("yr uqo,a");
-        jButton8.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
-        jButton8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton8.setIconTextGap(10);
-        jButton8.setInheritsPopupMenu(true);
-        jButton8.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jButton8FocusGained(evt);
-            }
-        });
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-        jPanel9.add(jButton8);
+        sidebarPanel.add(jButton7);
 
         jButton9.setBackground(new java.awt.Color(255, 255, 255));
         jButton9.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -837,58 +613,7 @@ public class Home extends javax.swing.JFrame {
                 jButton9ActionPerformed(evt);
             }
         });
-        jPanel9.add(jButton9);
-
-        jPanel4.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 572, -1, -1));
-
-        jPanel10.setMinimumSize(new java.awt.Dimension(100, 126));
-        jPanel10.setPreferredSize(new java.awt.Dimension(269, 126));
-        jPanel10.setLayout(new java.awt.GridLayout(2, 1));
-
-        jPanel15.setBackground(new java.awt.Color(236, 243, 242));
-        jPanel15.setForeground(new java.awt.Color(236, 243, 242));
-        jPanel15.setMinimumSize(new java.awt.Dimension(100, 64));
-        jPanel15.setPreferredSize(new java.awt.Dimension(269, 64));
-        jPanel15.setVerifyInputWhenFocusTarget(false);
-        jPanel15.setLayout(new java.awt.BorderLayout());
-
-        jLabel8.setBackground(new java.awt.Color(255, 102, 204));
-        jLabel8.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/report.png"))); // NOI18N
-        jLabel8.setText("jd¾;d");
-        jLabel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 30, 1, 1));
-        jLabel8.setDoubleBuffered(true);
-        jLabel8.setIconTextGap(8);
-        jLabel8.setMaximumSize(new java.awt.Dimension(170, 30));
-        jLabel8.setMinimumSize(new java.awt.Dimension(170, 30));
-        jLabel8.setPreferredSize(new java.awt.Dimension(170, 30));
-        jPanel15.add(jLabel8, java.awt.BorderLayout.CENTER);
-
-        jLabel9.setFont(new java.awt.Font("FMMalithi", 1, 27)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(57, 117, 104));
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/down_ar.png"))); // NOI18N
-        jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 20));
-        jPanel15.add(jLabel9, java.awt.BorderLayout.LINE_END);
-
-        jPanel16.setBackground(new java.awt.Color(57, 117, 104));
-        jPanel16.setMinimumSize(new java.awt.Dimension(4, 26));
-        jPanel16.setPreferredSize(new java.awt.Dimension(4, 64));
-
-        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
-        jPanel16.setLayout(jPanel16Layout);
-        jPanel16Layout.setHorizontalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 4, Short.MAX_VALUE)
-        );
-        jPanel16Layout.setVerticalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 63, Short.MAX_VALUE)
-        );
-
-        jPanel15.add(jPanel16, java.awt.BorderLayout.LINE_START);
-
-        jPanel10.add(jPanel15);
+        sidebarPanel.add(jButton9);
 
         jButton10.setBackground(new java.awt.Color(255, 255, 255));
         jButton10.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
@@ -909,9 +634,72 @@ public class Home extends javax.swing.JFrame {
                 jButton10ActionPerformed(evt);
             }
         });
-        jPanel10.add(jButton10);
+        sidebarPanel.add(jButton10);
 
-        jPanel4.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 762, -1, -1));
+        jButton1.setBackground(new java.awt.Color(255, 255, 255));
+        jButton1.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(147, 159, 171));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
+        jButton1.setText("m%jdyk wkqmd;h ");
+        jButton1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.setIconTextGap(10);
+        jButton1.setInheritsPopupMenu(true);
+        jButton1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButton1FocusGained(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        sidebarPanel.add(jButton1);
+
+        jButton2.setBackground(new java.awt.Color(255, 255, 255));
+        jButton2.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(147, 159, 171));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
+        jButton2.setText("iemhqïlrejka");
+        jButton2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.setIconTextGap(10);
+        jButton2.setInheritsPopupMenu(true);
+        jButton2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButton2FocusGained(evt);
+            }
+        });
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        sidebarPanel.add(jButton2);
+
+        jButton8.setBackground(new java.awt.Color(255, 255, 255));
+        jButton8.setFont(new java.awt.Font("FMMalithi", 1, 25)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(147, 159, 171));
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/circle.png"))); // NOI18N
+        jButton8.setText("yr uqo,a");
+        jButton8.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 35, 1, 1));
+        jButton8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton8.setIconTextGap(10);
+        jButton8.setInheritsPopupMenu(true);
+        jButton8.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jButton8FocusGained(evt);
+            }
+        });
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        sidebarPanel.add(jButton8);
+
+        jPanel4.add(sidebarPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 2, -1, -1));
 
         jScrollPane2.setViewportView(jPanel4);
 
@@ -1976,6 +1764,7 @@ public class Home extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel card1;
     private javax.swing.JPanel cardPanel;
+    private javax.swing.JPanel sidebarPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton15;
